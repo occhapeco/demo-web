@@ -130,8 +130,8 @@
                         <div class="footer status">
                             <hr />                            
                                 <div class="pull-right">
-                                    <div class=""><button class=" btn btn-simple btn-warning"><i class="ti-pencil" style="font-size: 20px"></i></button></div>      
-                                    <div class=""><button class="btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></div>
+                                    <button class=" btn btn-simple btn-warning"><i class="ti-pencil" style="font-size: 20px"></i></button> 
+                                    <button class="btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button>
                                 </div>
                                 <div style="font-size: 20px;color: #007aff;">R$22,00</div><br><s style="color:coral">R$44,00</s>
                         </div>
