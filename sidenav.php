@@ -15,13 +15,13 @@
             <ul class="nav">
                 <li class="active">
                     <a href="dashboard.html">
-                        <i class="ti-pie-chart"></i>
+                        <i class="ti-bookmark-alt"></i>
                         <p>Novo Cupom</p>
                     </a>
                 </li>
                 <li>
                     <a href="dashboard.html">
-                        <i class="ti-panel"></i>
+                        <i class="ti-layers-alt"></i>
                         <p>Meus Cupons</p>
                     </a>
                 </li>
