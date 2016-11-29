@@ -1,3 +1,6 @@
+<?php
+    $page = basename(__FILE__, '.php');
+?>
 <!doctype html>
 <html lang="en">
 <head>

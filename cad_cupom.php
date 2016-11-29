@@ -1,5 +1,8 @@
+<?php
+    $page = basename(__FILE__, '.php');
+?>
 <!doctype html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
@@ -42,42 +45,8 @@
 <body>
 
 <div class="wrapper">
-    <div class="sidebar" data-background-color="white" data-active-color="danger">
-
-    <!--
-        Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-        Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-    -->
-
-        <div class="sidebar-wrapper">
-            <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text">
-                    Nome
-                </a>
-            </div>
-
-            <ul class="nav">
-                <li class="active">
-                    <a href="dashboard.html">
-                        <i class="ti-pie-chart"></i>
-                        <p>Novo Cupom</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="dashboard.html">
-                        <i class="ti-panel"></i>
-                        <p>Meus Cupons</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="dashboard.html">
-                        <i class="ti-panel"></i>
-                        <p>Estatísticas</p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    
+    <?php require_once("sidenav.php"); ?>
 
     <div class="main-panel">
         <nav class="navbar navbar-default">
@@ -176,43 +145,43 @@
                                             <div class="col-sm-8">
                                                 <div class="form-group">
                                                     <label>Título <small>(obrigatório)</small></label>
-                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false"><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
+                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" required><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Prioridade <small>(obrigatório)</small></label>
-                                                    <input name="prioridade" type="number" class="form-control" placeholder="MUDAR" aria-required="true" aria-invalid="false"><label id="prioridade-error" class="error" for="prioridade" style="display: none;"></label>
+                                                    <input name="prioridade" type="number" class="form-control" placeholder="MUDAR" aria-required="true" aria-invalid="false" required><label id="prioridade-error" class="error" for="prioridade" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Valor de cardápio <small>(obrigatório)</small></label>
-                                                    <input name="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false"><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
+                                                    <input name="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false" required><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Valor promocional <small>(obrigatório)</small></label>
-                                                    <input name="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false"><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
+                                                    <input name="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false" required><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Número de cupons <small>(obrigatório)</small></label>
-                                                    <input name="quatidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false"><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
+                                                    <input name="quatidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false" required><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label>Descrição <small>(obrigatório)</small></label>
-                                                    <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false"></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
+                                                    <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false" required></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label>Regras <small>(obrigatório)</small></label>
-                                                    <textarea name="descricao" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false"></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
+                                                    <textarea name="regras" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false" required></textarea><label id="regras-error" class="error" for="regras" style="display: none;"></label>
                                                 </div>
                                             </div>
 
