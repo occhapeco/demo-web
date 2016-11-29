@@ -132,7 +132,7 @@ transparent = true;
                     wizard.find('[data-toggle="wizard-radio"]').removeClass('active');
                     $(this).addClass('active');
                     $(wizard).find('[type="radio"]').removeAttr('checked');
-                    $(this).find('[type="radio"]').attr('checked','true');
+                    $(this).find('[type="radio"]').attr('checked',true);
                 });
 
                 $('[data-toggle="wizard-checkbox"]').click(function(){
@@ -141,7 +141,7 @@ transparent = true;
                         $(this).find('[type="checkbox"]').removeAttr('checked');
                     } else {
                         $(this).addClass('active');
-                        $(this).find('[type="checkbox"]').attr('checked','true');
+                        $(this).find('[type="checkbox"]').attr('checked',true);
                     }
                 });
 

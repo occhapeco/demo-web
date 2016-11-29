@@ -91,7 +91,7 @@
                         <div class="row">
                             <div class="col-xs-5">
                                 <div class="icon-big icon-warning text-center">
-                                    <img src="pizza4.png" width="100px" class="img-responsive">
+                                    <img src="imgs/pizza-3.png" width="100px" class="img-responsive">
                                 </div>
                             </div>
                             <div class="col-xs-7">
@@ -118,7 +118,7 @@
                         <div class="row">
                             <div class="col-xs-5">
                                 <div class="icon-big icon-warning text-center">
-                                    <img src="pizza4.png" width="100px" class="img-responsive">
+                                    <img src="imgs/pizza-3.png" width="100px" class="img-responsive">
                                 </div>
                             </div>
                             <div class="col-xs-7">
