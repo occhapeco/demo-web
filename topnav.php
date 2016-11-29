@@ -33,6 +33,12 @@
                         <p class="navbar-brand">Configurações</p>
                     <?php
                         }
+                        elseif($page == "endereco")
+                        {
+                    ?>
+                        <p class="navbar-brand">Novo endereço</p>
+                    <?php
+                        }
                     ?>
                 </div>
                 <div class="collapse navbar-collapse">

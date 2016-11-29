@@ -73,6 +73,27 @@
                         <p>Meus cupons</p>
                     </a>
                 </li>
+            <?php } 
+                if($page == "endereco.php")
+                {
+            ?>
+                <li class="active">
+                    <a href="#">
+                        <i class="ti-map"></i>
+                        <p>Novo Endereço</p>
+                    </a>
+                </li>
+            <?php
+                }
+                else
+                {
+            ?>
+                <li>
+                    <a href="endereco.php">
+                        <i class="ti-map"></i>
+                        <p>Novo Endereço</p>
+                    </a>
+                </li>
             <?php } ?>
             </ul>
     	</div>
