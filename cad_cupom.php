@@ -37,7 +37,7 @@
         label{
             margin-right:5px;
         }
-        i{
+        .icon{
             margin-top: -5px;
         }
     </style>
@@ -58,10 +58,6 @@
                             <form action="#" method="GET" novalidate="novalidate">
                         <!--        You can switch " data-color="orange" "  with one of the next bright colors: "blue", "green", "orange", "red", "azure"          -->
 
-                                <div class="wizard-header text-center">
-                                    <h3 class="wizard-title">Criar novo cupom</h3>
-                                </div>
-
                                 <div class="wizard-navigation">
                                     <div class="progress-with-circle">
                                          <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" style="width: 83.3333%;"></div>
@@ -70,7 +66,7 @@
                                         <li class="active" style="width: 33.3333%;">
                                             <a href="#about" data-toggle="tab" aria-expanded="true">
                                                 <div class="icon-circle checked">
-                                                    <i class="ti-info"></i>
+                                                    <i class="ti-info icon"></i>
                                                 </div>
                                                 Informações
                                             </a>
@@ -78,7 +74,7 @@
                                         <li class="" style="width: 33.3333%;">
                                             <a href="#account" data-toggle="tab" aria-expanded="false">
                                                 <div class="icon-circle checked">
-                                                    <i class="ti-settings"></i>
+                                                    <i class="ti-settings icon"></i>
                                                 </div>
                                                 Opções
                                             </a>
@@ -86,7 +82,7 @@
                                         <li class="" style="width: 33.3333%;">
                                             <a href="#address" data-toggle="tab" aria-expanded="false">
                                                 <div class="icon-circle checked">
-                                                    <i class="ti-map"></i>
+                                                    <i class="ti-map icon"></i>
                                                 </div>
                                                 Imagem de fundo
                                             </a>
