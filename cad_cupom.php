@@ -46,56 +46,10 @@
 
 <div class="wrapper">
     
-    <?php require_once("sidenav.php"); ?>
-
-    <div class="main-panel">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar bar1"></span>
-                        <span class="icon-bar bar2"></span>
-                        <span class="icon-bar bar3"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Cupom</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-panel"></i>
-                                <p>Estatisticas</p>
-                            </a>
-                        </li>
-                        <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="ti-bell"></i>
-                                    <p class="notification">5</p>
-                                    <p>Notificações</p>
-                                    <b class="caret"></b>
-                              </a>
-                              <ul class="dropdown-menu">
-                                <li><a href="#">Notification 1</a></li>
-                                <li><a href="#">Notification 2</a></li>
-                                <li><a href="#">Notification 3</a></li>
-                                <li><a href="#">Notification 4</a></li>
-                                <li><a href="#">Another notification</a></li>
-                              </ul>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ti-settings"></i>
-                                <p>Configurações</p>
-                            </a>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
-
-
+    <?php 
+        require_once("sidenav.php");
+        require_once("topnav.php");
+    ?>
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -145,7 +99,7 @@
                                             <div class="col-sm-8">
                                                 <div class="form-group">
                                                     <label>Título <small>(obrigatório)</small></label>
-                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" required><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
+                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" autofocus required><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
@@ -228,7 +182,7 @@
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="" class="picture-src" id="wizardPicturePreview" title="">
-                                                            <input type="file" id="wizard-picture">
+                                                            <input type="file" id="wizard-picture" accept="image/x-png,image/gif,image/jpeg">
                                                             <p style="margin-top: 40px;">Fazer upload</p>
                                                         </div>
                                                     </div>
