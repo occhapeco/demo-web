@@ -89,10 +89,11 @@
 		function select_cupons($usuario_id,$cidade,$delivery,$pagamento,$tipo_id,$num)
 		{
 			$tipo_id = json_decode($tipo_id);
+			$str_tipo = "";
 			for($i=0;$i<sizeof($tipo_id);$i++)
 			{
 				if($i != 0)
-					$str_tipo .= "AND"
+					$str_tipo .= "AND";
 				$str_tipo .= " cupom_has_tipo.tipo_id = ".$tipo_id[$i]." ";
 			}
 			$cond = "";
@@ -103,7 +104,7 @@
 			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,empresa.nome_fantasia FROM cupom INNER JOIN cupom_has_tipo ON (cupom.id = cupom_has_tipo.cupom_id) INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE $str_tipo AND cidade.id = $cidade $cond AND cupom.quantidade > 0 AND cupom.estado = 0 ORDER BY cupom.prioridade DESC");
 			$dados = array();
-			$i = 0
+			$i = 0;
 			$max = $num + 5;
 			while($row = $query->fetch_assoc())
 			{
@@ -119,7 +120,7 @@
 		function select_detalhes_cupom($cupom_id)
 		{
 			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
-			$query = $conexao->query("SELECT cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,endereco.rua,endereco.num,endereco.complemento,endereco.bairro,endereco.latitude,endereco.longitude FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id)  WHERE cupom.id = $cupom_id");
+			$query = $conexao->query("SELECT cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id)  WHERE cupom.id = $cupom_id");
 			$dados = array();
 			$row = $query->fetch_assoc();
 			$dados["detalhes"] = $row;
@@ -178,7 +179,7 @@
 
 	class empresa
 	{
-		function insert($nome_usuario,$email,$senha,$razao_social,$nome_fantasia,$cnpj,$celular,$rua,$num,$complemento,$bairro,$cidade_id,$latitude,$longitude,$telefone)
+		function insert($nome_usuario,$email,$senha,$razao_social,$nome_fantasia,$cnpj,$celular,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
 		{
 			if(!validar_cnpj($cnpj))
 				return 0;
@@ -198,8 +199,9 @@
 		    $rua = preg_replace('![*#/\"´`]+!','',$rua);
 		    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
 		    $bairro = preg_replace('![*#/\"´`]+!','',$bairro);
+			$cep = preg_replace('![^0-9]+!','',$cep);
 			$telefone = preg_replace('![^0-9]+!','',$telefone);
-		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$bairro',$cidade_id,$latitude,$longitude,'$telefone')");
+		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,$latitude,$longitude,'$telefone')");
 		    if(!$query)
 		    {
 		    	$query = $conexao->query("DELETE FROM usuario WHERE id = $empresa_id)");
@@ -209,18 +211,38 @@
 			return $empresa_id;
 		}
 
-		function insert_endereco($empresa_id,$rua,$num,$complemento,$bairro,$cidade_id,$latitude,$longitude,$telefone)
+		function insert_endereco($empresa_id,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
 		{
 		    $rua = preg_replace('![*#/\"´`]+!','',$rua);
 		    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
 		    $bairro = preg_replace('![*#/\"´`]+!','',$bairro);
+			$cep = preg_replace('![^0-9]+!','',$cep);
 			$telefone = preg_replace('![^0-9]+!','',$telefone);
-		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$bairro',$cidade_id,$latitude,$longitude,'$telefone')");
+		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,$latitude,$longitude,'$telefone')");
 		    $empresa_id = 0;
 		    if($query)
 		    	$empresa_id = $conexao->insert_id;
 			$conexao->close();
 			return $empresa_id;
+		}
+
+		function insert_cupom($empresa_id,$endereco_id,$titulo,$regras,$descricao,$preco_normal,$preco_cupom,$prazo,$quantidade,$prioridade,$pagamento,$delivery,$tipos)
+		{
+		    $titulo = preg_replace('![*#/\"´`]+!','',$titulo);
+		    $regras = preg_replace('![*#/\"´`]+!','',$regras);
+		    $descricao = preg_replace('![*#/\"´`]+!','',$descricao);
+		    $prazo = preg_replace('![^0-9/]+!','',$prazo);
+		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,'$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$prioridade,$pagamento,$delivery,1)");
+		    $cupom_id = 0;
+		    if($query)
+		    {
+		    	$cupom_id = $conexao->insert_id;
+		    	$tipo = json_decode($tipos);
+		    	for($i=0;$tipo<sizeof($tipo);$tipo++)
+		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
+		    }
+			$conexao->close();
+			return $cupom_id;
 		}
 
 		function update_perfil($id,$nome_usuario,$razao_social,$nome_fantasia,$celular)
@@ -272,20 +294,48 @@
 		function select_enderecos($id)
 		{
 			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
-			$query = $conexao->query("SELECT endereco.rua,endereco.num,endereco.complemento,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.empresa_id = $id");
-			$row = $query->fetch_assoc();
+			$query = $conexao->query("SELECT endereco.rua,endereco.num,endereco.complemento,endereco.cep,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.empresa_id = $id");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
 			$conexao->close();
-			return json_encode($row);
+			return json_encode($dados);
+		}
+
+		function select_cupom($id)
+		{
+			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$query = $conexao->query("SELECT * FROM cupom WHERE id = $id");
+			$dados = $query->fetch_assoc();
+			$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = $id");
+			while($row = $query->fetch_assoc())
+				$dados["tipo"][] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function select_cupons($id)
+		{
+			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$query = $conexao->query("SELECT * FROM cupom WHERE id = $id");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
 		}
 	}
 
-	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:double','longitude' => 'xsd:double','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
-	$server->register('empresa.insert_empresa', array('empresa_id' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:double','longitude' => 'xsd:double','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de endereço.');
+	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:double','longitude' => 'xsd:double','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
+	$server->register('empresa.insert_endereco', array('empresa_id' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:double','longitude' => 'xsd:double','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de endereço.');
+	$server->register('empresa.insert_cupom', array('empresa_id' => 'xsd:integer','endereco_id' => 'xsd:integer','titulo' => 'xsd:string','regras' => 'xsd:string','descricao' => 'xsd:string','preco_normal' => 'xsd:double','preco_cupom' => 'xsd:double','prazo' => 'xsd:string','quantidade' => 'xsd:integer','prioridade' => 'xsd:integer','pagamento' => 'xsd:integer','delivery' => 'xsd:integer','tipos' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de cupom.');
 	$server->register('empresa.update_perfil', array('id' => 'xsd:integer','nome_usuario' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','celular' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar perfil de empresa.');
 	$server->register('empresa.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha da empresa.');
 	$server->register('empresa.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login da empresa.');
 	$server->register('empresa.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de uma empresa.');
 	$server->register('empresa.select_enderecos', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona endereços de uma empresa.');
+	$server->register('empresa.select_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um cupom.');
+	$server->register('empresa.select_cupons', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todos os cupons e seus dados pela empresa.');
 
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA);
