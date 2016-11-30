@@ -94,6 +94,27 @@
                         <p>Novo Endereço</p>
                     </a>
                 </li>
+            <?php } 
+                if($page == "meus__enderecos.php")
+                {
+            ?>
+                <li class="active">
+                    <a href="#">
+                        <i class="ti-direction-alt"></i>
+                        <p>Meus Endereços</p>
+                    </a>
+                </li>
+            <?php
+                }
+                else
+                {
+            ?>
+                <li>
+                    <a href="meus_enderecos.php">
+                        <i class="ti-direction-alt"></i>
+                        <p>Meus Endereços</p>
+                    </a>
+                </li>
             <?php } ?>
             </ul>
     	</div>

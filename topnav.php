@@ -39,6 +39,12 @@
                         <p class="navbar-brand">Novo endereço</p>
                     <?php
                         }
+                        elseif($page == "meus_enderecos")
+                        {
+                    ?>
+                        <p class="navbar-brand">Meus endereços</p>
+                    <?php
+                        }
                     ?>
                 </div>
                 <div class="collapse navbar-collapse">

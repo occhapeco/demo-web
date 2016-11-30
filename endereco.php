@@ -78,10 +78,16 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-9">
                                             <div class="form-group">
                                                 <label>Rua</label>
                                                 <input type="text" class="form-control border-input" id="rua" name="rua" placeholder="Avenida Paulista" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>CEP</label>
+                                                <input type="number" class="form-control border-input" id="cep" name="cep" placeholder="87856123" required>
                                             </div>
                                         </div>
                                     </div>
