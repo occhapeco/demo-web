@@ -53,7 +53,7 @@
                 </li>
             <?php
                 }
-                if($page == "cupons")
+                if($page == "meus_cupons")
                 {
             ?>
                 <li class="active">
@@ -68,13 +68,13 @@
                 {
             ?>
                 <li>
-                    <a href="cupons.php">
+                    <a href="meus_cupons.php">
                         <i class="ti-layers-alt"></i>
                         <p>Meus cupons</p>
                     </a>
                 </li>
             <?php } 
-                if($page == "endereco.php")
+                if($page == "endereco")
                 {
             ?>
                 <li class="active">
@@ -95,7 +95,7 @@
                     </a>
                 </li>
             <?php } 
-                if($page == "meus__enderecos.php")
+                if($page == "meus_enderecos")
                 {
             ?>
                 <li class="active">

@@ -5,8 +5,8 @@
 <html lang="pt">
 <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>Paper Dashboard by Creative Tim</title>
@@ -16,22 +16,22 @@
 
 
     <!-- Bootstrap core CSS     -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="assets/css/paper-bootstrap-wizard.css" rel="stylesheet" />
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/paper-bootstrap-wizard.css" rel="stylesheet" />
 
     <!-- Animation library for notifications   -->
-    <link href="assets/css/animate.min.css" rel="stylesheet"/>
+    <link href="../assets/css/animate.min.css" rel="stylesheet"/>
 
     <!--  Paper Dashboard core CSS    -->
-    <link href="assets/css/paper-dashboard.css" rel="stylesheet"/>
+    <link href="../assets/css/paper-dashboard.css" rel="stylesheet"/>
 
     <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="assets/css/demo.css" rel="stylesheet" />
+    <link href="../assets/css/demo.css" rel="stylesheet" />
 
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
-    <link href="assets/css/themify-icons.css" rel="stylesheet">
+    <link href="../assets/css/themify-icons.css" rel="stylesheet">
 
     <style type="text/css">
         label{
@@ -501,24 +501,24 @@
 </body>
 
     <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-    <script src="assets/js/demo.js"></script>
+    <script src="../assets/js/demo.js"></script>
 
     <!--   Core JS Files   -->
-    <script src="assets/js/jquery-2.2.4.min.js" type="text/javascript"></script>
-    <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
+    <script src="../assets/js/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
 
     <!--  Plugin for the Wizard -->
-    <script src="assets/js/paper-bootstrap-wizard.js" type="text/javascript"></script>
+    <script src="../assets/js/paper-bootstrap-wizard.js" type="text/javascript"></script>
 
     <!--  Notifications Plugin    -->
-    <script src="assets/js/bootstrap-notify.js"></script>
+    <script src="../assets/js/bootstrap-notify.js"></script>
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
-    <script src="assets/js/paper-dashboard.js"></script>
+    <script src="../assets/js/paper-dashboard.js"></script>
 
     <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
-    <script src="assets/js/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../assets/js/jquery.validate.min.js" type="text/javascript"></script>
 
     <script>
         function gambiarra_radio()

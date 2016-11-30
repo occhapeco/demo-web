@@ -21,7 +21,7 @@
                         <p class="navbar-brand">Cadastro de cupom</p>
                     <?php
                         }
-                        elseif($page == "cupons")
+                        elseif($page == "meus_cupons")
                         {
                     ?>
                         <p class="navbar-brand">Meus cupons</p>

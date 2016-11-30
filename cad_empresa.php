@@ -5,7 +5,6 @@
 
 	if (isset($_POST["concluir"]))
 	{
-		$insert = -3;
 		if($_POST["senha"] == $_POST["senha1"])
 		{
 			$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
@@ -16,8 +15,6 @@
 			elseif($insert == -2)
 				$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
 		}
-		else
-			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Senhas não correspondem!</b> Digite novamente.</span></div>';
 	}
 ?>
 <!doctype html>
@@ -58,6 +55,7 @@
 		}
 
 	</style>
+
 </head>
 
 <body>
@@ -250,9 +248,6 @@
 
 </body>
 
-	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-    <script src="assets/js/demo.js"></script>
-
     <!--   Core JS Files   -->
     <script src="assets/js/jquery-2.2.4.min.js" type="text/javascript"></script>
     <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
@@ -268,6 +263,7 @@
     <script src="assets/js/paper-dashboard.js"></script>
 
     <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
+    <script src="assets/js/jquery.validate.js" type="text/javascript"></script>
     <script src="assets/js/jquery.validate.min.js" type="text/javascript"></script>
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmWPAIE9_AASg6Ijgoh0lVOZZ_VWvw6fg&libraries=places&callback=initAutocomplete" async defer></script>  
@@ -294,7 +290,26 @@
         	document.getElementById('uf').value = uf;
         }
 
-	}
+        $("#frm").validate({
+			rules: {
+				senha: {
+					minlength: 6
+				},
+				senha1: {
+					minlength: 6,
+					equalTo: "#senha"
+				},
+			},
+			messages: {
+				senha: {
+					minlength: "Digite pelo menos 6 caracteres."
+				},
+				senha1: {
+					minlength: "Digite pelo menos 6 caracteres.",
+					equalTo: "As senhas não correspondem."
+				}
+			}
+		});
 
     </script>
 
