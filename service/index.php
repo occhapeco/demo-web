@@ -8,7 +8,7 @@
 
 	function validar_cnpj($cnpj)
 	{
-		$cnpj = preg_replace('![^0-9/]+!','',$cnpj);
+		$cnpj = preg_replace('![^0-9]+!','',$cnpj);
 		// Valida tamanho
 		if (strlen($cnpj) != 14)
 			return false;
@@ -42,7 +42,7 @@
 		return json_encode($dados);
 	}
 
-	$server->register('select_cidades', array(null), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de cidades cadastradas para abrangência.');
+	$server->register('select_cidades', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de cidades cadastradas para abrangência.');
 
 	class usuario
 	{
@@ -202,8 +202,8 @@
 			$senha = md5(sha1($senha));
 			$razao_social = preg_replace('![*#/\"´`]+!','',$razao_social);
 			$nome_fantasia = preg_replace('![*#/\"´`]+!','',$nome_fantasia);
-			$cnpj = preg_replace('![^0-9]+!','',$cnpj);
-			$celular = preg_replace("![^0-9]+!",'',$celular);
+			$cnpj = preg_replace('![*#\"´`]+!','',$cnpj);
+			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular',0)");
@@ -214,11 +214,12 @@
 		    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
 		    $bairro = preg_replace('![*#/\"´`]+!','',$bairro);
 			$cep = preg_replace('![^0-9]+!','',$cep);
-			$telefone = preg_replace('![^0-9]+!','',$telefone);
+			$telefone = preg_replace('![*#/\"´`]+!','',$telefone);
+
 		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,$latitude,$longitude,'$telefone')");
 		    if(!$query)
 		    {
-		    	$query = $conexao->query("DELETE FROM empresa WHERE id = $empresa_id)");
+		    	$sub_query = $conexao->query("DELETE FROM empresa WHERE id = $empresa_id");
 		    	return -2;
 		    }
 			$conexao->close();
@@ -231,7 +232,8 @@
 		    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
 		    $bairro = preg_replace('![*#/\"´`]+!','',$bairro);
 			$cep = preg_replace('![^0-9]+!','',$cep);
-			$telefone = preg_replace('![^0-9]+!','',$telefone);
+			$telefone = preg_replace('![*#/\"´`]+!','',$telefone);
+
 		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,$latitude,$longitude,'$telefone')");
 		    $empresa_id = 0;
 		    if($query)
@@ -264,7 +266,7 @@
 			$nome_usuario = preg_replace('![*#/\"´`]+!','',$nome_usuario);
 			$razao_social = preg_replace('![*#/\"´`]+!','',$razao_social);
 			$nome_fantasia = preg_replace('![*#/\"´`]+!','',$nome_fantasia);
-			$celular = preg_replace('![^0-9]+!','',$celular);
+			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("UPDATE empresa SET nome_usuario = '$nome_usuario', razao_social = '$razao_social', nome_fantasia = '$nome_fantasia', celular = '$celular' WHERE id = $id");
@@ -289,11 +291,9 @@
 			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha'");
 			if($query->num_rows > 1 || $query->num_rows == 0)
 				return 0;
-			$dados = array();
-			while($row = $query->fetch_assoc())
-				$dados[] = $row;
+			$row = $query->fetch_assoc();
 			$conexao->close();
-			return json_encode($dados);
+			return json_encode($row);
 		}
 
 		function select_perfil($id)

@@ -186,297 +186,296 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice active" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/breakfast-1.jpg">
+                                                    <input type="radio" name="img" value="../imgs/breakfast-1.jpg" checked="checked">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/breakfast-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/breakfast-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/breakfast-2.jpg">
+                                                    <input type="radio" name="img" value="../imgs/breakfast-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/breakfast-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/breakfast-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/breakfast-3.jpg">
+                                                    <input type="radio" name="img" value="../imgs/breakfast-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/breakfast-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/breakfast-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/breakfast-4.jpg">
+                                                    <input type="radio" name="img" value="../imgs/breakfast-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/breakfast-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/breakfast-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/breakfast-5.jpg">
+                                                    <input type="radio" name="img" value="../imgs/breakfast-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/breakfast-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/breakfast-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/breakfast-6.jpg">
+                                                    <input type="radio" name="img" value="../imgs/breakfast-6.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/breakfast-6.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/breakfast-6.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/drink-1.jpg">
+                                                    <input type="radio" name="img" value="../imgs/drink-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/drink-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/drink-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/drink-2.jpg">
+                                                    <input type="radio" name="img" value="../imgs/drink-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/drink-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/drink-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/drink-3.jpg">
+                                                    <input type="radio" name="img" value="../imgs/drink-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/drink-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/drink-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/drink-4.jpg">
+                                                    <input type="radio" name="img" value="../imgs/drink-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/drink-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/drink-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/drink-5.jpg">
+                                                    <input type="radio" name="img" value="../imgs/drink-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/drink-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/drink-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meals-1.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meals-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meals-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meals-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meals-2.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meals-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meals-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meals-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meals-3.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meals-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meals-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meals-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meat-1.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meat-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meat-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meat-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meat-2.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meat-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meat-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meat-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meat-3.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meat-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meat-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meat-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meat-4.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meat-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meat-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meat-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meat-5.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meat-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meat-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meat-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/meat-6.jpg">
+                                                    <input type="radio" name="img" value="../imgs/meat-6.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/meat-6.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/meat-6.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/seafood-1.jpg">
+                                                    <input type="radio" name="img" value="../imgs/seafood-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/seafood-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/seafood-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/seafood-2.jpg">
+                                                    <input type="radio" name="img" value="../imgs/seafood-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/seafood-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/seafood-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/seafood-3.jpg">
+                                                    <input type="radio" name="img" value="../imgs/seafood-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/seafood-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/seafood-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/seafood-4.jpg">
+                                                    <input type="radio" name="img" value="../imgs/seafood-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/seafood-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/seafood-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/snack-1.jpg">
+                                                    <input type="radio" name="img" value="../imgs/snack-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/snack-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/snack-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/snack-2.jpg">
+                                                    <input type="radio" name="img" value="../imgs/snack-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/snack-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/snack-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/snack-3.jpg">
+                                                    <input type="radio" name="img" value="../imgs/snack-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/snack-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/snack-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/snack-4.jpg">
+                                                    <input type="radio" name="img" value="../imgs/snack-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/snack-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/snack-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="imgs/snack-5.jpg">
+                                                    <input type="radio" name="img" value="../imgs/snack-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img src="imgs/snack-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img src="../imgs/snack-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="wizard-footer">
                                         <div class="pull-right">
                                             <input type="button" class="btn btn-next btn-fill btn-info btn-wd disabled" name="next" value="Próximo" style="display: none;">
@@ -488,6 +487,7 @@
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
+                                </div>
                                 </form>
                             </div>
                         </div>
@@ -519,12 +519,5 @@
 
     <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
     <script src="../assets/js/jquery.validate.min.js" type="text/javascript"></script>
-
-    <script>
-        function gambiarra_radio()
-        {
-
-        }
-    </script>
 
 </html>

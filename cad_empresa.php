@@ -124,11 +124,11 @@
 												</div>
 												<div class="form-group">
 													<label>CNPJ <small>(obrigatório)</small></label>
-													<input type="number" class="form-control" name="cnpj" id="cnpj" placeholder="Informe seu CNPJ" maxlength="14" required>
+													<input type="text" class="form-control" name="cnpj" id="cnpj" placeholder="Informe seu CNPJ" maxlength="18" required>
 												</div>
 												<div class="form-group">
-													<label>Telefone <small>(obrigatório)</small></label>
-													<input type="number" class="form-control" name="celular" id="celular" placeholder="Informe um telefone pessoal para contato" maxlength="11" required>
+													<label>Telefone pessoal <small>(obrigatório)</small></label>
+													<input type="text" class="form-control" name="celular" id="celular" placeholder="Informe um telefone pessoal para contato" maxlength="14" required>
 												</div>
 											</div>
 											<div class="col-sm-6">
@@ -188,25 +188,25 @@
 		                                    </div>
 											<div class="col-sm-6">
 		                                        <div class="form-group">
-		                                            <label>Bairro</label>
+		                                            <label>Bairro <small>(obrigatório)</small></label>
 		                                            <input type="text" class="form-control" name="bairro" id="bairro" placeholder="Centro" maxlength="30" required>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                    	<div class="form-group">
-		                                            <label>Rua</label>
+		                                            <label>Rua <small>(obrigatório)</small></label>
 		                                            <input type="text" class="form-control" name="rua" id="rua" placeholder="Avenida Paulista" maxlength="60" required>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                    	<div class="form-group">
-		                                            <label>CEP</label>
-		                                            <input type="number" class="form-control" name="cep" id="cep" placeholder="89567231" maxlength="8" required>
+		                                            <label>CEP <small>(obrigatório)</small></label>
+		                                            <input type="text" class="form-control" name="cep" id="cep" placeholder="89.567-231" maxlength="10" required>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                        <div class="form-group">
-		                                            <label>Número</label>
+		                                            <label>Número <small>(obrigatório)</small></label>
 		                                            <input type="number" class="form-control" name="num" id="num" maxlength="
 		                                            5" placeholder="242" required>
 		                                        </div>
@@ -219,8 +219,8 @@
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                    	<div class="form-group">
-		                                            <label>Telefone</label>
-		                                            <input type="number" class="form-control" name="telefone" id="telefone" maxlength="11" placeholder="Informe o telefone do estabelecimento">
+		                                            <label>Telefone do estabelecimento </label>
+		                                            <input type="text" class="form-control" name="telefone" id="telefone" maxlength="14" placeholder="Informe o telefone do estabelecimento">
 		                                        </div>
 		                                    </div>
 										</div>
@@ -265,6 +265,7 @@
 
     <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
     <script src="assets/js/jquery.validate.js" type="text/javascript"></script>
+    <script src="assets/js/jquery.maskedinput.js" type="text/javascript"></script>
     <script src="assets/js/jquery.validate.min.js" type="text/javascript"></script>
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmWPAIE9_AASg6Ijgoh0lVOZZ_VWvw6fg&libraries=places&callback=initAutocomplete" async defer></script>  
@@ -310,6 +311,13 @@
 					equalTo: "As senhas não correspondem."
 				}
 			}
+		});
+
+		jQuery(function($){
+		   $("#celular").mask("(99)99999-9999");
+		   $("#telefone").mask("(99)99999-9999");
+		   $("#cnpj").mask("99.999.999/9999-99");
+		   $("#cep").mask("99.999-999");
 		});
 
     </script>

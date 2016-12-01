@@ -11,8 +11,8 @@ CREATE TABLE empresa (
   senha VARCHAR(60) NOT NULL,
   razao_social VARCHAR(20) NOT NULL,
   nome_fantasia VARCHAR(20) NOT NULL,
-  cnpj VARCHAR(14) NOT NULL UNIQUE KEY,
-  celular VARCHAR(11) NOT NULL,
+  cnpj VARCHAR(18) NOT NULL UNIQUE KEY,
+  celular VARCHAR(14) NOT NULL,
   dias_bloqueio INTEGER UNSIGNED NOT NULL
 );
 
@@ -21,13 +21,13 @@ CREATE TABLE endereco (
   empresa_id INTEGER UNSIGNED NOT NULL,
   rua VARCHAR(60) NOT NULL,
   num INTEGER(5) UNSIGNED NOT NULL,
-  complemento VARCHAR(20) NOT NULL,
-  cep VARCHAR(8) NOT NULL,
+  complemento VARCHAR(20) NULL,
+  cep VARCHAR(10) NOT NULL,
   bairro VARCHAR(30) NOT NULL,
   cidade_id INTEGER UNSIGNED NOT NULL,
   latitude DOUBLE NOT NULL,
   longitude DOUBLE NOT NULL,
-  telefone VARCHAR(11) NOT NULL,
+  telefone VARCHAR(14) NULL,
   FOREIGN KEY(empresa_id)REFERENCES empresa(id),
   FOREIGN KEY(cidade_id)REFERENCES cidade(id)
 );
@@ -37,7 +37,7 @@ CREATE TABLE usuario (
   nome VARCHAR(40) NOT NULL,
   email VARCHAR(40) NOT NULL,
   senha VARCHAR(60) NOT NULL,
-  celular VARCHAR(11) NOT NULL,
+  celular VARCHAR(14) NOT NULL,
   genero INTEGER(1) NOT NULL,
   nascimento VARCHAR(10) NOT NULL,
   dias_bloqueio INTEGER UNSIGNED NOT NULL
