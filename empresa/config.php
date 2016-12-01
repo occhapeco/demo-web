@@ -1,5 +1,23 @@
 <?php
     $page = basename(__FILE__, '.php');
+
+    //Post enviado de outra página para esta, onde serão carregados os dados e exibidos nos campos
+    if(isset($_POST["editar"]))
+    {
+        $editar = $service->call('empresa.update_perfil', array($id_end));
+        $perfil = json_decode($editar);
+        $nome_usuario = $perfil[0]->nome_usuario;
+        $razao_social = $perfil[0]->razao_social;
+        $nome_fantasia = $perfil[0]->nome_fantasia;
+        $celular = $perfil[0]->celular;
+    }
+
+    //Post enviado desta página para confirmar a edição
+    if(isset($_POST["editar_perfil"]))
+    {
+       if ($update = $service->call('empresa.update_perfil', array($_SESSION["id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"])))
+        if ($update = $service->call('empresa.update_senha', array()))
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -61,34 +79,34 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Razão Social</label>
-                                                    <input type="text" class="form-control border-input">
+                                                    <input type="text" name="razao_social" id="razao_social" maxlength="20" class="form-control border-input">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Nome Fantasia</label>
-                                                    <input type="text" class="form-control border-input">
+                                                    <input type="text" name="nome_fantasia" id="nome_fantasia" maxlength="20" class="form-control border-input">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Nome de usuário</label>
-                                                    <input type="text" class="form-control border-input">
+                                                    <input type="text" name="nome_usuario" id="nome_usuario" maxlength="40" class="form-control border-input">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Celular</label>
-                                                    <input type="text" class="form-control border-input">
+                                                    <input type="text" name="celular" id="celular" maxlength="14" class="form-control border-input">
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Senha atual</label>
-                                                    <input type="password" class="form-control border-input" placeholder="Informe a sua senha atual">
+                                                    <input type="password" class="form-control border-input" name="senha_atual" id="senha_atual" maxlength="12" placeholder="Informe a sua senha atual">
                                                 </div>                                           
                                                 <div class="form-group">
                                                     <label>Nova senha</label>
-                                                    <input type="password" class="form-control border-input" placeholder="Informe a sua nova senha">
+                                                    <input type="password" class="form-control border-input" name="nova_senha" id="nova_senha" maxlength="12" placeholder="Informe a sua nova senha">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Repita a nova senha</label>
-                                                    <input type="password" class="form-control border-input" placeholder="Repita a nova senha">
+                                                    <input type="password" class="form-control border-input" name="nova_senha1" id="nova_senha1" maxlength="12" placeholder="Repita a nova senha">
                                                 </div>
                                             </div>
                                         </div>
