@@ -206,7 +206,7 @@
 			$celular = preg_replace("![^0-9]+!",'',$celular);
 
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
-			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social',$genero,'$nome_fantasia','$cnpj','$celular',0)");
+			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular',0)");
 			if(!$query)
 		    	return -1;
 		    $empresa_id = $conexao->insert_id;
