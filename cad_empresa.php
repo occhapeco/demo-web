@@ -116,37 +116,37 @@
 											<div class="col-sm-6">
 												<div class="form-group">
 													<label>Razão Social <small>(obrigatório)</small></label>
-													<input type="text" class="form-control" name="razao_social" id="razao_social" placeholder="Digite a razão social" required>
+													<input type="text" class="form-control" name="razao_social" id="razao_social" placeholder="Digite a razão social" maxlength="20" required>
 												</div>
 												<div class="form-group">
 													<label>Nome Fantasia <small>(obrigatório)</small></label>
-													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" required>
+													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" maxlength="20" required>
 												</div>
 												<div class="form-group">
 													<label>CNPJ <small>(obrigatório)</small></label>
-													<input type="number" class="form-control" name="cnpj" id="cnpj" placeholder="Informe seu CNPJ" required>
+													<input type="number" class="form-control" name="cnpj" id="cnpj" placeholder="Informe seu CNPJ" maxlength="14" required>
 												</div>
 												<div class="form-group">
 													<label>Telefone <small>(obrigatório)</small></label>
-													<input type="number" class="form-control" name="celular" id="celular" placeholder="Informe um telefone para contato" required>
+													<input type="number" class="form-control" name="celular" id="celular" placeholder="Informe um telefone pessoal para contato" maxlength="11" required>
 												</div>
 											</div>
 											<div class="col-sm-6">
 												<div class="form-group">
 													<label>Nome de usuário <small>(obrigatório)</small></label>
-													<input type="text" class="form-control" name="nome_usuario" id="nome_usuario" placeholder="Informe o nome de usuário" required>
+													<input type="text" class="form-control" name="nome_usuario" id="nome_usuario" placeholder="Informe o nome de usuário" maxlength="40" required>
 												</div>
 												<div class="form-group">
 													<label>Email <small>(obrigatório)</small></label>
-													<input type="email" class="form-control" name="email" id="email" placeholder="informe um email" required>
+													<input type="email" class="form-control" name="email" id="email" placeholder="informe um email" maxlength="40" required>
 												</div>
 												<div class="form-group">
 													<label>Senha <small>(obrigatório)</small></label>
-													<input type="password" class="form-control" name="senha" id="senha" placeholder="Digite sua senha" required>
+													<input type="password" class="form-control" name="senha" id="senha" placeholder="Digite sua senha" maxlength="12" required>
 												</div>
 												<div class="form-group">
 													<label>Digite a senha novamente <small>(obrigatório)</small></label>
-													<input name="senha1" id="senha1" type="password" class="form-control" placeholder="Digite novamente sua senha" required>
+													<input name="senha1" id="senha1" type="password" class="form-control" placeholder="Digite novamente sua senha" maxlength="12" required>
 												</div>
 											</div>
 										</div>
@@ -189,37 +189,38 @@
 											<div class="col-sm-6">
 		                                        <div class="form-group">
 		                                            <label>Bairro</label>
-		                                            <input type="text" class="form-control" name="bairro" id="bairro" placeholder="Centro" required>
+		                                            <input type="text" class="form-control" name="bairro" id="bairro" placeholder="Centro" maxlength="30" required>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                    	<div class="form-group">
 		                                            <label>Rua</label>
-		                                            <input type="text" class="form-control" name="rua" id="rua" placeholder="Avenida Paulista" required>
+		                                            <input type="text" class="form-control" name="rua" id="rua" placeholder="Avenida Paulista" maxlength="60" required>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                    	<div class="form-group">
 		                                            <label>CEP</label>
-		                                            <input type="number" class="form-control" name="cep" id="cep" placeholder="89567231" required>
+		                                            <input type="number" class="form-control" name="cep" id="cep" placeholder="89567231" maxlength="8" required>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                        <div class="form-group">
 		                                            <label>Número</label>
-		                                            <input type="number" class="form-control" name="num" id="num" placeholder="242" required>
+		                                            <input type="number" class="form-control" name="num" id="num" maxlength="
+		                                            5" placeholder="242" required>
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                    	<div class="form-group">
 		                                            <label>Complemento</label>
-		                                            <input type="text" class="form-control" name="complemento" id="complemento" placeholder="Próx. à escola">
+		                                            <input type="text" class="form-control" name="complemento" id="complemento" maxlength="20" placeholder="Próx. à escola">
 		                                        </div>
 		                                    </div>
 		                                    <div class="col-sm-6">
 		                                    	<div class="form-group">
 		                                            <label>Telefone</label>
-		                                            <input type="number" class="form-control" name="telefone" id="telefone" placeholder="4998989898">
+		                                            <input type="number" class="form-control" name="telefone" id="telefone" maxlength="11" placeholder="Informe o telefone do estabelecimento">
 		                                        </div>
 		                                    </div>
 										</div>
