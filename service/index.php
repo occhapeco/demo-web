@@ -31,6 +31,19 @@
 		return $cnpj{13} == ($resto < 2 ? 0 : 11 - $resto);
 	}
 
+	function select_cidades()
+	{
+		$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
+		$query = $conexao->query("SELECT * FROM cidade");
+		$dados = array();
+		while($row = $query->fetch_assoc())
+			$dados[] = $row;
+		$conexao->close();
+		return json_encode($dados);
+	}
+
+	$server->register('select_cidades', array(null), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de cidades cadastradas para abrangência.');
+
 	class usuario
 	{
 		function insert($nome,$email,$senha,$celular,$genero,$nascimento)
@@ -41,7 +54,7 @@
 			$nascimento = preg_replace('![^0-9/]+!','',$nascimento);
 			$senha = md5(sha1($senha));
 
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0)");
 			$id = 0;
 			if($query)
@@ -56,7 +69,7 @@
 			$celular = preg_replace("![^0-9]+!",'',$celular);
 			$nascimento = preg_replace('![^0-9/]+!','',$nascimento);
 
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("UPDATE usuario SET nome = '$nome', celular = '$celular', genero = $genero, nascimento = '$nascimento' WHERE id = $id");
 			$conexao->close();
 			return $query;
@@ -66,7 +79,7 @@
 		{
 			$senha_antiga = md5(sha1($senha_antiga));
 			$senha_nova = md5(sha1($senha_nova));
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
 			$conexao->close();
 			return $query;
@@ -75,7 +88,7 @@
 		function login($email,$senha)
 		{
 			$senha = md5(sha1($senha));
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'");
 			if($query->num_rows > 1 || $query->num_rows == 0)
 				return 0;
@@ -90,7 +103,7 @@
 		{
 			$tipo_id = json_decode($tipo_id);
 			$str_tipo = "";
-			for($i=0;$i<sizeof($tipo_id);$i++)
+			for($i=0;$i<count($tipo_id);$i++)
 			{
 				if($i != 0)
 					$str_tipo .= "AND";
@@ -101,7 +114,7 @@
 				$cond .= " AND cupom.pagamento = ".$pagamento;
 			if($delivery > 0)
 				$cond .= " AND cupom.delivery = ".$delivery;
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,empresa.nome_fantasia FROM cupom INNER JOIN cupom_has_tipo ON (cupom.id = cupom_has_tipo.cupom_id) INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE $str_tipo AND cidade.id = $cidade $cond AND cupom.quantidade > 0 AND cupom.estado = 0 ORDER BY cupom.prioridade DESC");
 			$dados = array();
 			$i = 0;
@@ -119,7 +132,7 @@
 
 		function select_detalhes_cupom($cupom_id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id)  WHERE cupom.id = $cupom_id");
 			$dados = array();
 			$row = $query->fetch_assoc();
@@ -133,7 +146,7 @@
 
 		function pegar_cupom($usuario_id,$cupom_id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
 			if($query)
 			{
@@ -148,7 +161,7 @@
 
 		function select_perfil($id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT * FROM usuario WHERE id = $id");
 			$row = $query->fetch_assoc();
 			$conexao->close();
@@ -157,7 +170,7 @@
 
 		function select_historico($id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT * FROM usuario_has_cupom INNER JOIN usuario ON(cupom.usuario_id = usuario.id) WHERE usuario.id = $id");
 			$dados = array();
 			while($row = $query->fetch_assoc())
@@ -177,6 +190,7 @@
 	$server->register('usuario.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um usuario.');
 	$server->register('usuario.select_historico', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
 
+
 	class empresa
 	{
 		function insert($nome_usuario,$email,$senha,$razao_social,$nome_fantasia,$cnpj,$celular,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
@@ -191,7 +205,7 @@
 			$cnpj = preg_replace('![^0-9]+!','',$cnpj);
 			$celular = preg_replace("![^0-9]+!",'',$celular);
 
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social',$genero,'$nome_fantasia','$cnpj','$celular',0)");
 			if(!$query)
 		    	return -1;
@@ -204,7 +218,7 @@
 		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,$latitude,$longitude,'$telefone')");
 		    if(!$query)
 		    {
-		    	$query = $conexao->query("DELETE FROM usuario WHERE id = $empresa_id)");
+		    	$query = $conexao->query("DELETE FROM empresa WHERE id = $empresa_id)");
 		    	return -2;
 		    }
 			$conexao->close();
@@ -238,7 +252,7 @@
 		    {
 		    	$cupom_id = $conexao->insert_id;
 		    	$tipo = json_decode($tipos);
-		    	for($i=0;$tipo<sizeof($tipo);$tipo++)
+		    	for($i=0;$tipo<count($tipo);$tipo++)
 		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
 		    }
 			$conexao->close();
@@ -252,7 +266,7 @@
 			$nome_fantasia = preg_replace('![*#/\"´`]+!','',$nome_fantasia);
 			$celular = preg_replace('![^0-9]+!','',$celular);
 
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("UPDATE empresa SET nome_usuario = '$nome_usuario', razao_social = '$razao_social', nome_fantasia = '$nome_fantasia', celular = '$celular' WHERE id = $id");
 			$conexao->close();
 			return $query;
@@ -262,7 +276,7 @@
 		{
 			$senha_antiga = md5(sha1($senha_antiga));
 			$senha_nova = md5(sha1($senha_nova));
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("UPDATE empresa SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
 			$conexao->close();
 			return $query;
@@ -271,7 +285,7 @@
 		function login($email,$senha)
 		{
 			$senha = md5(sha1($senha));
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha'");
 			if($query->num_rows > 1 || $query->num_rows == 0)
 				return 0;
@@ -284,7 +298,7 @@
 
 		function select_perfil($id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT * FROM empresa WHERE id = $id");
 			$row = $query->fetch_assoc();
 			$conexao->close();
@@ -293,7 +307,7 @@
 
 		function select_enderecos($id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT endereco.rua,endereco.num,endereco.complemento,endereco.cep,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.empresa_id = $id");
 			$dados = array();
 			while($row = $query->fetch_assoc())
@@ -304,7 +318,7 @@
 
 		function select_cupom($id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT * FROM cupom WHERE id = $id");
 			$dados = $query->fetch_assoc();
 			$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = $id");
@@ -316,7 +330,7 @@
 
 		function select_cupons($id)
 		{
-			$conexao = mysqli_connect("localhost","u274667541_root","oieoie","u274667541_app");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query("SELECT * FROM cupom WHERE id = $id");
 			$dados = array();
 			while($row = $query->fetch_assoc())
