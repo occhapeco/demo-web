@@ -95,43 +95,43 @@
                                             <div class="col-sm-8">
                                                 <div class="form-group">
                                                     <label>Título <small>(obrigatório)</small></label>
-                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" autofocus required><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
+                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" autofocus><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Prioridade <small>(obrigatório)</small></label>
-                                                    <input name="prioridade" type="number" class="form-control" placeholder="MUDAR" aria-required="true" aria-invalid="false" required><label id="prioridade-error" class="error" for="prioridade" style="display: none;"></label>
+                                                    <input name="prioridade" type="number" class="form-control" placeholder="MUDAR" aria-required="true" aria-invalid="false"><label id="prioridade-error" class="error" for="prioridade" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Valor de cardápio <small>(obrigatório)</small></label>
-                                                    <input name="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false" required><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
+                                                    <input name="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false"><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Valor promocional <small>(obrigatório)</small></label>
-                                                    <input name="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false" required><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
+                                                    <input name="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false"><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Número de cupons <small>(obrigatório)</small></label>
-                                                    <input name="quatidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false" required><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
+                                                    <input name="quatidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false"><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label>Descrição <small>(obrigatório)</small></label>
-                                                    <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false" required></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
+                                                    <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false"></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label>Regras <small>(obrigatório)</small></label>
-                                                    <textarea name="regras" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false" required></textarea><label id="regras-error" class="error" for="regras" style="display: none;"></label>
+                                                    <textarea name="regras" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false"></textarea><label id="regras-error" class="error" for="regras" style="display: none;"></label>
                                                 </div>
                                             </div>
 
@@ -172,7 +172,7 @@
                                     </div>
                                     <div class="tab-pane" id="address">
                                         <div class="row">
-                                            <div class="col-sm-3">
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="upload">
                                                     <div class="card card-radios card-hover-effect">
@@ -183,8 +183,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice active" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/breakfast-1.jpg" checked="checked">
                                                     <div class="card card-radios card-hover-effect">
@@ -193,8 +193,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/breakfast-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -203,8 +203,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/breakfast-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -213,8 +213,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/breakfast-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -223,8 +223,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/breakfast-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -233,8 +233,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/breakfast-6.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -243,8 +243,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/drink-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -253,8 +253,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/drink-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -263,8 +263,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/drink-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -273,8 +273,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/drink-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -283,8 +283,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/drink-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -293,8 +293,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meals-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -303,8 +303,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meals-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -313,8 +313,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meals-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -323,8 +323,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meat-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -333,8 +333,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meat-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -343,8 +343,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meat-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -353,8 +353,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meat-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -363,8 +363,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meat-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -373,8 +373,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/meat-6.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -383,8 +383,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/seafood-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -393,8 +393,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/seafood-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -403,8 +403,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/seafood-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -413,8 +413,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/seafood-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -423,8 +423,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/snack-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -433,8 +433,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/snack-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -443,8 +443,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/snack-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -453,8 +453,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/snack-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -463,8 +463,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
+                                            </label>
+                                            <label class="col-sm-3">
                                                 <div class="choice" data-toggle="wizard-radio">
                                                     <input type="radio" name="img" value="../imgs/snack-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
@@ -473,7 +473,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="wizard-footer">

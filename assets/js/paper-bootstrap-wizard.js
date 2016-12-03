@@ -131,17 +131,13 @@ transparent = true;
                     wizard = $(this).closest('.wizard-card');
                     wizard.find('[data-toggle="wizard-radio"]').removeClass('active');
                     $(this).addClass('active');
-                    $(wizard).find('[type="radio"]').removeAttr('checked');
-                    $(this).find('[type="radio"]').attr('checked',true);
                 });
 
                 $('[data-toggle="wizard-checkbox"]').click(function(){
                     if( $(this).hasClass('active')){
                         $(this).removeClass('active');
-                        $(this).find('[type="checkbox"]').removeAttr('checked');
                     } else {
                         $(this).addClass('active');
-                        $(this).find('[type="checkbox"]').attr('checked',true);
                     }
                 });
 
