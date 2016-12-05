@@ -13,6 +13,7 @@
     $bairro = "";
     $cidade = "";
     $telefone = "";
+    $btn = '<button type="submit" class="btn btn-info btn-fill btn-wd" name="cadastrar" id="cadastrar">Concluir</button>';
 
     if(isset($_POST["cadastrar"]))
     {
@@ -39,6 +40,7 @@
         $bairro = $endereco[0]->bairro;
         $cidade = $endereco[0]->cidade;
         $telefone = $endereco[0]->telefone;
+        $btn = '<button type="submit" class="btn btn-info btn-fill btn-wd" name="edit" id="edit">Concluir</button>';
     }
 
     //Post enviado desta página para confirmar a edição
@@ -164,7 +166,7 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-info btn-fill btn-wd" name="cadastrar" id="cadastrar">Concluir</button>
+                                        <?php echo $btn; ?>
                                     </div>
                                     <div class="clearfix"></div>
                                 </form>

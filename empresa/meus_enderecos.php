@@ -1,5 +1,6 @@
 <?php
     require_once("permissao.php");
+    require_once("../conectar_service.php");
 
     $page = basename(__FILE__, '.php');
 ?>
@@ -48,33 +49,42 @@
     ?>
 
         <div class="content">
-            <div class="col-lg-6 col-sm-6">
+         <?php
+            $json_dados = $service->call('empresa.select_enderecos', array($_SESSION["id"]));
+            $endereco = json_decode($json_dados);
+            for($i = 0; $i<count($endereco); $i++)
+            {
+             ?>
+             <div class="col-lg-6 col-sm-6">
                 <div class="card">
                     <div class="content">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div>
-                                    <label>Estado:</label><label style="color:#252422">São Paulo</label><br>
-                                    <label>Cidade:</label><label style="color:#252422">São Paulo</label><br>
-                                    <label>Bairro:</label><label style="color:#252422">Centro</label><br>
-                                    <label>Rua:</label><label style="color:#252422">Avenida Paulista</label><br>
-                                    <label>CEP:</label><label style="color:#252422">87865123</label>
-                                    <label>Número:</label><label style="color:#252422">224</label><br>
-                                    <label>Complemento:</label><label style="color:#252422">Próx. à escola</label>
+                                    <label>Estado:</label><label style="color:#252422"><?php echo $endereco[$i]->uf ?></label><br>
+                                    <label>Cidade:</label><label style="color:#252422"><?php echo $endereco[$i]->nome ?></label><br>
+                                    <label>Bairro:</label><label style="color:#252422"><?php echo $endereco[$i]->bairro ?></label><br>
+                                    <label>Rua:</label><label style="color:#252422"><?php echo $endereco[$i]->rua ?></label><br>
+                                    <label>CEP:</label><label style="color:#252422"><?php echo $endereco[$i]->cep ?></label>
+                                    <label>Número:</label><label style="color:#252422"><?php echo $endereco[$i]->num ?></label><br>
+                                    <label>Complemento:</label><label style="color:#252422"><?php echo $endereco[$i]->complemento ?></label>
                                 </div>
                             </div>
                         </div>
                         <div class="footer status">
                             <hr />                            
                                 <div class="pull-right">
-                                    <button class=" btn btn-simple btn-info"><i class="ti-pencil" style="font-size: 20px"></i></button>
+                                    <form action="endereco.php" method="post"><input type="hidden" value="<?php echo $endereco[$i]->id ?>"><button class=" btn btn-simple btn-info"><i class="ti-pencil" style="font-size: 20px"></i></button></form>
                                     <button class=" btn btn-simple btn-danger"><i class="ti-trash" style="font-size: 20px"></i></button>
                                 </div>
                         </div><br><br>
                     </div>
                 </div>
             </div>
-        </div>
+            <?php
+            }
+        ?>
+         </div>
     </div>
 </div>
 
