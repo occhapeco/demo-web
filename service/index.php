@@ -336,11 +336,23 @@
 			return json_encode($row);
 		}
 
-		function select_enderecos($id)
+		function select_endereco($id)
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT endereco.rua,endereco.num,endereco.complemento,endereco.cep,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.empresa_id = $id");
+			$query = $conexao->query("SELECT endereco.rua,endereco.num,endereco.complemento,endereco.cep,cidade.id,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.id = $id");
+			$dados = array();
+			$row = $query->fetch_assoc();
+			$dados = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function select_enderecos($empresa_id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT endereco.id,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.empresa_id = $empresa_id");
 			$dados = array();
 			while($row = $query->fetch_assoc())
 				$dados[] = $row;
@@ -382,7 +394,8 @@
 	$server->register('empresa.update_endereco', array('id' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar dados de um endereço.');
 	$server->register('empresa.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login da empresa.');
 	$server->register('empresa.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de uma empresa.');
-	$server->register('empresa.select_enderecos', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona endereços de uma empresa.');
+	$server->register('empresa.select_enderecos', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona endereços de uma empresa.');
+	$server->register('empresa.select_endereco', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um endereço.');
 	$server->register('empresa.select_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um cupom.');
 	$server->register('empresa.select_cupons', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todos os cupons e seus dados pela empresa.');
 
