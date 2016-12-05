@@ -6,7 +6,7 @@
 	if (isset($_POST["concluir"]))
 	{
 		$json = $service->call('empresa.login', array($_POST["email"],$_POST["senha"]));
-		if($json == 0)
+		if(!$json)
 		{
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email ou senha não correspondem!</b> Digite novamente.</span></div>';
 		}

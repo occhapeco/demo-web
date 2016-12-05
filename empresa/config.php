@@ -19,6 +19,9 @@
     {
        if ($update = $service->call('empresa.update_perfil', array($_SESSION["id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"])))
         if ($update = $service->call('empresa.update_senha', array()))
+        {
+            
+        }
     }
 ?>
 <!doctype html>

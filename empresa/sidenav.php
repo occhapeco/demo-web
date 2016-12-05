@@ -94,7 +94,8 @@
                         <p>Novo Endereço</p>
                     </a>
                 </li>
-            <?php } 
+            <?php 
+                } 
                 if($page == "meus_enderecos")
                 {
             ?>
@@ -116,6 +117,12 @@
                     </a>
                 </li>
             <?php } ?>
+                <li>
+                    <a href="../logout.php">
+                        <i class="ti-arrow-left"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
             </ul>
     	</div>
     </div>
