@@ -74,7 +74,7 @@
                     </a>
                 </li>
             <?php } 
-                if($page == "endereco")
+                if($page == "cad_endereco")
                 {
             ?>
                 <li class="active">
@@ -89,7 +89,7 @@
                 {
             ?>
                 <li>
-                    <a href="endereco.php">
+                    <a href="cad_endereco.php">
                         <i class="ti-map"></i>
                         <p>Novo Endereço</p>
                     </a>
