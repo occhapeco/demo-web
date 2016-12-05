@@ -1,4 +1,6 @@
 <?php
+    require_once("permissao.php");
+    
     $page = basename(__FILE__, '.php');
 
     //Post enviado de outra página para esta, onde serão carregados os dados e exibidos nos campos

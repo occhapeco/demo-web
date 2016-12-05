@@ -133,12 +133,12 @@ transparent = true;
                     $(this).addClass('active');
                 });
 
-                $('[data-toggle="wizard-checkbox"]').click(function(){
-                    if( $(this).hasClass('active')){
-                        $(this).removeClass('active');
-                    } else {
-                        $(this).addClass('active');
-                    }
+                $('[type="checkbox"]').click(function(){
+                    console.log("click");
+                    if( $(this).parent('[data-toggle="wizard-checkbox"]').hasClass('active'))
+                        $(this).parent('[data-toggle="wizard-checkbox"]').removeClass('active');
+                    else
+                        $(this).parent('[data-toggle="wizard-checkbox"]').addClass('active');
                 });
 
                 $('.set-full-height').css('height', 'auto');

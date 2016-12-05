@@ -3,17 +3,21 @@
 
 	$alert = "";
 
-	if (isset($_POST["concluir"]))
+	if (isset($_POST["rua"]))
 	{
-		if($_POST["senha"] == $_POST["senha1"])
+		$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
+		if($insert == 0)
+			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ inválido!</b> Digite novamente.</span></div>';
+		elseif($insert == -1)
+			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email ou CNPJ já cadastrados!</b> Reveja seus dados.</span></div>';
+		elseif($insert == -2)
+			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
+		else
 		{
-			$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
-			if($insert == 0)
-				$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ inválido!</b> Digite novamente.</span></div>';
-			elseif($insert == -1)
-				$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email ou CNPJ já cadastrados!</b> Reveja seus dados.</span></div>';
-			elseif($insert == -2)
-				$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
+			session_start();
+			$_SESSION["id"] = $insert;
+			$_SESSION["tipo"] = "empresa";
+			header("location: empresa/");
 		}
 	}
 ?>
@@ -72,8 +76,8 @@
 
 		                <div class="card wizard-card" data-color="orange" id="wizardProfile">
 		                    <form action="#" id="frm" method="post">
-		                    	<input type="hidden" name="latitude" id="latitude">
-		                    	<input type="hidden" name="longitude" id="longitude">
+		                    	<input type="hidden" name="latitude" id="latitude" value="e">
+		                    	<input type="hidden" name="longitude" id="longitude" value="e">
 
 		                    	<div class="wizard-header text-center">
 		                        	<h3 class="wizard-title">Cadastre-se</h3>
@@ -169,12 +173,12 @@
 												$str2 = "onclick='trocar(`".$cidade[$i]->nome."`,`".$cidade[$i]->uf."`)'";
 										?>
 											<div class="col-sm-3" >
-                                                <div <?php echo $class_first; ?> data-toggle="wizard-radio" <?php echo $str2; ?>>
+                                                <label <?php echo $class_first; ?> data-toggle="wizard-radio" <?php echo $str2; ?>>
                                                     <input type="radio" name="cidade_id" <?php echo 'value="'.$cidade[$i]->id.'" '.$first; ?>>
                                                     <div class="card card-radioss card-hover-effect">
                                                     <?php echo $str; ?>
                                                     </div>
-                                                </div>
+                                                </label>
                                             </div>
 										<?php
 											}
@@ -229,7 +233,7 @@
 		                        <div class="wizard-footer">
 		                            <div class="pull-right">
 		                                <input type='button' class='btn btn-next btn-fill btn-warning btn-wd' name='next' value='Próximo' />
-		                                <input type='submit' class='btn btn-finish btn-fill btn-warning btn-wd' name='concluir' value='Concluir' />
+		                                <a onclick="codeAddress();" class='btn btn-finish btn-fill btn-warning btn-wd' name='concluir'>Concluir</a>
 		                            </div>
 
 		                            <div class="pull-left">
@@ -268,23 +272,27 @@
     <script src="assets/js/jquery.maskedinput.js" type="text/javascript"></script>
     <script src="assets/js/jquery.validate.min.js" type="text/javascript"></script>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmWPAIE9_AASg6Ijgoh0lVOZZ_VWvw6fg&libraries=places&callback=initAutocomplete" async defer></script>  
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmWPAIE9_AASg6Ijgoh0lVOZZ_VWvw6fg&libraries=places&callback=geoco" async defer></script>  
 
 	<script type="text/javascript">
-		var geocoder;
+		var geocoder ;
+
+		function geoco(){
+			geocoder = new google.maps.Geocoder();
+		}
 
         function codeAddress() {
-        var address = document.getElementById( 'cidade' ).value+', '+document.getElementById( 'uf' ).value+ ', '+ document.getElementById( 'rua' ).value+' '+ document.getElementById( 'num' ).value;
-          geocoder.geocode( { 'address' : address }, function( results, status ) {
-            if( status == google.maps.GeocoderStatus.OK ) {
-                document.getElementById( 'latitude' ).value = results[0].geometry.location.lat();
-                document.getElementById( 'longitude' ).value = results[0].geometry.location.lng();
-                document.getElementById('frm').submit();
-            } else {
-                alert( 'Não podemos encontrar sua localização corretamente, por favor, reveja os dados.');
-            }
-        } );
-      }
+	        var address = document.getElementById( 'cidade' ).value+', '+document.getElementById( 'uf' ).value+ ', '+ document.getElementById( 'rua' ).value+' '+ document.getElementById( 'num' ).value;
+	          geocoder.geocode( { 'address' : address }, function( results, status ) {
+	            if( status == google.maps.GeocoderStatus.OK ) {
+	                document.getElementById( 'latitude' ).value = results[0].geometry.location.lat();
+	                document.getElementById( 'longitude' ).value = results[0].geometry.location.lng();
+	                document.getElementById('frm').submit();
+	            } else {
+	                alert( 'Não podemos encontrar sua localização corretamente, por favor, reveja os dados.');
+	            }
+	        } );
+	    }
 
         function trocar(cidade,uf)
         {

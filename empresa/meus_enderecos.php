@@ -1,4 +1,6 @@
 <?php
+    require_once("permissao.php");
+
     $page = basename(__FILE__, '.php');
 ?>
 <html lang="pt">

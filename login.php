@@ -15,6 +15,7 @@
 			session_start();
 			$empresa = json_decode($json);
 			$_SESSION["id"] = $empresa->id;
+			$_SESSION["tipo"] = "empresa";
 			header("location: empresa/");
 		}
 	}

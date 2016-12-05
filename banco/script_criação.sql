@@ -25,8 +25,8 @@ CREATE TABLE endereco (
   cep VARCHAR(10) NOT NULL,
   bairro VARCHAR(30) NOT NULL,
   cidade_id INTEGER UNSIGNED NOT NULL,
-  latitude DOUBLE NOT NULL,
-  longitude DOUBLE NOT NULL,
+  latitude TEXT NOT NULL,
+  longitude TEXT NOT NULL,
   telefone VARCHAR(14) NULL,
   FOREIGN KEY(empresa_id)REFERENCES empresa(id),
   FOREIGN KEY(cidade_id)REFERENCES cidade(id)
