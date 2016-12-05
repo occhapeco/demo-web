@@ -71,12 +71,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="footer status">
+                        <div class="footer status" style="height:6px;">
                             <hr />                            
                                 <div class="pull-right">
-                                    <form action="endereco.php" method="post"><input type="hidden" value="<?php echo $endereco[$i]->id ?>"><button class=" btn btn-simple btn-info"><i class="ti-pencil" style="font-size: 20px"></i></button></form>
-                                    <button class=" btn btn-simple btn-danger"><i class="ti-trash" style="font-size: 20px"></i></button>
+                                    <form action="endereco.php" method="post"><input type="hidden" name="id_end" id="id_end" <?php echo "value='".$endereco[$i]->id."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-pencil" style="font-size: 20px"></i></button></form>
                                 </div>
+                                <form action="#" method="post" style=" margin-left:300px;"><input type="hidden" name="id_en" id="id_en" <?php echo "value='".$endereco[$i]->id."'"; ?>><button class=" btn btn-simple btn-danger"><i class="ti-trash" style="font-size: 20px"></i></button></form>
+                                
                         </div><br><br>
                     </div>
                 </div>
