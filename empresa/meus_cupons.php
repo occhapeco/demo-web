@@ -1,5 +1,6 @@
 <?php
     require_once("permissao.php");
+    require_once("../conectar_service.php");
 
     $page = basename(__FILE__, '.php');
 ?>
@@ -48,6 +49,12 @@
     ?>
 
         <div class="content">
+            <?php
+            $json_dados = $service->call('empresa.select_cupons', array($_SESSION["id"]));
+            $cupom = json_decode($json_dados);
+            for($i = 0; $i<count($cupom); $i++)
+            {
+             ?>
             <div class="col-lg-6 col-sm-6">
                 <div class="card">
                     <div class="content">
@@ -59,7 +66,7 @@
                             </div>
                             <div class="col-xs-7">
                                 <div class="numbers">
-                                    <p>Batata frita com camarão à milanesa + coquinha bem grammde texto grande</p>
+                                    <p><?php echo $cupom[$i]->titulo ?></p>
                                 </div>
                             </div>
                         </div>
@@ -70,39 +77,15 @@
                                     <div class=""><button class=" btn btn-simple btn-warning"><i class="ti-pencil" style="font-size: 20px"></i></button></div>      
                                     <div class=""><button class="btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></div>
                                 </div>
-                                <div style="font-size: 20px;color: #007aff;">R$22,00</div><br><s style="color:coral">R$44,00</s>
+                                <div style="font-size: 20px;color: #007aff;"><?php echo $cupom[$i]->preco_cupom ?></div><br><s style="color:coral"><?php echo $cupom[$i]->preco_normal ?></s>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-sm-6">
-                <div class="card">
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-xs-5">
-                                <div class="icon-big icon-warning text-center">
-                                    <img src="imgs/pizza-3.png" width="100px" class="img-responsive">
-                                </div>
-                            </div>
-                            <div class="col-xs-7">
-                                <div class="numbers">
-                                    <p>Batata frita com camarão à milanesa + coquinha bem grammde texto grande</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer status">
-                            <hr />                            
-                                <div class="pull-right">
-                                    <button class=" btn btn-simple btn-warning"><i class="ti-pencil" style="font-size: 20px"></i></button> 
-                                    <button class="btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button>
-                                </div>
-                                <div style="font-size: 20px;color: #007aff;">R$22,00</div><br><s style="color:coral">R$44,00</s>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php
+              }
+            ?>            
         </div>
-    </div>
 </div>
 
 
