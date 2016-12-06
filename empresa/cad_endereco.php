@@ -17,12 +17,12 @@
 
     if(isset($_POST["cadastrar"]))
     {
-        $insert = $service->call('empresa.insert_endereco',array($_SESSION["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
-
+        $insert = $service->call('empresa.insert_endereco',array($_SESSION["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
+        echo $insert;
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
         else
-            header("location: enderecos.php");
+            header("location: meus_enderecos.php");
     }
 
     //Post enviado de outra página para esta, onde serão carregados os dados e exibidos nos campos
@@ -36,7 +36,8 @@
         $complemento = $endereco->complemento;
         $cep = $endereco->cep;
         $bairro = $endereco->bairro;
-        $cidade = $endereco->cidade;
+        $cidade = $endereco->nome;
+        $cidade_id = $endereco->id;
         $telefone = $endereco->telefone;
         $operacao = '<input type="hidden" name="edit" value="'.$id_end.'">';
     }
@@ -44,10 +45,10 @@
     //Post enviado desta página para confirmar a edição
     if(isset($_POST["edit"]))
     {
-        if($service->call('empresa.update_endereco', array($_POST["edit"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"])))
-            header("location: enderecos.php");
+        if($service->call('empresa.update_endereco', array($_POST["edit"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"])))
+            header("location: meus_enderecos.php");
         else
-            $alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom: 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
     }
 ?>
 <!doctype html>
@@ -137,11 +138,23 @@
                                             {
                                                 $first = "checked";
                                                 $class_first = 'class="choice active"';
-                                                if($i > 0)
+                                                if(isset($cidade_id))
+                                                {
+                                                    if($cidade[$i]->id != $cidade_id)
+                                                    {
+                                                        $first = "";
+                                                        $class_first = 'class="choice"';
+                                                    }
+                                                    else
+                                                        echo '<input type="hidden" name="cidade" id="cidade" value="'.$cidade[$i]->nome.'"><input type="hidden" name="uf" id="uf" value="'.$cidade[$i]->uf.'">';
+                                                }
+                                                elseif($i > 0)
                                                 {
                                                     $first = "";
                                                     $class_first = 'class="choice"';
                                                 }
+                                                else
+                                                    echo '<input type="hidden" name="cidade" id="cidade" value="'.$cidade[0]->nome.'"><input type="hidden" name="uf" id="uf" value="'.$cidade[0]->uf.'">';
                                                 $str = "<p>".$cidade[$i]->nome." - ".$cidade[$i]->uf."</p>";
                                                 $str2 = "onclick='trocar(`".$cidade[$i]->nome."`,`".$cidade[$i]->uf."`)'";
                                         ?>
@@ -155,7 +168,6 @@
                                             </div>
                                         <?php
                                             }
-                                            echo '<input type="hidden" name="cidade" id="cidade" value="'.$cidade[0]->nome.'"><input type="hidden" name="uf" id="uf" value="'.$cidade[0]->uf.'">'
                                         ?>
                                         </div>
                                     </div>
