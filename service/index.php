@@ -45,6 +45,20 @@
 
 	$server->register('select_cidades', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de cidades cadastradas para abrangência.');
 
+	function select_tipos()
+	{
+		$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+		$query = $conexao->query('SET CHARACTER SET utf8');
+		$query = $conexao->query("SELECT * FROM tipo");
+		$dados = array();
+		while($row = $query->fetch_assoc())
+			$dados[] = $row;
+		$conexao->close();
+		return json_encode($dados);
+	}
+
+	$server->register('select_tipos', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de cidades cadastradas para abrangência.');
+
 	class usuario
 	{
 		function insert($nome,$email,$senha,$celular,$genero,$nascimento)
@@ -127,7 +141,7 @@
 			$max = $num + 5;
 			while($row = $query->fetch_assoc())
 			{
-				$sub_query = $conexao->query("SELECT * FROM cupom_has_tipo WHERE estado <> 0 AND usuario_id = $usuario_id AND cupom_id = ".$row["id"]);
+				$sub_query = $conexao->query("SELECT * FROM usuario_has_cupom WHERE estado <> 0 AND usuario_id = $usuario_id AND cupom_id = ".$row["id"]);
 				if($i > $num && $i < $max && $sub_query->num_rows() == 0)
 					$dados[$i] = $row;
 				$i++;
@@ -255,7 +269,7 @@
 			return $id;
 		}
 
-		function insert_cupom($empresa_id,$endereco_id,$titulo,$regras,$descricao,$preco_normal,$preco_cupom,$prazo,$quantidade,$prioridade,$pagamento,$delivery,$tipos)
+		function insert_cupom($empresa_id,$endereco_id,$titulo,$regras,$descricao,$preco_normal,$preco_cupom,$prazo,$quantidade,$pagamento,$delivery,$tipos)
 		{
 		    $titulo = preg_replace('![*#/\"´`]+!','',$titulo);
 		    $regras = preg_replace('![*#/\"´`]+!','',$regras);
@@ -266,7 +280,7 @@
 
 		    $conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,'$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$prioridade,$pagamento,$delivery,-1)");
+		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,'$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$pagamento,$delivery,-1)");
 		    $cupom_id = 0;
 		    if($query)
 		    {
@@ -383,10 +397,13 @@
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM cupom WHERE id = $id");
+			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id");
 			$dados = array();
 			while($row = $query->fetch_assoc())
 				$dados[] = $row;
+			$query = $conexao->query("SELECT tipo.nome,tipo.id FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
+			while($row = $query->fetch_assoc())
+				$dados["tipos"][] = $row;
 			$conexao->close();
 			return json_encode($dados);
 		}
