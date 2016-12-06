@@ -20,11 +20,7 @@
         $insert = $service->call('empresa.insert_endereco',array($_SESSION["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
 
         if($insert == 0)
-            $alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ inválido!</b> Digite novamente.</span></div>';
-        elseif($insert == -1)
-            $alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email ou CNPJ já cadastrados!</b> Reveja seus dados.</span></div>';
-        elseif($insert == -2)
-            $alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
         else
             header("location: enderecos.php");
     }
@@ -32,26 +28,26 @@
     //Post enviado de outra página para esta, onde serão carregados os dados e exibidos nos campos
     if(isset($_POST["editar"]))
     {
-        $id_end = $_POST["id"];
-        $editar = $service->call('empresa.select_enderecos', array($id_end));
+        $id_end = $_POST["id_end"];
+        $editar = $service->call('empresa.select_endereco', array($id_end));
         $endereco = json_decode($editar);
-        $rua = $endereco[0]->rua;
-        $num = $endereco[0]->num;
-        $complemento = $endereco[0]->complemento;
-        $cep = $endereco[0]->cep;
-        $bairro = $endereco[0]->bairro;
-        $cidade = $endereco[0]->cidade;
-        $telefone = $endereco[0]->telefone;
-        $operacao = '<input type="hidden" name="edit">';
+        $rua = $endereco->rua;
+        $num = $endereco->num;
+        $complemento = $endereco->complemento;
+        $cep = $endereco->cep;
+        $bairro = $endereco->bairro;
+        $cidade = $endereco->cidade;
+        $telefone = $endereco->telefone;
+        $operacao = '<input type="hidden" name="edit" value="'.$id_end.'">';
     }
 
     //Post enviado desta página para confirmar a edição
     if(isset($_POST["edit"]))
     {
-        if($service->call('empresa.update_endereco', array($_POST["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"])))
+        if($service->call('empresa.update_endereco', array($_POST["edit"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"])))
             header("location: enderecos.php");
         else
-            $alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
+            $alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom: 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
     }
 ?>
 <!doctype html>
@@ -78,9 +74,6 @@
     <!--  Paper Dashboard core CSS    -->
     <link href="../assets/css/paper-dashboard.css" rel="stylesheet"/>
 
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="../assets/css/demo.css" rel="stylesheet" />
-
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
@@ -97,10 +90,11 @@
 
 <div class="wrapper">
     <?php 
-        echo $alert;
         require_once("sidenav.php");
         require_once("topnav.php");
+        echo $alert;
     ?>
+
         <div class="content">
             <div class="container-fluid">
                 <div class="row">

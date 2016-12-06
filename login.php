@@ -1,6 +1,12 @@
 <?php
 	require_once("conectar_service.php");
 
+	session_start();
+	if(isset($_SESSION) &&$_SESSION["tipo"] == "empresa")
+		header("location: empresa/");
+	elseif($_SESSION["tipo"] == "admin")
+		header("location: admin/");
+
 	$alert = "";
 
 	if (isset($_POST["concluir"]))
@@ -43,9 +49,6 @@
 
     <!--  Paper Dashboard core CSS    -->
     <link href="assets/css/paper-dashboard.css" rel="stylesheet"/>
-
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">

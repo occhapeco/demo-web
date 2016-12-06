@@ -246,11 +246,11 @@
 			$telefone = preg_replace('![*#/\"´`]+!','',$telefone);
 
 		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,'$latitude','$longitude','$telefone')");
-		    $empresa_id = 0;
+		    $id = 0;
 		    if($query)
-		    	$empresa_id = $conexao->insert_id;
+		    	$id = $conexao->insert_id;
 			$conexao->close();
-			return $empresa_id;
+			return $id;
 		}
 
 		function insert_cupom($empresa_id,$endereco_id,$titulo,$regras,$descricao,$preco_normal,$preco_cupom,$prazo,$quantidade,$prioridade,$pagamento,$delivery,$tipos)
@@ -386,8 +386,8 @@
 		}
 	}
 
-	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
-	$server->register('empresa.insert_endereco', array('empresa_id' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de endereço.');
+	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
+	$server->register('empresa.insert_endereco', array('empresa_id' => 'xsd:integer','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de endereço.');
 	$server->register('empresa.insert_cupom', array('empresa_id' => 'xsd:integer','endereco_id' => 'xsd:integer','titulo' => 'xsd:string','regras' => 'xsd:string','descricao' => 'xsd:string','preco_normal' => 'xsd:double','preco_cupom' => 'xsd:double','prazo' => 'xsd:string','quantidade' => 'xsd:integer','prioridade' => 'xsd:integer','pagamento' => 'xsd:integer','delivery' => 'xsd:integer','tipos' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de cupom.');
 	$server->register('empresa.update_perfil', array('id' => 'xsd:integer','nome_usuario' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','celular' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar perfil de empresa.');
 	$server->register('empresa.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha da empresa.');
