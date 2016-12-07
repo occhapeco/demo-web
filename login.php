@@ -1,12 +1,7 @@
 <?php
+	require_once("permissao.php");
 	require_once("conectar_service.php");
-
-	session_start();
-	if(isset($_SESSION) &&$_SESSION["tipo"] == "empresa")
-		header("location: empresa/");
-	elseif($_SESSION["tipo"] == "admin")
-		header("location: admin/");
-
+	
 	$alert = "";
 
 	if (isset($_POST["concluir"]))

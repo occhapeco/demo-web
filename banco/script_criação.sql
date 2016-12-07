@@ -13,6 +13,7 @@ CREATE TABLE empresa (
   nome_fantasia VARCHAR(20) NOT NULL,
   cnpj VARCHAR(18) NOT NULL UNIQUE KEY,
   celular VARCHAR(14) NOT NULL,
+  data_cadastro VARCHAR(10) NOT NULL,
   dias_bloqueio INTEGER UNSIGNED NOT NULL
 );
 
@@ -58,11 +59,12 @@ CREATE TABLE cupom (
   descricao TEXT NOT NULL,
   preco_normal DOUBLE NOT NULL,
   preco_cupom DOUBLE NOT NULL,
-  prazo DATETIME NOT NULL,
+  prazo VARCHAR(16) NOT NULL,
   quantidade INTEGER UNSIGNED NOT NULL,
   pagamento INTEGER(1) UNSIGNED NOT NULL,
   delivery INTEGER(1) UNSIGNED NOT NULL,
-  estado INTEGER(1) UNSIGNED NOT NULL,
+  imagem TEXT NOT NULL,
+  estado INTEGER(1) NOT NULL,
   FOREIGN KEY(empresa_id)REFERENCES empresa(id),
   FOREIGN KEY(endereco_id)REFERENCES endereco(id)
 );

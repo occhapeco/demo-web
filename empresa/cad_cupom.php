@@ -6,16 +6,17 @@
 
     $alert = "";
     
-    $endereco_id = "";
+    $endereco_id = 0;
     $titulo = "";
     $regras = "";
     $descricao = "";
     $preco_normal = "";
     $preco_cupom = "";
+    $prazo = "";
     $quantidade = "";
-    $prioridade = 0;
     $pagamento = 0;
     $delivery = 0;
+    $imagem = "";
     $tipo = NULL;
     $operacao = '<input type="hidden" name="cadastrar">';
 
@@ -43,11 +44,31 @@
             }
         $tipos = json_encode($tipos);
 
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,$tipos));
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,$_POST["imagem"],$tipos));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
-            header("location: meus_enderecos.php");
+            header("location: meus_cupons.php");
+    }
+
+    if(isset($_POST["editar"]))
+    {
+        $cupom_id = $_POST["cupom_id"];
+        $json = $service->call('empresa.select_cupom', array($cupom_id));
+        $cupom = json_decode($json);
+        $endereco_id = $cupom->endereco_id;
+        $titulo = $cupom->titulo;
+        $regras = $cupom->regras;
+        $descricao = $cupom->descricao;
+        $preco_normal = $cupom->preco_normal;
+        $preco_cupom = $cupom->preco_cupom;
+        $prazo = $cupom->prazo;
+        $quantidade = $cupom->quantidade;
+        $pagamento = $cupom->pagamento;
+        $delivery = $cupom->delivery;
+        $imagem = $cupom->imagem;
+        $tipo = $cupom->tipos;
+        $operacao = '<input type="hidden" name="edit" value="'.$cupom_id.'">';
     }
 ?>
 <!doctype html>
@@ -95,6 +116,7 @@
     <?php 
         require_once("sidenav.php");
         require_once("topnav.php");
+        echo $alert;
     ?>
         <div class="content">
             <div class="container-fluid">
@@ -156,31 +178,31 @@
                                             <div class="col-sm-8">
                                                 <div class="form-group">
                                                     <label>Título <small>(obrigatório)</small></label>
-                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" required autofocus><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
+                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" value="<?php echo $titulo; ?>" required autofocus><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Número de cupons <small>(obrigatório)</small></label>
-                                                    <input name="quantidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false" required><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
+                                                    <input name="quantidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false" value="<?php echo $quantidade; ?>" required><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Prazo <small>(obrigatório)</small></label>
-                                                    <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
+                                                    <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label>Valor de cardápio <small>(obrigatório)</small></label>
-                                                    <input name="preco_normal" id="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false" required><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
+                                                    <input name="preco_normal" id="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false" value="<?php echo $preco_normal; ?>" required><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label>Valor promocional <small>(obrigatório)</small></label>
-                                                    <input name="preco_cupom" id="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false" required><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
+                                                    <input name="preco_cupom" id="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false" value="<?php echo $preco_cupom; ?>" required><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
@@ -192,13 +214,13 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label>Descrição <small>(obrigatório)</small></label>
-                                                    <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false" required></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
+                                                    <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false" required><?php echo $descricao; ?></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label>Regras <small>(obrigatório)</small></label>
-                                                    <textarea name="regras" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false" required></textarea><label id="regras-error" class="error" for="regras" style="display: none;"></label>
+                                                    <textarea name="regras" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false" required><?php echo $regras; ?></textarea><label id="regras-error" class="error" for="regras" style="display: none;"></label>
                                                 </div>
                                             </div>
 
@@ -314,7 +336,7 @@
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="upload">
+                                                    <input type="radio" name=imagem value="upload">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="" class="picture-src" id="wizardPicturePreview" title="">
@@ -326,7 +348,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice active" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/breakfast-1.jpg" checked>
+                                                    <input type="radio" name=imagem value="breakfast-1.jpg" checked>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/breakfast-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -336,7 +358,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/breakfast-2.jpg">
+                                                    <input type="radio" name=imagem value="breakfast-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/breakfast-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -346,7 +368,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/breakfast-3.jpg">
+                                                    <input type="radio" name=imagem value="breakfast-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/breakfast-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -356,7 +378,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/breakfast-4.jpg">
+                                                    <input type="radio" name=imagem value="breakfast-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/breakfast-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -366,7 +388,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/breakfast-5.jpg">
+                                                    <input type="radio" name=imagem value="breakfast-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/breakfast-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -376,7 +398,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/breakfast-6.jpg">
+                                                    <input type="radio" name=imagem value="breakfast-6.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/breakfast-6.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -386,7 +408,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/drink-1.jpg">
+                                                    <input type="radio" name=imagem value="drink-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/drink-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -396,7 +418,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/drink-2.jpg">
+                                                    <input type="radio" name=imagem value="drink-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/drink-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -406,7 +428,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/drink-3.jpg">
+                                                    <input type="radio" name=imagem value="drink-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/drink-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -416,7 +438,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/drink-4.jpg">
+                                                    <input type="radio" name=imagem value="drink-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/drink-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -426,7 +448,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/drink-5.jpg">
+                                                    <input type="radio" name=imagem value="drink-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/drink-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -436,7 +458,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meals-1.jpg">
+                                                    <input type="radio" name=imagem value="meals-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meals-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -446,7 +468,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meals-2.jpg">
+                                                    <input type="radio" name=imagem value="meals-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meals-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -456,7 +478,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meals-3.jpg">
+                                                    <input type="radio" name=imagem value="meals-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meals-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -466,7 +488,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meat-1.jpg">
+                                                    <input type="radio" name=imagem value="meat-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meat-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -476,7 +498,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meat-2.jpg">
+                                                    <input type="radio" name=imagem value="meat-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meat-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -486,7 +508,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meat-3.jpg">
+                                                    <input type="radio" name=imagem value="meat-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meat-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -496,7 +518,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meat-4.jpg">
+                                                    <input type="radio" name=imagem value="meat-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meat-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -506,7 +528,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meat-5.jpg">
+                                                    <input type="radio" name=imagem value="meat-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meat-5.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -516,7 +538,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/meat-6.jpg">
+                                                    <input type="radio" name=imagem value="meat-6.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/meat-6.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -526,7 +548,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/seafood-1.jpg">
+                                                    <input type="radio" name=imagem value="seafood-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/seafood-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -536,7 +558,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/seafood-2.jpg">
+                                                    <input type="radio" name=imagem value="seafood-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/seafood-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -546,7 +568,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/seafood-3.jpg">
+                                                    <input type="radio" name=imagem value="seafood-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/seafood-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -556,7 +578,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/seafood-4.jpg">
+                                                    <input type="radio" name=imagem value="seafood-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/seafood-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -566,7 +588,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/snack-1.jpg">
+                                                    <input type="radio" name=imagem value="snack-1.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/snack-1.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -576,7 +598,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/snack-2.jpg">
+                                                    <input type="radio" name=imagem value="snack-2.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/snack-2.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -586,7 +608,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/snack-3.jpg">
+                                                    <input type="radio" name=imagem value="snack-3.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/snack-3.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -596,7 +618,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/snack-4.jpg">
+                                                    <input type="radio" name=imagem value="snack-4.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/snack-4.jpg" class="picture-src" id="wizardPicturePreview" title="">
@@ -606,7 +628,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="choice" data-toggle="wizard-radio">
-                                                    <input type="radio" name="img" value="../imgs/snack-5.jpg">
+                                                    <input type="radio" name=imagem value="snack-5.jpg">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="../imgs/snack-5.jpg" class="picture-src" id="wizardPicturePreview" title="">

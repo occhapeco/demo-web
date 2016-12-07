@@ -61,12 +61,13 @@
                         <div class="row">
                             <div class="col-xs-5">
                                 <div class="icon-big icon-warning text-center">
-                                    <img src="imgs/pizza-3.png" width="100px" class="img-responsive">
+                                    <img src="<?php echo $cupom[$i]->imagem ?>" width="100px" class="img-responsive">
                                 </div>
                             </div>
                             <div class="col-xs-7">
                                 <div class="numbers">
                                     <p><?php echo $cupom[$i]->titulo ?></p>
+                                    <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
                                 </div>
                             </div>
                         </div>
@@ -74,10 +75,10 @@
                             <hr />
                             
                                 <div class="pull-right" >
-                                    <div class=""><button class=" btn btn-simple btn-warning"><i class="ti-pencil" style="font-size: 20px"></i></button></div>      
-                                    <div class=""><button class="btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></div>
+                                    <form action="cad_cupom.php" method="post" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
+                                    <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
                                 </div>
-                                <div style="font-size: 20px;color: #007aff;"><?php echo $cupom[$i]->preco_cupom ?></div><br><s style="color:coral"><?php echo $cupom[$i]->preco_normal ?></s>
+                                <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div> <s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
                         </div>
                     </div>
                 </div>
