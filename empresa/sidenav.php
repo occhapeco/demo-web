@@ -116,7 +116,19 @@
                         <p>Meus Endereços</p>
                     </a>
                 </li>
-            <?php } ?>
+            <?php } 
+            if($page == "index")
+                {
+            ?>
+                <li class="active">
+                    <a href="#">
+                        <i class="ti-panel"></i>
+                        <p>Cupom</p>
+                    </a>
+                </li>
+            <?php
+                }
+            ?>
                 <li>
                     <a href="../logout.php">
                         <i class="ti-arrow-left"></i>

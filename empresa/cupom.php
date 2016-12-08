@@ -3,6 +3,8 @@
     require_once("../conectar_service.php");
 
     $page = basename(__FILE__, '.php');
+
+    $id_cupom = $_POST["id_cupom"];
 ?>
 <html lang="pt">
 <head>
@@ -50,12 +52,10 @@
 
         <div class="content">
             <?php
-            $json_dados = $service->call('empresa.select_cupons', array($_SESSION["id"]));
+            $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
             $cupom = json_decode($json_dados);
-            for($i = 0; $i<count($cupom); $i++)
-            {
              ?>
-            <div class="col-lg-6 col-sm-6">
+            <div class="col-lg-8">
                 <div class="card">
                     <div class="content">
                         <div class="row">
@@ -66,30 +66,70 @@
                             </div>
                             <div class="col-xs-7">
                                 <div class="numbers">
-                                    <p><?php echo $cupom[$i]->titulo ?></p>
                                     <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
+                                    <label>Oferta:</label><label style="color:#252422"><?php echo $cupom[0]->titulo ?></label><br>
+                                    <label>Validade:</label><label style="color:#252422"><?php echo $cupom[0]->prazo ?></label><br>
+                                    <label>Valor:</label><label style="color:#252422"><?php echo $cupom[0]->preco_cupom ?></label><br>
+                                    <label>Regras:</label><label style="color:#252422"><?php echo $cupom[0]->regra ?></label><br>
+                                    <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom[0]->quantidade ?></label><br>
+                                    <label>Descrição:</label><label style="color:#252422"><?php echo $cupom[0]->descricao ?></label><br>
                                 </div>
                             </div>
                         </div>
                         <div class="footer status">
                             <hr />
-                            <form action="cupom.php" method="post">
-                                <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                <input class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Detalhes" style="display: none;" type="submit">
-                            </form>
+                            
                                 <div class="pull-right" >
                                     <form action="cad_cupom.php" method="post" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
-                                    <form action="cad_cupom.php" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button class=" btn btn-simple btn-info" name="editar"><i class="ti-reload" style="font-size: 20px"></i></button></form>
+                                    <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
                                 </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <?php
-              }
-            ?>            
+            </div>          
         </div>
-</div>
+
+        <?php
+            $select = $service->call(select_usuarios, array($id_cupom));
+            $usuario = json_decode($select);
+            
+        ?>
+        <div class="content table-responsive table-full-width">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Celular</th>
+                        <th>Valor</th>
+                        <th>Dar Baixa</th>
+                    </tr>
+                    <tbody>
+                        <?php
+                            for($i = 0; $i<count($usuario); $i++)
+                            {
+                        ?>
+                        <tr>
+                            <td><?php echo $usuario[$i]->nome; ?></td>
+                            <td><?php echo $usuario[$i]->celular; ?></td>
+                            <td><?php echo $usuario[$i]->preco_cupom; ?></td>
+                            <?php
+                            if($usuario[$i]->estado == 0)
+                            ?>
+                            <td><input type="checkbox" value="<?php echo $usuario[$i]->id ?>"></td>
+                            <?php
+                            else
+                            ?>
+                            <td> - </td>
+                        </tr>
+                        <?php
+                            }
+                        ?>
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+        <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Dar Baixa" style="display: inline-block;">
+    </div>
 
 
 </body>

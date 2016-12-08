@@ -648,7 +648,7 @@
                                             <input type="button" class="btn btn-previous btn-default btn-wd" name="previous" value="Anterior">
                                         </div>
                                         <div class="clearfix"></div>
-                                    </div>
+                                    </div> 
                                 </div>
                                 </form>
                             </div>
