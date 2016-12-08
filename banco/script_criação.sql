@@ -4,6 +4,12 @@ CREATE TABLE cidade (
   uf VARCHAR(2) NOT NULL
 );
 
+CREATE TABLE imagem (
+  id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  caminho TEXT NOT NULL,
+  tipo INTEGER(1) NOT NULL
+);
+
 CREATE TABLE empresa (
   id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   nome_usuario VARCHAR(40) NOT NULL,
@@ -13,7 +19,7 @@ CREATE TABLE empresa (
   nome_fantasia VARCHAR(20) NOT NULL,
   cnpj VARCHAR(18) NOT NULL UNIQUE KEY,
   celular VARCHAR(14) NOT NULL,
-  data_cadastro VARCHAR(10) NOT NULL,
+  data_cadastro DATE NOT NULL,
   dias_bloqueio INTEGER UNSIGNED NOT NULL
 );
 
@@ -40,7 +46,7 @@ CREATE TABLE usuario (
   senha VARCHAR(60) NOT NULL,
   celular VARCHAR(14) NOT NULL,
   genero INTEGER(1) NOT NULL,
-  nascimento VARCHAR(10) NOT NULL,
+  nascimento DATE NOT NULL,
   dias_bloqueio INTEGER UNSIGNED NOT NULL
 );
 
@@ -54,19 +60,21 @@ CREATE TABLE cupom (
   id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   empresa_id INTEGER UNSIGNED NOT NULL,
   endereco_id INTEGER UNSIGNED NOT NULL,
+  imagem_id INTEGER UNSIGNED NOT NULL,
   titulo VARCHAR(50) NOT NULL,
   regras TEXT NOT NULL,
   descricao TEXT NOT NULL,
   preco_normal DOUBLE NOT NULL,
   preco_cupom DOUBLE NOT NULL,
-  prazo VARCHAR(16) NOT NULL,
+  prazo DATETIME NOT NULL,
   quantidade INTEGER UNSIGNED NOT NULL,
   pagamento INTEGER(1) UNSIGNED NOT NULL,
   delivery INTEGER(1) UNSIGNED NOT NULL,
   imagem TEXT NOT NULL,
   estado INTEGER(1) NOT NULL,
   FOREIGN KEY(empresa_id)REFERENCES empresa(id),
-  FOREIGN KEY(endereco_id)REFERENCES endereco(id)
+  FOREIGN KEY(endereco_id)REFERENCES endereco(id),
+  FOREIGN KEY(imagem_id)REFERENCES imagem(id)
 );
 
 CREATE TABLE cupom_has_tipo (
@@ -83,10 +91,14 @@ CREATE TABLE usuario_has_cupom (
   usuario_id INTEGER UNSIGNED NOT NULL,
   estado INTEGER(1) UNSIGNED NOT NULL,
   preco_cupom DOUBLE NOT NULL,
-  prazo VARCHAR(16) NOT NULL,
+  prazo DATETIME NOT NULL,
   pagamento INTEGER(1) NOT NULL,
   delivery INTEGER(1) NOT NULL,
-  data_resgate VARCHAR(16) NOT NULL,
+  data_resgate DATETIME NOT NULL,
+  produto INTEGER(1) NULL,
+  atendimento INTEGER(1) NULL,
+  ambiente INTEGER(1) NULL,
+  comentarios TEXT NULL,
   FOREIGN KEY(usuario_id)REFERENCES usuario(id),
   FOREIGN KEY(cupom_id)REFERENCES cupom(id)
 );
