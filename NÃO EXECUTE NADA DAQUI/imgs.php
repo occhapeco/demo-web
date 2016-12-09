@@ -1,0 +1,15 @@
+<?php
+	require_once("conectar_service.php");
+	for($i=1;$i<=6;$i++)
+		$service->call('empresa.insert_imagem',array('breakfast-'.$i.'.jpg'));
+	for($i=1;$i<=5;$i++)
+		$service->call('empresa.insert_imagem',array('drink-'.$i.'.jpg'));
+	for($i=1;$i<=3;$i++)
+		$service->call('empresa.insert_imagem',array('meals-'.$i.'.jpg'));
+	for($i=1;$i<=6;$i++)
+		$service->call('empresa.insert_imagem',array('meat-'.$i.'.jpg'));
+	for($i=1;$i<=4;$i++)
+		$service->call('empresa.insert_imagem',array('seafood-'.$i.'.jpg'));
+	for($i=1;$i<=5;$i++)
+		$service->call('empresa.insert_imagem',array('snack-'.$i.'.jpg'));
+?>

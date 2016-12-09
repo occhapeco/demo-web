@@ -70,7 +70,6 @@ CREATE TABLE cupom (
   quantidade INTEGER UNSIGNED NOT NULL,
   pagamento INTEGER(1) UNSIGNED NOT NULL,
   delivery INTEGER(1) UNSIGNED NOT NULL,
-  imagem TEXT NOT NULL,
   estado INTEGER(1) NOT NULL,
   FOREIGN KEY(empresa_id)REFERENCES empresa(id),
   FOREIGN KEY(endereco_id)REFERENCES endereco(id),

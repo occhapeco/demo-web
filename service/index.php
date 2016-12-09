@@ -33,7 +33,7 @@
 
 	function select_cidades()
 	{
-		$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+		$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 		$query = $conexao->query('SET CHARACTER SET utf8');
 		$query = $conexao->query("SELECT * FROM cidade");
 		$dados = array();
@@ -47,7 +47,7 @@
 
 	function select_tipos()
 	{
-		$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+		$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 		$query = $conexao->query('SET CHARACTER SET utf8');
 		$query = $conexao->query("SELECT * FROM tipo");
 		$dados = array();
@@ -61,7 +61,7 @@
 
 	function select_imagens()
 	{
-		$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+		$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 		$query = $conexao->query('SET CHARACTER SET utf8');
 		$query = $conexao->query("SELECT * FROM imagem WHERE tipo = 1");
 		$dados = array();
@@ -80,11 +80,12 @@
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
 			$celular = preg_replace('![*#/\"´`]+!','',$celular);
-			$nascimento = DateTime::createFromFormat('d/m/Y',$nascimento);
-		    $nascimento = $nascimento->format("Y-m-d");
+			$data = new DateTime();
+		    $data = $data->createFromFormat('d/m/Y',$nascimento);
+		    $nascimento = $data->format("Y-m-d");
 			$senha = md5(sha1($senha));
 
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0)");
 			$id = 0;
@@ -99,7 +100,7 @@
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
 			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE usuario SET nome = '$nome', celular = '$celular', genero = $genero, nascimento = '$nascimento' WHERE id = $id");
 			$conexao->close();
@@ -110,7 +111,7 @@
 		{
 			$senha_antiga = md5(sha1($senha_antiga));
 			$senha_nova = md5(sha1($senha_nova));
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
 			$conexao->close();
@@ -120,7 +121,7 @@
 		function login($email,$senha)
 		{
 			$senha = md5(sha1($senha));
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'");
 			if($query->num_rows > 1 || $query->num_rows == 0)
@@ -147,7 +148,7 @@
 				$cond .= " AND cupom.pagamento = ".$pagamento;
 			if($delivery > 0)
 				$cond .= " AND cupom.delivery = ".$delivery;
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,imagem.caminho,empresa.nome_fantasia FROM cupom INNER JOIN cupom_has_tipo ON (cupom.id = cupom_has_tipo.cupom_id) INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE $str_tipo AND cidade.id = $cidade $cond AND cupom.quantidade > 0 AND cupom.estado = 0 ORDER BY cupom.prioridade DESC");
 			$dados = array();
@@ -158,8 +159,9 @@
 				$sub_query = $conexao->query("SELECT * FROM usuario_has_cupom WHERE estado <> 0 AND usuario_id = $usuario_id AND cupom_id = ".$row["id"]);
 				if($i > $num && $i < $max && $sub_query->num_rows() == 0)
 					$dados[$i] = $row;
-				$prazo = DateTime::createFromFormat('Y-m-d H:i:s',$dados[$i]->prazo);
-		    	$dados[$i]->prazo = $prazo->format("d/m/Y H:i:s");
+				$data = new DateTime();
+			    $data = $data->createFromFormat('Y-m-d H:i:s',$dados[$i]->prazo);
+			    $dados[$i]->prazo = $data->format("d/m/Y H:i");
 				$i++;
 			}
 			$conexao->close();
@@ -168,9 +170,9 @@
 
 		function select_detalhes_cupom($cupom_id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN imagem ON (imagem.id = cupom.imagem_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id)  WHERE cupom.id = $cupom_id");
+			$query = $conexao->query("SELECT cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN imagem ON (imagem.id = cupom.imagem_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id)  WHERE cupom.id = $cupom_id");
 			$dados = array();
 			$row = $query->fetch_assoc();
 			$dados["detalhes"] = $row;
@@ -183,7 +185,7 @@
 
 		function pegar_cupom($usuario_id,$cupom_id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
 			if($query)
@@ -200,7 +202,7 @@
 
 		function select_perfil($id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM usuario WHERE id = $id");
 			$row = $query->fetch_assoc();
@@ -210,7 +212,7 @@
 
 		function select_historico($id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT MUDAR FROM usuario_has_cupom INNER JOIN usuario ON(usuario_has_cupom.usuario_id = usuario.id) INNER JOIN cupom ON(cupom.id = usuario_has_cupom.cupom_id) WHERE usuario.id = $id");
 			$dados = array();
@@ -247,7 +249,7 @@
 			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 			$data_cadastro = date("Y-m-d");
 
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular','$data_cadastro',0)");
 			if(!$query)
@@ -277,7 +279,7 @@
 			$cep = preg_replace('![*#/\"´`]+!','',$cep);
 			$telefone = preg_replace('![*#/\"´`]+!','',$telefone);
 
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,'$latitude','$longitude','$telefone')");
 		    $id = 0;
@@ -291,9 +293,9 @@
 		{
 		    $caminho = preg_replace('![*#\"´`]+!','',$caminho);
 
-		    $conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+		    $conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-		    $query = $conexao->query("INSERT INTO imagem VALUES(NULL,'$caminho',0)");
+		    $query = $conexao->query("INSERT INTO imagem VALUES(NULL,'$caminho',1)");
 		    $imagem_id = 0;
 		    if($query)
 		    	$imagem_id = $conexao->insert_id;
@@ -307,14 +309,12 @@
 		    $regras = preg_replace('![*#/\"´`]+!','',$regras);
 		    $descricao = preg_replace('![*#/\"´`]+!','',$descricao);
 		    $data = new DateTime();
-		    $data = $data->createFromFormat('d/m/Y H:i:s',$prazo.':00');
+		    $data = $data->createFromFormat('d/m/Y H:i',$prazo);
 		    $prazo = $data->format("Y-m-d H:i:s");
 
-		    return "INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,$imagem_id'$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$pagamento,$delivery,-1)";
-
-		    $conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+		    $conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,$imagem_id'$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$pagamento,$delivery,-1)");
+		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,$imagem_id,'$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$pagamento,$delivery,-1)");
 		    $cupom_id = 0;
 		    if($query)
 		    {
@@ -334,7 +334,7 @@
 			$nome_fantasia = preg_replace('![*#/\"´`]+!','',$nome_fantasia);
 			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE empresa SET nome_usuario = '$nome_usuario', razao_social = '$razao_social', nome_fantasia = '$nome_fantasia', celular = '$celular' WHERE id = $id");
 			$conexao->close();
@@ -345,7 +345,7 @@
 		{
 			$senha_antiga = md5(sha1($senha_antiga));
 			$senha_nova = md5(sha1($senha_nova));
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE empresa SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
 			$conexao->close();
@@ -360,7 +360,7 @@
 			$cep = preg_replace('![*#/\"´`]+!','',$cep);
 			$telefone = preg_replace('![*#/\"´`]+!','',$telefone);
 
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 		    $query = $conexao->query("UPDATE endereco SET rua='$rua',num='$num',complemento='$complemento',cep='$cep',bairro='$bairro',cidade_id=$cidade_id,latitude='$latitude',longitude='$longitude',telefone='$telefone' WHERE id = $id");
 			$conexao->close();
@@ -370,7 +370,7 @@
 		function login($email,$senha)
 		{
 			$senha = md5(sha1($senha));
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha'");
 			if($query->num_rows == 0)
@@ -382,7 +382,7 @@
 
 		function select_perfil($id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM empresa WHERE id = $id");
 			$row = $query->fetch_assoc();
@@ -392,7 +392,7 @@
 
 		function select_endereco($id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT endereco.bairro,endereco.rua,endereco.num,endereco.complemento,endereco.cep,cidade.id,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.id = $id");
 			$dados = array();
@@ -404,7 +404,7 @@
 
 		function select_enderecos($empresa_id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT endereco.id,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM endereco INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE endereco.empresa_id = $empresa_id");
 			$dados = array();
@@ -416,7 +416,7 @@
 
 		function select_cupom($id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM cupom WHERE id = $id");
 			$dados = $query->fetch_assoc();
@@ -429,9 +429,9 @@
 
 		function select_cupons($id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id");
+			$query = $conexao->query("SELECT cupom.id, cupom.titulo, cupom.descricao, cupom.preco_normal, cupom.preco_cupom, cupom.prazo, cupom.quantidade, cupom.delivery, cupom.estado, imagem.caminho FROM cupom INNER JOIN imagem ON(cupom.imagem_id = imagem.id) WHERE cupom.empresa_id = $id");
 			$dados = array();
 			$i = 0;
 			while($row = $query->fetch_assoc())
@@ -447,7 +447,7 @@
 
 		function select_usuarios($cupum_id)
 		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT usuario_has_cupom.id,usuario.nome,usuario.celular,usuario_has_cupom.preco_cupom,usuario_has_cupom.estado FROM usuario_has_cupom INNER JOIN usuario ON(usuario.id = usuario_has_cupom.usuario_id) WHERE usuario_has_cupom.cupom_id = $cupum_id");
 			while($row = $query->fetch_assoc())
@@ -459,7 +459,7 @@
 		function dar_baixa($usuarios)
 		{
 			$usuarios = json_decode($usuarios);
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			for($i=0;$i<count($usuarios);$i++)
 				$query = $conexao->query("UPDATE usuario_has_cupom SET estado = 1 WHERE id = ".$usuarios[$i]);

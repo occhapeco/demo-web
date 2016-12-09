@@ -26,9 +26,6 @@
     <!--  Paper Dashboard core CSS    -->
     <link href="../assets/css/paper-dashboard.css" rel="stylesheet"/>
 
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="../assets/css/demo.css" rel="stylesheet" />
-
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
@@ -61,7 +58,7 @@
                         <div class="row">
                             <div class="col-xs-5">
                                 <div class="icon-big icon-warning text-center">
-                                    <img src="<?php echo $cupom[$i]->imagem ?>" width="100px" class="img-responsive">
+                                    <img src="../imgs/<?php echo $cupom[$i]->caminho ?>" width="100px" class="img-responsive">
                                 </div>
                             </div>
                             <div class="col-xs-7">
@@ -73,14 +70,21 @@
                         </div>
                         <div class="footer status">
                             <hr />
-                            <form action="cupom.php" method="post">
-                                <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                <input class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Detalhes" style="display: none;" type="submit">
-                            </form>
                                 <div class="pull-right" >
-                                    <form action="cad_cupom.php" method="post" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
-                                    <form action="cad_cupom.php" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button class=" btn btn-simple btn-info" name="editar"><i class="ti-reload" style="font-size: 20px"></i></button></form>
+                                    <form action="cupom.php" method="post" style="margin-left:150px;">
+                                        <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                        <button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
+                                    </form>
+                                    <form action="cad_cupom.php" method="post" style="margin-left:250px;margin-top:-56">
+                                        <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                        <button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button>
+                                    </form>     
+                                    <form action="cad_cupom.php" method="post" style=" margin-left:300px; margin-top:-56">
+                                        <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                        <button class=" btn btn-simple btn-info" name="editar"><i class="ti-reload" style="font-size: 20px"></i></button>
+                                    </form>
                                 </div>
+                                <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div> <s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
                         </div>
                     </div>
                 </div>
@@ -106,14 +110,7 @@
     <!--  Notifications Plugin    -->
     <script src="../assets/js/bootstrap-notify.js"></script>
 
-    <!--  Google Maps Plugin    -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
-
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="../assets/js/paper-dashboard.js"></script>
-
-	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-	<script src="../assets/js/demo.js"></script>
-
 
 </html>

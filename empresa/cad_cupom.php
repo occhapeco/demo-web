@@ -45,7 +45,6 @@
         $tipos = json_encode($tipos);
 
         $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$_POST["imagem_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,$tipos));
-        echo "dgysaudhasjk ".$insert;
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
