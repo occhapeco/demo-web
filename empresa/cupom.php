@@ -52,8 +52,8 @@
 
         <div class="content">
             <?php
-            $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
-            $cupom = json_decode($json_dados);
+                $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
+                $cupom = json_decode($json_dados);
              ?>
             <div class="col-lg-8">
                 <div class="card">
@@ -73,6 +73,7 @@
                                     <label>Regras:</label><label style="color:#252422"><?php echo $cupom[0]->regra ?></label><br>
                                     <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom[0]->quantidade ?></label><br>
                                     <label>Descrição:</label><label style="color:#252422"><?php echo $cupom[0]->descricao ?></label><br>
+                                   <!-- <label>Endereço:</label><label style="color:#252422"><?php echo $cupom[0]->descricao ?></label><br>-->
                                 </div>
                             </div>
                         </div>
@@ -89,11 +90,6 @@
             </div>          
         </div>
 
-        <?php
-            $select = $service->call(select_usuarios, array($id_cupom));
-            $usuario = json_decode($select);
-            
-        ?>
         <div class="content table-responsive table-full-width">
             <table class="table table-striped">
                 <thead>
@@ -105,6 +101,8 @@
                     </tr>
                     <tbody>
                         <?php
+                            $select = $service->call(select_usuarios, array($id_cupom));
+                            $usuario = json_decode($select);
                             for($i = 0; $i<count($usuario); $i++)
                             {
                         ?>
