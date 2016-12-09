@@ -4,7 +4,7 @@
 
     $page = basename(__FILE__, '.php');
 
-    $id_cupom = $_POST["id_cupom"];
+    $id_cupom = $_GET["id_cupom"];
 ?>
 <html lang="pt">
 <head>
@@ -55,42 +55,66 @@
                 $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
                 $cupom = json_decode($json_dados);
              ?>
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="content">
                         <div class="row">
-                            <div class="col-xs-5">
+                            <div class="col-xs-6">
                                 <div class="icon-big icon-warning text-center">
-                                    <img src="<?php echo $cupom[$i]->imagem ?>" width="100px" class="img-responsive">
+                                    <img src="../imgs/<?php echo $cupom->caminho; ?>" width="200px" class="img-responsive">
                                 </div>
                             </div>
-                            <div class="col-xs-7">
+                            <div class="col-xs-6">
                                 <div class="numbers">
-                                    <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
-                                    <label>Oferta:</label><label style="color:#252422"><?php echo $cupom[0]->titulo ?></label><br>
-                                    <label>Validade:</label><label style="color:#252422"><?php echo $cupom[0]->prazo ?></label><br>
-                                    <label>Valor:</label><label style="color:#252422"><?php echo $cupom[0]->preco_cupom ?></label><br>
-                                    <label>Regras:</label><label style="color:#252422"><?php echo $cupom[0]->regra ?></label><br>
-                                    <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom[0]->quantidade ?></label><br>
-                                    <label>Descrição:</label><label style="color:#252422"><?php echo $cupom[0]->descricao ?></label><br>
-                                   <!-- <label>Endereço:</label><label style="color:#252422"><?php echo $cupom[0]->descricao ?></label><br>-->
+                                    <label style="color:#252422"><?php echo $cupom->titulo; ?></label>
+                                    
                                 </div>
                             </div>
-                        </div>
-                        <div class="footer status">
-                            <hr />
+                            <div class="col-xs-6">
+                                <label>Validade:</label><label style="color:#252422"><?php echo $cupom->prazo; ?></label>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Valor:</label><label style="color:#252422">R$ <?php echo $cupom->preco_cupom; ?></label>
+                            </div>
                             
-                                <div class="pull-right" >
-                                    <form action="cad_cupom.php" method="post" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
-                                    <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
+                            <div class="col-xs-6">
+                                <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom->quantidade; ?></label>
+                            </div>
+                            <div class="col-xs-12" style="margin-top:10px">
+                                <div class="col-xs-6">
+                                    <label>Descrição:</label><label style="color:#252422"><?php echo $cupom->descricao; ?></label>
                                 </div>
+                                <div class="col-xs-6">
+                                    <label>Regras:</label><label style="color:#252422"><?php echo $cupom->regras; ?></label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-xs-12" style="margin-left:15px">
+                                <label>Endereço:</label><label style="color:#252422"><?php echo $cupom->bairro.", ".$cupom->rua.", ".$cupom->num.", ".$cupom->complemento.", ".$cupom->cep;?></label>
+                            </div>
                         </div>
                     </div>
+                    <div class="footer status" style="padding-bottom:50px;">
+                        <hr />
+                        
+                            <div class="pull-right" >
+                                <form action="cad_cupom.php" method="post" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
+                                <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom->id."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
+                            </div>
+                    </div>
+                    </div>
                 </div>
-            </div>          
-        </div>
+            </div> 
 
-        <div class="content table-responsive table-full-width">
+        <div class="content">
+            <?php
+                $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
+                $cupom = json_decode($json_dados);
+             ?>
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="content">
+                       <div class="content table-responsive table-full-width">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -101,7 +125,7 @@
                     </tr>
                     <tbody>
                         <?php
-                            $select = $service->call(select_usuarios, array($id_cupom));
+                            $select = $service->call('select_usuarios', array($id_cupom));
                             $usuario = json_decode($select);
                             for($i = 0; $i<count($usuario); $i++)
                             {
@@ -112,12 +136,18 @@
                             <td><?php echo $usuario[$i]->preco_cupom; ?></td>
                             <?php
                             if($usuario[$i]->estado == 0)
+                            {
                             ?>
-                            <td><input type="checkbox" value="<?php echo $usuario[$i]->id ?>"></td>
+                            <td><input type="checkbox" value="<?php echo $usuario[$i]->id; ?>"></td>
                             <?php
+                            }
                             else
+                            {
                             ?>
                             <td> - </td>
+                            <?php
+                                }
+                            ?>
                         </tr>
                         <?php
                             }
@@ -125,9 +155,16 @@
                     </tbody>
                 </thead>
             </table>
-        </div>
-        <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Dar Baixa" style="display: inline-block;">
-    </div>
+            <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Dar Baixa" style="display: inline-block;">
+        </div>          
+                    </div>
+                </div>
+            </div> 
+</div>
+
+
+        
+
 
 
 </body>
