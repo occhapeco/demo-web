@@ -160,8 +160,8 @@
 				if($i > $num && $i < $max && $sub_query->num_rows() == 0)
 					$dados[$i] = $row;
 				$data = new DateTime();
-			    $data = $data->createFromFormat('Y-m-d H:i:s',$dados[$i]->prazo);
-			    $dados[$i]->prazo = $data->format("d/m/Y H:i");
+			    $data = $data->createFromFormat('Y-m-d H:i:s',$dados[$i]["prazo"]);
+			    $dados[$i]["prazo"] = $data->format("d/m/Y H:i");
 				$i++;
 			}
 			$conexao->close();
@@ -418,12 +418,15 @@
 		{
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM cupom WHERE id = $id");
+			$query = $conexao->query("SELECT imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,endereco.id,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = cupom.endereco_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) WHERE cupom.id = $id");
 			$dados = $query->fetch_assoc();
 			$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = $id");
 			while($row = $query->fetch_assoc())
 				$dados["tipo"][] = $row;
 			$conexao->close();
+			$data = new DateTime();
+		    $data = $data->createFromFormat('Y-m-d H:i:s',$dados["prazo"]);
+		    $dados["prazo"] = $data->format("d/m/Y H:i");
 			return json_encode($dados);
 		}
 
