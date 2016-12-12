@@ -74,7 +74,7 @@
                         <div class="footer status" style="height:6px;">
                             <hr />                            
                                 <div class="pull-right">
-                                    <form action="cad_endereco.php" method="post" style="margin-left:250px;"><input type="hidden" name="id_end" id="id_end" <?php echo "value='".$endereco[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-info" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>
+                                    <form action="cad_endereco.php" method="get" style="margin-left:250px;"><input type="hidden" name="id_end" id="id_end" <?php echo "value='".$endereco[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-info" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>
                                     <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="id_en" id="id_en" <?php echo "value='".$endereco[$i]->id."'"; ?>><button class=" btn btn-simple btn-danger"><i class="ti-trash" style="font-size: 20px"></i></button></form>
                                 </div>
                                 

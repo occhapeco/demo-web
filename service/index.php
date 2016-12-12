@@ -137,12 +137,15 @@
 		{
 			$tipo_id = json_decode($tipo_id);
 			$str_tipo = "";
+			$inner = "";
 			for($i=0;$i<count($tipo_id);$i++)
 			{
 				if($i != 0)
 					$str_tipo .= "AND";
 				$str_tipo .= " cupom_has_tipo.tipo_id = ".$tipo_id[$i]." ";
 			}
+			if($str_tipo != "")
+				$inner = "INNER JOIN cupom_has_tipo ON (cupom.id = cupom_has_tipo.cupom_id)";
 			$cond = "";
 			if($pagamento > 0)
 				$cond .= " AND cupom.pagamento = ".$pagamento;
@@ -150,14 +153,13 @@
 				$cond .= " AND cupom.delivery = ".$delivery;
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,imagem.caminho,empresa.nome_fantasia FROM cupom INNER JOIN cupom_has_tipo ON (cupom.id = cupom_has_tipo.cupom_id) INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE $str_tipo AND cidade.id = $cidade $cond AND cupom.quantidade > 0 AND cupom.estado = 0 ORDER BY cupom.prioridade DESC");
+			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,imagem.caminho,empresa.nome_fantasia FROM cupom $inner INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE cidade.id = $cidade $str_tipo $cond AND cupom.quantidade > 0 AND cupom.estado = 0");
 			$dados = array();
 			$i = 0;
 			$max = $num + 5;
 			while($row = $query->fetch_assoc())
 			{
-				$sub_query = $conexao->query("SELECT * FROM usuario_has_cupom WHERE estado <> 0 AND usuario_id = $usuario_id AND cupom_id = ".$row["id"]);
-				if($i > $num && $i < $max && $sub_query->num_rows() == 0)
+				if($i >= $num && $i < $max)
 					$dados[$i] = $row;
 				$data = new DateTime();
 			    $data = $data->createFromFormat('Y-m-d H:i:s',$dados[$i]["prazo"]);
@@ -172,7 +174,7 @@
 		{
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN imagem ON (imagem.id = cupom.imagem_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id)  WHERE cupom.id = $cupom_id");
+			$query = $conexao->query("SELECT cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN imagem ON (imagem.id = cupom.imagem_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE cupom.id = $cupom_id");
 			$dados = array();
 			$row = $query->fetch_assoc();
 			$dados["detalhes"] = $row;
@@ -194,10 +196,10 @@
 				$query = $conexao->query("SELECT * FROM cupom WHERE id = $cupom_id");
 				$row = $query->fetch_assoc();
 				$data = date("Y-m-d H:i:s");
-				$query = $conexao->query("INSERT INTO usuario_has_cupom VALUES(NULL,$cupom_id,$usuario_id,0,".$row["preco_cupom"].",'".$row["prazo"]."',".$row["pagamento"].",".$row["delivery"].",'$data',NULL,NULL,NULL,NULL)");
+				$query = $conexao->query("INSERT INTO usuario_has_cupom VALUES(NULL,$cupom_id,$usuario_id,0,".$row["preco_normal"].",".$row["preco_cupom"].",'".$row["prazo"]."',".$row["pagamento"].",".$row["delivery"].",'$data',NULL,NULL,NULL,NULL)");
 			}
 			$conexao->close();
-			return false;
+			return $query;
 		}
 
 		function select_perfil($id)
@@ -214,7 +216,7 @@
 		{
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT MUDAR FROM usuario_has_cupom INNER JOIN usuario ON(usuario_has_cupom.usuario_id = usuario.id) INNER JOIN cupom ON(cupom.id = usuario_has_cupom.cupom_id) WHERE usuario.id = $id");
+			$query = $conexao->query("SELECT usuario_has_cupom.cupom_id,usuario_has_cupom.estado,usuario_has_cupom.preco_normal,usuario_has_cupom.preco_cupom,usuario_has_cupom.prazo,usuario_has_cupom.pagamento,usuario_has_cupom.delivery,usuario_has_cupom.data_resgate,cupom.titulo,cupom.regras,cupom.descricao,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM usuario_has_cupom INNER JOIN usuario ON(usuario_has_cupom.usuario_id = usuario.id) INNER JOIN cupom ON(cupom.id = usuario_has_cupom.cupom_id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE usuario.id = $id");
 			$dados = array();
 			while($row = $query->fetch_assoc())
 				$dados[] = $row;
@@ -295,7 +297,7 @@
 
 		    $conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-		    $query = $conexao->query("INSERT INTO imagem VALUES(NULL,'$caminho',1)");
+		    $query = $conexao->query("INSERT INTO imagem VALUES(NULL,'$caminho',0)");
 		    $imagem_id = 0;
 		    if($query)
 		    	$imagem_id = $conexao->insert_id;
@@ -320,7 +322,7 @@
 		    {
 		    	$cupom_id = $conexao->insert_id;
 		    	$tipo = json_decode($tipos);
-		    	for($i=0;$tipo<count($tipo);$tipo++)
+		    	for($i=0;$i<count($tipo);$i++)
 		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
 		    }
 			$conexao->close();
@@ -362,7 +364,30 @@
 
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-		    $query = $conexao->query("UPDATE endereco SET rua='$rua',num='$num',complemento='$complemento',cep='$cep',bairro='$bairro',cidade_id=$cidade_id,latitude='$latitude',longitude='$longitude',telefone='$telefone' WHERE id = $id");
+		    $query = $conexao->query("UPDATE endereco SET rua='$rua',num='$num',complemento='$complemento',cep='$cep',bairro='$bairro',cidade_id=$cidade_id,latitude='$latitude',longitude='$longitude',telefone='$telefone',estado=-1 WHERE id = $id");
+			$conexao->close();
+			return $query;
+		}
+
+		function update_cupom($cupom_id,$endereco_id,$imagem_id,$titulo,$regras,$descricao,$preco_normal,$preco_cupom,$prazo,$quantidade,$pagamento,$delivery,$tipos)
+		{
+		    $titulo = preg_replace('![*#/\"´`]+!','',$titulo);
+		    $regras = preg_replace('![*#/\"´`]+!','',$regras);
+		    $descricao = preg_replace('![*#/\"´`]+!','',$descricao);
+		    $data = new DateTime();
+		    $data = $data->createFromFormat('d/m/Y H:i',$prazo);
+		    $prazo = $data->format("Y-m-d H:i:s");
+
+		    $conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+		    $query = $conexao->query("UPDATE cupom SET endereco_id=$endereco_id,imagem_id=$imagem_id,titulo='$titulo',regras='$regras',descricao='$descricao',preco_normal=$preco_normal,preco_cupom=$preco_cupom,prazo='$prazo',quantidade=$quantidade,pagamento=$pagamento,delivery=$delivery,estado=-1 WHERE id = $cupom_id");
+		    if($query)
+		    {
+		    	$tipo = json_decode($tipos);
+		    	$sub_query = $conexao->query("DELETE FROM cupom_has_tipo WHERE cupom_id=$cupom_id");
+		    	for($i=0;$i<count($tipo);$i++)
+		    		$sub_query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
+		    }
 			$conexao->close();
 			return $query;
 		}
@@ -418,9 +443,10 @@
 		{
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,endereco.id,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = cupom.endereco_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) WHERE cupom.id = $id");
+			$query = $conexao->query("SELECT cupom.imagem_id,imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = cupom.endereco_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) WHERE cupom.id = $id");
 			$dados = $query->fetch_assoc();
 			$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = $id");
+			$dados["tipo"] = array();
 			while($row = $query->fetch_assoc())
 				$dados["tipo"][] = $row;
 			$conexao->close();
@@ -441,6 +467,7 @@
 			{
 				$dados[$i] = $row;
 				$sub_query = $conexao->query("SELECT tipo.nome,tipo.id FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
+				$dados[$i]["tipos"] = array();
 				while($row = $query->fetch_assoc())
 					$dados[$i]["tipos"][] = $row;
 			}
@@ -467,7 +494,7 @@
 			for($i=0;$i<count($usuarios);$i++)
 				$query = $conexao->query("UPDATE usuario_has_cupom SET estado = 1 WHERE id = ".$usuarios[$i]);
 			$conexao->close();
-			return json_encode($dados);
+			return $query;
 		}
 	}
 
@@ -478,6 +505,7 @@
 	$server->register('empresa.update_perfil', array('id' => 'xsd:integer','nome_usuario' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','celular' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar perfil de empresa.');
 	$server->register('empresa.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha da empresa.');
 	$server->register('empresa.update_endereco', array('id' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:string','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar dados de um endereço.');
+	$server->register('empresa.update_cupom', array('cupom_id' => 'xsd:integer','endereco_id' => 'xsd:integer','imagem_id' => 'xsd:string','titulo' => 'xsd:string','regras' => 'xsd:string','descricao' => 'xsd:string','preco_normal' => 'xsd:double','preco_cupom' => 'xsd:double','prazo' => 'xsd:string','quantidade' => 'xsd:integer','pagamento' => 'xsd:integer','delivery' => 'xsd:integer','tipos' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Alterar dados de um cupom.');
 	$server->register('empresa.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login da empresa.');
 	$server->register('empresa.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de uma empresa.');
 	$server->register('empresa.select_enderecos', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona endereços de uma empresa.');
@@ -485,7 +513,7 @@
 	$server->register('empresa.select_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um cupom.');
 	$server->register('empresa.select_cupons', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todos os cupons e seus dados pela empresa.');
 	$server->register('empresa.select_usuarios', array('cupom_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona os usuarios que resgatarem um cupom.');
-	$server->register('empresa.dar_baixa', array('usuarios' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Dá baixa em resgates de usuarios.');
+	$server->register('empresa.dar_baixa', array('usuarios' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Dá baixa em resgates de usuarios.');
 
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA);

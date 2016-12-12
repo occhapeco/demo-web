@@ -5,6 +5,23 @@
     $page = basename(__FILE__, '.php');
 
     $id_cupom = $_GET["id_cupom"];
+    $alert = "";
+
+    if(isset($_POST["finish"]))
+    {
+        $json = $service->call('empresa.select_usuarios', array($id_cupom));
+        $usuario_has_cupom = json_decode($json);
+        $usuarios = array();
+        for($i=0;$i<count($usuario_has_cupom);$i++)
+            if(isset($_POST[$usuario_has_cupom[$i]->id]))
+                $usuarios[] = $usuario_has_cupom[$i]->id;
+        $json = $service->call('empresa.dar_baixa', array(json_encode($usuarios)));
+        if($json)
+            $alert = '<div class="alert alert-info" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
+        else
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
+    }
+
 ?>
 <html lang="pt">
 <head>
@@ -28,9 +45,6 @@
     <!--  Paper Dashboard core CSS    -->
     <link href="../assets/css/paper-dashboard.css" rel="stylesheet"/>
 
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="../assets/css/demo.css" rel="stylesheet" />
-
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
@@ -48,58 +62,63 @@
 	<?php 
         require_once("sidenav.php");
         require_once("topnav.php");
+        echo $alert;
     ?>
 
         <div class="content">
             <?php
                 $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
                 $cupom = json_decode($json_dados);
+                $str_tipos = "";
+                for($i=0;$i<count($cupom->tipo);$i++)
+                {
+                    if($i>0)
+                        $str_tipos .= ", ";
+                    $str_tipos .= $cupom->tipo[$i]->nome;
+                }
              ?>
             <div class="col-lg-12">
                 <div class="card">
                     <div class="content">
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-xs-3">
                                 <div class="icon-big icon-warning text-center">
-                                    <img src="../imgs/<?php echo $cupom->caminho; ?>" width="200px" class="img-responsive">
+                                    <img src="../imgs/<?php echo $cupom->caminho; ?>" class="img-responsive">
                                 </div>
                             </div>
-                            <div class="col-xs-6">
-                                <div class="numbers">
-                                    <label style="color:#252422"><?php echo $cupom->titulo; ?></label>
-                                    
+                            <div class="col-xs-9">
+                                <div class="col-xs-12">
+                                    <h3 class="text-center" style="margin-top: -5px;color:#252422"><?php echo $cupom->titulo; ?></h3>
                                 </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <label>Validade:</label><label style="color:#252422"><?php echo $cupom->prazo; ?></label>
-                            </div>
-                            <div class="col-xs-6">
-                                <label>Valor:</label><label style="color:#252422">R$ <?php echo $cupom->preco_cupom; ?></label>
-                            </div>
-                            
-                            <div class="col-xs-6">
-                                <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom->quantidade; ?></label>
-                            </div>
-                            <div class="col-xs-12" style="margin-top:10px">
-                                <div class="col-xs-6">
+                                <div class="col-xs-12">
                                     <label>Descrição:</label><label style="color:#252422"><?php echo $cupom->descricao; ?></label>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-12">
                                     <label>Regras:</label><label style="color:#252422"><?php echo $cupom->regras; ?></label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <label>Endereço:</label><label style="color:#252422"><?php echo $cupom->bairro.", ".$cupom->rua.", ".$cupom->num.", ".$cupom->complemento.", ".$cupom->cep;?></label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <label>Prazo:</label><label style="color:#252422"><?php echo $cupom->prazo; ?></label>
+                                    <label>Valor:</label><label style="color:#252422">R$<?php echo $cupom->preco_cupom; ?></label>
+                                    <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom->quantidade; ?></label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <label>Tipos:</label><label style="color:#252422"><?php echo $str_tipos; ?></label>
                                 </div>
                             </div>
                             
-                            <div class="col-xs-12" style="margin-left:15px">
-                                <label>Endereço:</label><label style="color:#252422"><?php echo $cupom->bairro.", ".$cupom->rua.", ".$cupom->num.", ".$cupom->complemento.", ".$cupom->cep;?></label>
-                            </div>
+                            
+                            
                         </div>
                     </div>
                     <div class="footer status" style="padding-bottom:50px;">
                         <hr />
                         
                             <div class="pull-right" >
-                                <form action="cad_cupom.php" method="post" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
-                                <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom->id."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
+                                <form action="cad_cupom.php" method="get" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$id_cupom."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
+                                <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$id_cupom."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
                             </div>
                     </div>
                     </div>
@@ -107,56 +126,54 @@
             </div> 
 
         <div class="content">
-            <?php
-                $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
-                $cupom = json_decode($json_dados);
-             ?>
             <div class="col-lg-12">
                 <div class="card">
                     <div class="content">
                        <div class="content table-responsive table-full-width">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Celular</th>
-                        <th>Valor</th>
-                        <th>Dar Baixa</th>
-                    </tr>
-                    <tbody>
-                        <?php
-                            $select = $service->call('select_usuarios', array($id_cupom));
-                            $usuario = json_decode($select);
-                            for($i = 0; $i<count($usuario); $i++)
-                            {
-                        ?>
-                        <tr>
-                            <td><?php echo $usuario[$i]->nome; ?></td>
-                            <td><?php echo $usuario[$i]->celular; ?></td>
-                            <td><?php echo $usuario[$i]->preco_cupom; ?></td>
-                            <?php
-                            if($usuario[$i]->estado == 0)
-                            {
-                            ?>
-                            <td><input type="checkbox" value="<?php echo $usuario[$i]->id; ?>"></td>
-                            <?php
-                            }
-                            else
-                            {
-                            ?>
-                            <td> - </td>
-                            <?php
-                                }
-                            ?>
-                        </tr>
-                        <?php
-                            }
-                        ?>
-                    </tbody>
-                </thead>
-            </table>
-            <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Dar Baixa" style="display: inline-block;">
-        </div>          
+                            <form method="POST" action="cupom.php?id_cupom=<?php echo $id_cupom; ?>">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Marcar</th>
+                                            <th>Nome</th>
+                                            <th>Celular</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                        <tbody>
+                                            <?php
+                                                $select = $service->call('empresa.select_usuarios', array($id_cupom));
+                                                $usuario = json_decode($select);
+                                                for($i = 0; $i<count($usuario); $i++)
+                                                {
+                                            ?>
+                                            <tr>
+                                            <?php
+                                                if($usuario[$i]->estado == 0)
+                                                {
+                                            ?>
+                                                <td><input type="checkbox" name="<?php echo $usuario[$i]->id; ?>"></td>
+                                            <?php
+                                                }
+                                                else
+                                                {
+                                            ?>
+                                                <td> - </td>
+                                            <?php
+                                                }
+                                            ?>
+                                                <td><?php echo $usuario[$i]->nome; ?></td>
+                                                <td><?php echo $usuario[$i]->celular; ?></td>
+                                                <td>R$<?php echo $usuario[$i]->preco_cupom; ?></td>
+                                            </tr>
+                                            <?php
+                                                }
+                                            ?>
+                                        </tbody>
+                                    </thead>
+                                </table>
+                                <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Dar Baixa" style="display: inline-block;">
+                            </form>
+                        </div>          
                     </div>
                 </div>
             </div> 
@@ -186,9 +203,5 @@
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="../assets/js/paper-dashboard.js"></script>
-
-	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-	<script src="../assets/js/demo.js"></script>
-
 
 </html>

@@ -75,11 +75,11 @@
                                         <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                         <button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
                                     </form>
-                                    <form action="cad_cupom.php" method="post" style="margin-left:250px;margin-top:-56">
+                                    <form action="cad_cupom.php" method="get" style="margin-left:250px;margin-top:-56">
                                         <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                         <button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button>
                                     </form>     
-                                    <form action="cad_cupom.php" method="post" style=" margin-left:300px; margin-top:-56">
+                                    <form action="cad_cupom.php" method="get" style=" margin-left:300px; margin-top:-56">
                                         <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                         <button class=" btn btn-simple btn-info" name="editar"><i class="ti-reload" style="font-size: 20px"></i></button>
                                     </form>

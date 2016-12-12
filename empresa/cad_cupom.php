@@ -33,27 +33,21 @@
             $pagamento += 2;
 
         $tipos = array();
-        $i = 0;
         $json = $service->call("select_tipos",array());
         $tipo = json_decode($json);
         for($i=0;$i<count($tipo);$i++)
             if(isset($_POST[$tipo[$i]->id]))
-            {
-                $tipos[$i] = $tipo[$i]->id;
-                $i++;
-            }
-        $tipos = json_encode($tipos);
-
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$_POST["imagem_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,$tipos));
+                $tipos[] = $tipo[$i]->id;
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$_POST["imagem_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
             header("location: meus_cupons.php");
     }
 
-    if(isset($_POST["editar"]))
+    if(isset($_GET["editar"]))
     {
-        $cupom_id = $_POST["cupom_id"];
+        $cupom_id = $_GET["cupom_id"];
         $json = $service->call('empresa.select_cupom', array($cupom_id));
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
@@ -67,8 +61,33 @@
         $quantidade = $cupom->quantidade;
         $pagamento = $cupom->pagamento;
         $delivery = $cupom->delivery;
-        $tipo = $cupom->tipos;
+        $tipo = $cupom->tipo;
         $operacao = '<input type="hidden" name="edit" value="'.$cupom_id.'">';
+    }
+
+    if(isset($_POST["edit"]))
+    {
+        $delivery = 0;
+        if(isset($_POST["delivery"]))
+            $delivery = 1;
+
+        $pagamento = 0;
+        if(isset($_POST["debito"]))
+            $pagamento++;
+        if(isset($_POST["credito"]))
+            $pagamento += 2;
+
+        $tipos = array();
+        $json = $service->call("select_tipos",array());
+        $tipo = json_decode($json);
+        for($i=0;$i<count($tipo);$i++)
+            if(isset($_POST[$tipo[$i]->id]))
+                $tipos[] = $tipo[$i]->id;
+        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$_POST["imagem_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+        if($insert == 0)
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
+        else
+            header("location: meus_cupons.php");
     }
 ?>
 <!doctype html>
@@ -253,8 +272,8 @@
                                                 </label>
                                             </div>
                                             <div class="col-sm-4">
-                                                <label class="choice <?php if($pagamento == 1) echo "active"; ?>" data-toggle="wizard-checkbox">
-                                                    <input type="checkbox" name="credito" <?php if($pagamento == 1) echo "checked"; ?>>
+                                                <label class="choice <?php if($pagamento == 1 || $pagamento == 3) echo "active"; ?>" data-toggle="wizard-checkbox">
+                                                    <input type="checkbox" name="credito" <?php if($pagamento == 1  || $pagamento == 3) echo "checked"; ?>>
                                                     <div class="card card-checkboxes card-hover-effect">
                                                         <i class="ti-credit-card"></i>
                                                         <p>Cartão de crédito</p>
@@ -262,8 +281,8 @@
                                                 </label>
                                             </div>
                                             <div class="col-sm-4">
-                                                <label class="choice <?php if($pagamento == 2) echo "active"; ?>" data-toggle="wizard-checkbox">
-                                                    <input type="checkbox" name="debito" <?php if($pagamento == 2) echo "checked"; ?>>
+                                                <label class="choice <?php if($pagamento >= 2) echo "active"; ?>" data-toggle="wizard-checkbox">
+                                                    <input type="checkbox" name="debito" <?php if($pagamento >= 2) echo "checked"; ?>>
                                                     <div class="card card-checkboxes card-hover-effect">
                                                         <i class="ti-credit-card"></i>
                                                         <p>Cartão de débito</p>
@@ -274,8 +293,8 @@
                                         <div class="row">
                                         <?php
                                             $json = $service->call("select_tipos",array());
-                                            $tipo = json_decode($json);
-                                            for($i=0;$i<count($tipo);$i++)
+                                            $tipos = json_decode($json);
+                                            for($i=0;$i<count($tipos);$i++)
                                             {
                                                 $first = "checked";
                                                 $class_first = 'class="choice active"';
@@ -283,7 +302,7 @@
                                                 if(count($tipo) > 0)
                                                 {
                                                     for($j=0;$j<count($tipo);$j++)
-                                                        if($tipo[$i]->id == $tipo[$j]->id)
+                                                        if($tipo[$j]->tipo_id == $tipos[$i]->id)
                                                         {
                                                             $first = "";
                                                             $class_first = 'class="choice"';
@@ -296,11 +315,11 @@
                                                 }
                                                 
 
-                                                $str = "<p>".$tipo[$i]->nome."</p>";
+                                                $str = "<p>".$tipos[$i]->nome."</p>";
                                         ?>
                                             <div class="col-sm-2">
                                                 <label <?php echo $class_first; ?> data-toggle="wizard-checkbox">
-                                                    <input type="checkbox" name="<?php echo $tipo[$i]->id; ?>" <?php echo $first; ?>>
+                                                    <input type="checkbox" name="<?php echo $tipos[$i]->id; ?>" <?php echo $first; ?>>
                                                     <div class="card card-checkboxes card-hover-effect">
                                                         <?php echo $str; ?>
                                                     </div>
@@ -332,10 +351,13 @@
                                                 {
                                                     $first = "checked";
                                                     $class_first = 'class="choice active"';
-                                                    if($imagem[$i]->id != $imagem_id && $imagem_id != 0)
+                                                    if($imagem_id > 0)
                                                     {
-                                                        $first = "";
-                                                        $class_first = 'class="choice"';
+                                                        if($imagem[$i]->id != $imagem_id)
+                                                        {
+                                                            $first = "";
+                                                            $class_first = 'class="choice"';
+                                                        }
                                                     }
                                                     elseif($i > 0)
                                                     {
@@ -344,7 +366,7 @@
                                                     }
                                             ?>
                                             <div class="col-sm-3">
-                                                <label class="choice" data-toggle="wizard-radio">
+                                                <label <?php echo $class_first; ?> data-toggle="wizard-radio">
                                                     <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem[$i]->id.'" '.$first; ?>>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">

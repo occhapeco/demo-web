@@ -89,6 +89,7 @@ CREATE TABLE usuario_has_cupom (
   cupom_id INTEGER UNSIGNED NOT NULL,
   usuario_id INTEGER UNSIGNED NOT NULL,
   estado INTEGER(1) UNSIGNED NOT NULL,
+  preco_normal DOUBLE NOT NULL,
   preco_cupom DOUBLE NOT NULL,
   prazo DATETIME NOT NULL,
   pagamento INTEGER(1) NOT NULL,
