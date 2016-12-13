@@ -4,21 +4,15 @@
 
     $page = basename(__FILE__, '.php');
 
-    $alert = "";
-
-    if(isset($_POST["finish"]))
+    if(isset($_POST["recusar"]))
     {
-        $json = $service->call('empresa.select_usuarios', array($id_cupom));
-        $usuario_has_cupom = json_decode($json);
-        $usuarios = array();
-        for($i=0;$i<count($usuario_has_cupom);$i++)
-            if(isset($_POST[$usuario_has_cupom[$i]->id]))
-                $usuarios[] = $usuario_has_cupom[$i]->id;
-        $json = $service->call('empresa.dar_baixa', array(json_encode($usuarios)));
-        if($json)
-            $alert = '<div class="alert alert-info" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
-        else
-            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
+        $bool = $service->call('admin.recusar', array($_POST["cupom_id"]));
+        header("location: index.php");
+    }
+    if(isset($_POST["aprovar"]))
+    {
+        $bool = $service->call('admin.aprovar', array($_POST["cupom_id"]));
+        header("location: index.php");
     }
 
 ?>
@@ -61,7 +55,6 @@
 	<?php 
         require_once("sidenav.php");
         require_once("topnav.php");
-        echo $alert;
         $json_dados = $service->call('admin.select_cupons',array());
         $cupom = json_decode($json_dados);
         if(count($cupom) == 0)
@@ -107,17 +100,34 @@
                             </div>
                             <div class="col-xs-12">
                                 <label>Tipos:</label><label style="color:#252422"><?php echo $str_tipos; ?></label>
+                                <label>Empresa:</label><label style="color:#252422"><?php echo $cupom[$i]->nome_fantasia; ?></label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="footer status" style="padding-bottom:50px;">
-                    <hr />
-                    
-                        <div class="pull-right" >
-                            <form action="cad_cupom.php" method="get" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
-                            <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
-                        </div>
+                <div class="footer status">
+                    <hr style="padding-top:10px;">
+                        <center>
+                            <label>
+                                <form action="#" method="post">
+                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                    <button type="submit" class="btn btn-primary btn-success" name="aprovar" style="font-size: 16px"><i class="ti-check"></i> Aprovar</button>
+                                </form>
+                            </label>
+                            <label>
+                                <form action="#" method="post">
+                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                    <button class=" btn btn-primary btn-danger" name="recusar" style="font-size: 16px"><i class="ti-close"></i> Recusar</button>
+                                </form>
+                            </label>
+                            <label>
+                                <form action="cad_cupom.php" method="get">
+                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                    <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$cupom[$i]->empresa_id."'"; ?>>
+                                    <button type="submit" class="btn btn-primary btn-warning" name="editar" style="font-size: 16px"><i class="ti-pencil"></i> Editar e aprovar</button>
+                                </form>
+                            </label>
+                        </center>
                 </div>
                 </div>
             </div>

@@ -73,15 +73,15 @@
                 $estado = "";
                 if ($cupom->estado == -1)
                 {
-                    $estado = " A ser avaliado";
+                    $estado = "Enviado para aprovação";
                 }
                 if($cupom->estado == -2)
                 {
-                    $estado = " Ativo";
+                    $estado = "Inativo";
                 }
                 if($cupom->estado == 0)
                 {
-                    $estado = "Inativo";
+                    $estado = "Ativo";
                 }
 
                 for($i=0;$i<count($cupom->tipo);$i++)

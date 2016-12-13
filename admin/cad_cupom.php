@@ -5,49 +5,11 @@
     require_once("../conectar_service.php");
 
     $alert = "";
-    
-    $endereco_id = 0;
-    $imagem_id = 0;
-    $titulo = "";
-    $regras = "";
-    $descricao = "";
-    $preco_normal = "";
-    $preco_cupom = "";
-    $prazo = "";
-    $quantidade = "";
-    $pagamento = 0;
-    $delivery = 0;
-    $tipo = NULL;
-    $operacao = '<input type="hidden" name="cadastrar">';
-
-    if(isset($_POST["cadastrar"]))
-    {
-        $delivery = 0;
-        if(isset($_POST["delivery"]))
-            $delivery = 1;
-
-        $pagamento = 0;
-        if(isset($_POST["debito"]))
-            $pagamento++;
-        if(isset($_POST["credito"]))
-            $pagamento += 2;
-
-        $tipos = array();
-        $json = $service->call("select_tipos",array());
-        $tipo = json_decode($json);
-        for($i=0;$i<count($tipo);$i++)
-            if(isset($_POST[$tipo[$i]->id]))
-                $tipos[] = $tipo[$i]->id;
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$_POST["imagem_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
-        if($insert == 0)
-            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
-        else
-            header("location: meus_cupons.php");
-    }
 
     if(isset($_GET["editar"]))
     {
         $cupom_id = $_GET["cupom_id"];
+        $empresa_id = $_GET["empresa_id"];
         $json = $service->call('empresa.select_cupom', array($cupom_id));
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
@@ -62,9 +24,9 @@
         $pagamento = $cupom->pagamento;
         $delivery = $cupom->delivery;
         $tipo = $cupom->tipo;
-        $operacao = '<input type="hidden" name="edit" value="'.$cupom_id.'">';
     }
-
+    else
+        header("location: index.php");
     if(isset($_POST["edit"]))
     {
         $delivery = 0;
@@ -84,10 +46,11 @@
             if(isset($_POST[$tipo[$i]->id]))
                 $tipos[] = $tipo[$i]->id;
         $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$_POST["imagem_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+        $insert = $service->call('admin.aprovar',array($_POST["edit"]));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
-            header("location: meus_cupons.php");
+            header("location: index.php");
     }
 ?>
 <!doctype html>
@@ -143,7 +106,7 @@
                     <div class="wizard-container">
                         <div class="card wizard-card" data-color="orange" id="wizardProfile">
                             <form action="#" method="POST">
-                                <?php echo $operacao; ?>
+                                <input type="hidden" name="edit" value="<?php echo $cupom_id; ?>">
                                 <div class="wizard-navigation">
                                     <div class="progress-with-circle">
                                          <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" style="width: 83.3333%;"></div>
@@ -229,18 +192,13 @@
                                         </div>
                                         <div class="row">
                                         <?php
-                                            $json = $service->call("empresa.select_enderecos",array($_SESSION["id"]));
+                                            $json = $service->call("empresa.select_enderecos",array($empresa_id));
                                             $endereco = json_decode($json);
                                             for($i=0;$i<count($endereco);$i++)
                                             {
                                                 $first = "checked";
                                                 $class_first = 'class="choice active"';
-                                                if($endereco[$i]->id != $endereco_id && $endereco_id != 0)
-                                                {
-                                                    $first = "";
-                                                    $class_first = 'class="choice"';
-                                                }
-                                                elseif($i > 0)
+                                                if($endereco[$i]->id != $endereco_id)
                                                 {
                                                     $first = "";
                                                     $class_first = 'class="choice"';
