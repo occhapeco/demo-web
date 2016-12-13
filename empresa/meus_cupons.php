@@ -2,7 +2,14 @@
     require_once("permissao.php");
     require_once("../conectar_service.php");
 
+    $alert="";
+
     $page = basename(__FILE__, '.php');
+
+    if(isset($_GET["aprovar"]))
+    {
+        $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Oferta enviada para aprovação!</b></span></div>';
+    }
 ?>
 <html lang="pt">
 <head>
@@ -49,8 +56,21 @@
             <?php
             $json_dados = $service->call('empresa.select_cupons', array($_SESSION["id"]));
             $cupom = json_decode($json_dados);
-            for($i = 0; $i<count($cupom); $i++)
+            $estado = "";
+           for($i = 0; $i<count($cupom); $i++)
             {
+                 if ($cupom[$i]->estado == -1)
+                {
+                    $estado = "Enviado para aprovação";
+                }
+                if($cupom[$i]->estado == -2)
+                {
+                    $estado = "Inativo";
+                }
+                if($cupom[$i]->estado == 0)
+                {
+                    $estado = "Ativo";
+                }
              ?>
             <div class="col-lg-6 col-sm-6">
                 <div class="card">
@@ -65,6 +85,7 @@
                                 <div class="numbers">
                                     <p><?php echo $cupom[$i]->titulo ?></p>
                                     <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
+                                    <p style="color: #aaa"><?php echo $estado ?></p>
                                 </div>
                             </div>
                         </div>
@@ -78,11 +99,19 @@
                                     <form action="cad_cupom.php" method="get" style="margin-left:250px;margin-top:-56">
                                         <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                         <button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button>
-                                    </form>     
-                                    <form action="cad_cupom.php" method="get" style=" margin-left:300px; margin-top:-56">
-                                        <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                        <button class=" btn btn-simple btn-info" name="editar"><i class="ti-reload" style="font-size: 20px"></i></button>
-                                    </form>
+                                    </form>   
+                                    <?php if($estado == "Inativo") { ?>
+                                        <form action="cad_cupom.php" method="get" style=" margin-left:300px; margin-top:-56">
+                                            <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                            <button class=" btn btn-simple btn-info" name="editar"><i class="ti-reload" style="font-size: 20px"></i></button>
+                                        </form>
+                                    <?php } ?>
+                                    <?php if($estado == "Ativo") { ?>
+                                        <form action="#" method="get" style=" margin-left:300px; margin-top:-56">
+                                            <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                            <button class=" btn btn-simple btn-danger" name="cancelar"><i class="ti-close" style="font-size: 20px"></i></button>
+                                        </form>
+                                    <?php } ?>
                                 </div>
                                 <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div> <s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
                         </div>

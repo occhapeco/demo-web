@@ -42,7 +42,7 @@
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
-            header("location: meus_cupons.php");
+            header("location: meus_cupons.php?aprovar=0");
     }
 
     if(isset($_GET["editar"]))
@@ -87,7 +87,7 @@
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
-            header("location: meus_cupons.php");
+            header("location: meus_cupons.php?aprovar=0");
     }
 ?>
 <!doctype html>
