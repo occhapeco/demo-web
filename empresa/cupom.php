@@ -192,13 +192,8 @@
                     </div>
                 </div>
             </div> 
-</div>
-
-
-        
-
-
-
+        </div>
+    </div>
 </body>
 
     <!--   Core JS Files   -->
