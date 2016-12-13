@@ -70,6 +70,20 @@
                 $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
                 $cupom = json_decode($json_dados);
                 $str_tipos = "";
+                $estado = "";
+                if ($cupom->estado == -1)
+                {
+                    $estado = " A ser avaliado";
+                }
+                if($cupom->estado == -2)
+                {
+                    $estado = " Ativo";
+                }
+                if($cupom->estado == 0)
+                {
+                    $estado = "Inativo";
+                }
+
                 for($i=0;$i<count($cupom->tipo);$i++)
                 {
                     if($i>0)
@@ -106,6 +120,7 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <label>Tipos:</label><label style="color:#252422"><?php echo $str_tipos; ?></label>
+                                    <label>Estado:</label><label style="color:#252422"><?php echo $estado; ?></label>
                                 </div>
                             </div>
                             

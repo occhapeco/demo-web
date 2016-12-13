@@ -1,27 +1,48 @@
 <?php
     require_once("permissao.php");
+    require_once("../conectar_service.php");
     
     $page = basename(__FILE__, '.php');
 
-    //Post enviado de outra página para esta, onde serão carregados os dados e exibidos nos campos
-    if(isset($_POST["editar"]))
-    {
-        $editar = $service->call('empresa.update_perfil', array($id_end));
-        $perfil = json_decode($editar);
-        $nome_usuario = $perfil[0]->nome_usuario;
-        $razao_social = $perfil[0]->razao_social;
-        $nome_fantasia = $perfil[0]->nome_fantasia;
-        $celular = $perfil[0]->celular;
-    }
+    $alert="";
+
+    $editar = $service->call('empresa.select_perfil', array($_SESSION["id"]));
+    $perfil = json_decode($editar);
+    $nome_usuario = $perfil->nome_usuario;
+    $razao_social = $perfil->razao_social;	
+    $nome_fantasia = $perfil->nome_fantasia;
+    $celular = $perfil->celular;
 
     //Post enviado desta página para confirmar a edição
     if(isset($_POST["editar_perfil"]))
     {
        if ($update = $service->call('empresa.update_perfil', array($_SESSION["id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"])))
-        if ($update = $service->call('empresa.update_senha', array()))
-        {
-            
-        }
+       {
+   	        $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Perfil alterado com sucesso!</b></span></div>';
+       }
+       else
+       {
+       		$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
+       }
+    }
+
+    if(isset($_POST["editar_senha"]))
+    {
+    	if($_POST["nova_senha"] == $_POST["nova_senha1"])
+    	{	
+	        if ($update = $service->call('empresa.update_senha', array($_SESSION["id"],$_POST["senha_atual"],$_POST["nova_senha"])))
+	        {
+	            $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Senha alterada com sucesso!</b></span></div>';
+	        }
+	       else
+	       {
+	       		$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
+	       }
+    	}
+    	else
+    	{
+    		$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Senhas não conferem!</b> Reveja seus dados.</span></div>';
+    	}
     }
 ?>
 <!doctype html>
@@ -67,6 +88,7 @@
 	<?php 
         require_once("sidenav.php");
         require_once("topnav.php");
+        echo $alert;
     ?>
 
         <div class="content">
@@ -78,37 +100,69 @@
                                 <h4 class="title">Editar Perfil</h4>
                             </div>
                             <div class="content">
-                                <form>
+                                <form action="#" method="post">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Razão Social</label>
-                                                    <input type="text" name="razao_social" id="razao_social" maxlength="20" class="form-control border-input">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Nome Fantasia</label>
-                                                    <input type="text" name="nome_fantasia" id="nome_fantasia" maxlength="20" class="form-control border-input">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Nome de usuário</label>
-                                                    <input type="text" name="nome_usuario" id="nome_usuario" maxlength="40" class="form-control border-input">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Celular</label>
-                                                    <input type="text" name="celular" id="celular" maxlength="14" class="form-control border-input">
+                                                    <input type="text" name="razao_social" id="razao_social" maxlength="20" class="form-control border-input" value="<?php echo $razao_social; ?>">
                                                 </div>
                                             </div>
-
                                             <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Nome Fantasia</label>
+                                                    <input type="text" name="nome_fantasia" id="nome_fantasia" maxlength="20" class="form-control border-input" value="<?php echo $nome_fantasia; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Nome de usuário</label>
+                                                    <input type="text" name="nome_usuario" id="nome_usuario" maxlength="40" class="form-control border-input" value="<?php echo $nome_usuario; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Celular</label>
+                                                    <input type="text" name="celular" id="celular" maxlength="14" class="form-control border-input" value="<?php echo $celular; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pull-right">
+                                        <button type="submit" class="btn btn-info btn-fill btn-wd" name="editar_perfil">Concluir</button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Editar Senha</h4>
+                            </div>
+                            <div class="content">
+                                <form action="#" method="post">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Senha atual</label>
                                                     <input type="password" class="form-control border-input" name="senha_atual" id="senha_atual" maxlength="12" placeholder="Informe a sua senha atual">
-                                                </div>                                           
+                                                </div> 
+                                            </div>
+                                            <div class="col-md-4">                                          
                                                 <div class="form-group">
                                                     <label>Nova senha</label>
                                                     <input type="password" class="form-control border-input" name="nova_senha" id="nova_senha" maxlength="12" placeholder="Informe a sua nova senha">
                                                 </div>
+                                            </div>
+                                           	<div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Repita a nova senha</label>
                                                     <input type="password" class="form-control border-input" name="nova_senha1" id="nova_senha1" maxlength="12" placeholder="Repita a nova senha">
@@ -117,8 +171,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-info btn-fill btn-wd">Concluir</button>
+                                    <div class="pull-right">
+                                        <button type="submit" class="btn btn-info btn-fill btn-wd" name="editar_senha">Concluir</button>
                                     </div>
                                     <div class="clearfix"></div>
                                 </form>
@@ -126,9 +180,11 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+
 </div>
 
 
