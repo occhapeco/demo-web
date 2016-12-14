@@ -127,10 +127,9 @@
 			if($query->num_rows > 1 || $query->num_rows == 0)
 				return 0;
 			$dados = array();
-			while($row = $query->fetch_assoc())
-				$dados[] = $row;
+			$row = $query->fetch_assoc();
 			$conexao->close();
-			return json_encode($dados);
+			return $row["id"];
 		}
 
 		function select_cupons($usuario_id,$cidade,$delivery,$pagamento,$tipo_id,$num)
@@ -228,7 +227,7 @@
 		{
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE usuario_has_cupom SET produto=$produto,atendimento=$atendimento,ambiente=$ambiente,comentarios='$comentarios' WHERE id = $id");
+			$query = $conexao->query("UPDATE usuario_has_cupom SET produto=$produto,atendimento=$atendimento,ambiente=$ambiente,comentarios='$comentarios',estado=2 WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
@@ -452,7 +451,7 @@
 		{
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.imagem_id,imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.estado,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) WHERE cupom.id = $id");
+			$query = $conexao->query("SELECT cupom.imagem_id,imagem.caminho,imagem.tipo AS imagem_tipo,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.estado,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) WHERE cupom.id = $id");
 			$dados = $query->fetch_assoc();
 			$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = $id");
 			$dados["tipo"] = array();
@@ -489,6 +488,7 @@
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT usuario_has_cupom.id,usuario.nome,usuario.celular,usuario_has_cupom.preco_cupom,usuario_has_cupom.estado FROM usuario_has_cupom INNER JOIN usuario ON(usuario.id = usuario_has_cupom.usuario_id) WHERE usuario_has_cupom.cupom_id = $cupum_id");
+			$dados = array();
 			while($row = $query->fetch_assoc())
 				$dados[] = $row;
 			$conexao->close();
@@ -504,6 +504,37 @@
 				$query = $conexao->query("UPDATE usuario_has_cupom SET estado = 1 WHERE id = ".$usuarios[$i]);
 			$conexao->close();
 			return $query;
+		}
+
+		function visualizar($empresa_id)
+		{
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE notificacao SET visualizado = 1 WHERE empresa_id = $empresa_id");
+			$conexao->close();
+			return $query;
+		}
+
+		function select_notificacoes($empresa_id)
+		{
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT notificacao.tipo,notificacao.cupom_id FROM notificacao INNER JOIN cupom ON(cupom.id=notificacao.cupom_id) WHERE cupom.empresa_id = $empresa_id");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function select_nao_visualizadas($empresa_id)
+		{
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT notificacao.id FROM notificacao INNER JOIN cupom ON(cupom.id=notificacao.cupom_id) WHERE cupom.empresa_id = $empresa_id AND notificacao.visualizado = 0");
+			$num = $query->num_rows;
+			$conexao->close();
+			return $num;
 		}
 	}
 
@@ -523,6 +554,9 @@
 	$server->register('empresa.select_cupons', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todos os cupons e seus dados pela empresa.');
 	$server->register('empresa.select_usuarios', array('cupom_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona os usuarios que resgatarem um cupom.');
 	$server->register('empresa.dar_baixa', array('usuarios' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Dá baixa em resgates de usuarios.');
+	$server->register('empresa.visualizar', array('empresa_id' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Visualiza todas as notificações.');
+	$server->register('empresa.select_notificacoes', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar todas as notificações.');
+	$server->register('empresa.select_nao_visualizadas', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Retorna numéro de notificações não visualizadas.');
 
 	class admin
 	{
@@ -567,6 +601,7 @@
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE cupom SET estado = 0 WHERE id = $id");
+			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,1,0)");
 			$conexao->close();
 			return $query;
 		}
@@ -576,6 +611,7 @@
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE cupom SET estado = -2 WHERE id = $id");
+			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,0,0)");
 			$conexao->close();
 			return $query;
 		}

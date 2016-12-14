@@ -8,6 +8,7 @@
     
     $endereco_id = 0;
     $imagem_id = 0;
+    $imagem_tipo = 1;
     $titulo = "";
     $regras = "";
     $descricao = "";
@@ -52,6 +53,7 @@
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
         $imagem_id = $cupom->imagem_id;
+        $imagem_tipo = $cupom->imagem_tipo;
         $titulo = $cupom->titulo;
         $regras = $cupom->regras;
         $descricao = $cupom->descricao;
@@ -67,6 +69,23 @@
 
     if(isset($_POST["edit"]))
     {
+        $imagem = $_POST["imagem_id"];
+
+        if($_POST["imagem_id"] == "upload")
+        {
+            $servidor = 'olar.esy.es';
+            $caminho_absoluto = '/public_html/';
+            $arquivo = $_FILES['wizard-picture'];
+            $extension = explode("/",$arquivo["type"]);
+            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[1];
+
+            //$con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
+            //ftp_login( $con_id, 'u274667541', 'batata' );
+
+            //ftp_delete($conn_id,$caminho_absoluto.$arquivo['cupom'.$_POST["edit"]]);
+            //ftp_put($con_id,$caminho_absoluto.$arquivo['cupom'.$_POST["edit"]], $arquivo['tmp_name'], FTP_BINARY );
+        }
+
         $delivery = 0;
         if(isset($_POST["delivery"]))
             $delivery = 1;
@@ -83,7 +102,7 @@
         for($i=0;$i<count($tipo);$i++)
             if(isset($_POST[$tipo[$i]->id]))
                 $tipos[] = $tipo[$i]->id;
-        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$_POST["imagem_id"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
@@ -142,7 +161,7 @@
                 <div class="row">
                     <div class="wizard-container">
                         <div class="card wizard-card" data-color="orange" id="wizardProfile">
-                            <form action="#" method="POST">
+                            <form action="#" method="POST" enctype="multipart/form-data">
                                 <?php echo $operacao; ?>
                                 <div class="wizard-navigation">
                                     <div class="progress-with-circle">
@@ -333,18 +352,34 @@
                                     <div class="tab-pane" id="address">
                                         <div class="row">
                                             <div class="col-sm-3">
-                                                <label class="choice" data-toggle="wizard-radio">
+                                                <input type="file" id="wizard-picture" name="wizard-picture" accept="image/x-png,image/jpeg">
+                                                <label class="choice" data-toggle="wizard-radio"  onclick="$('#wizard-picture').click();">
                                                     <input type="radio" name="imagem_id" value="upload">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="" class="picture-src" id="wizardPicturePreview" title="">
-                                                            <input type="file" id="wizard-picture" accept="image/x-png,image/gif,image/jpeg">
                                                             <p style="margin-top: 40px;">Fazer upload</p>
                                                         </div>
                                                     </div>
                                                 </label>
                                             </div>
                                             <?php
+                                                if($imagem_tipo == 0)
+                                                {
+                                            ?>
+                                            <div class="col-sm-3">
+                                                <label class="choice active" data-toggle="wizard-radio">
+                                                    <input type="hidden" name="trocar">
+                                                    <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem_id.'" checked'; ?>>
+                                                    <div class="card card-radios card-hover-effect">
+                                                        <div class="picture">
+                                                            <img <?php echo 'src="../imgs/'.$caminho.'"'; ?> class="picture-src" id="wizardPicturePreview" title="">
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <?php
+                                                }
                                                 $json = $service->call("select_imagens",array());
                                                 $imagem = json_decode($json);
                                                 for($i=0;$i<count($imagem);$i++)
@@ -370,7 +405,7 @@
                                                     <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem[$i]->id.'" '.$first; ?>>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img <?php echo 'src="../imgs/'.$imagem[$i]->caminho.'" '.$first; ?> class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img <?php echo 'src="../imgs/'.$imagem[$i]->caminho.'" '; ?> class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </label>
