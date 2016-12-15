@@ -471,10 +471,11 @@
 			while($row = $query->fetch_assoc())
 			{
 				$dados[$i] = $row;
-				$sub_query = $conexao->query("SELECT tipo.nome,tipo.id FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
+				$sub_query = $conexao->query("SELECT tipo.nome,tipo.id FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
 				$dados[$i]["tipos"] = array();
-				while($row = $query->fetch_assoc())
+				while($row = $sub_query->fetch_assoc())
 					$dados[$i]["tipos"][] = $row;
+				$i++;
 			}
 			$conexao->close();
 			return json_encode($dados);
@@ -554,7 +555,7 @@
 	}
 
 	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
-	$server->register('empresa.insert_endereco', array('empresa_id' => 'xsd:integer','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de endereço.');
+	$server->register('empresa.insert_endereco', array('empresa_id' => 'xsd:integer','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Cadastro de endereço.');
 	$server->register('empresa.insert_cupom', array('empresa_id' => 'xsd:integer','endereco_id' => 'xsd:integer','imagem_id' => 'xsd:string','titulo' => 'xsd:string','regras' => 'xsd:string','descricao' => 'xsd:string','preco_normal' => 'xsd:double','preco_cupom' => 'xsd:double','prazo' => 'xsd:string','quantidade' => 'xsd:integer','pagamento' => 'xsd:integer','delivery' => 'xsd:integer','tipos' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Cadastro de cupom.');
 	$server->register('empresa.insert_imagem', array('caminho' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Cadastro de imagem.');
 	$server->register('empresa.update_perfil', array('id' => 'xsd:integer','nome_usuario' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','celular' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar perfil de empresa.');
@@ -600,9 +601,9 @@
 			while($row = $query->fetch_assoc())
 			{
 				$dados[$i] = $row;
-				$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
+				$sub_query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
 				$dados[$i]["tipo"] = array();
-				while($row = $query->fetch_assoc())
+				while($row = $sub_query->fetch_assoc())
 					$dados[$i]["tipo"][] = $row;
 				$data = new DateTime();
 			    $data = $data->createFromFormat('Y-m-d H:i:s',$dados[$i]["prazo"]);

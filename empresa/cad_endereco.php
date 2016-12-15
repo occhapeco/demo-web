@@ -17,7 +17,8 @@
 
     if(isset($_POST["cadastrar"]))
     {
-        if ($service->call('empresa.insert_endereco',array($_SESSION["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"])))
+        $insert = $service->call('empresa.insert_endereco',array($_SESSION["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
+        if ($insert > 0)
             header("location: meus_enderecos.php");
         else
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';    
