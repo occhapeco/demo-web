@@ -1,3 +1,8 @@
+<?php
+    require_once("../conectar_service.php");
+
+    $num = $service->call('empresa.select_nao_visualizadas', array($_SESSION["id"]));
+?>
     <div class="main-panel">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -45,24 +50,28 @@
                         <p class="navbar-brand">Meus endereços</p>
                     <?php
                         }
+                        elseif($page == "cupom")
+                        {
+                    ?>
+                        <p class="navbar-brand">Detalhes d Cupom</p>
+                    <?php
+                        }
+                        elseif($page == "notificacoes")
+                        {
+                    ?>
+                        <p class="navbar-brand">Notificações</p>
+                    <?php
+                        }
                     ?>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                              <a href="notificacoes.php">
                                     <i class="ti-bell"></i>
-                                    <p class="notification">5</p>
+                                    <p class="notification"><?php $num ?></p>
                                     <p>Notificações</p>
-                                    <b class="caret"></b>
                               </a>
-                              <ul class="dropdown-menu">
-                                <li><a href="#">Notification 1</a></li>
-                                <li><a href="#">Notification 2</a></li>
-                                <li><a href="#">Notification 3</a></li>
-                                <li><a href="#">Notification 4</a></li>
-                                <li><a href="#">Another notification</a></li>
-                              </ul>
                         </li>
                         <li>
                             <a href="config.php">
