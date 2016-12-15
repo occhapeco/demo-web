@@ -27,22 +27,7 @@
         $imagem = $_POST["imagem_id"];
 
         if($_POST["imagem_id"] == "upload")
-        {
-            $servidor = 'olar.esy.es';
-            $caminho_absoluto = '/public_html/';
-
-            $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
-            ftp_login($con_id,'u274667541','batata');
-            ftp_pasv($con_id, true);
-
-            $arquivo = $_FILES['wizard-picture'];
-            $extension = explode(".",$arquivo["name"]);
-            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[1];
-
-            ftp_put($con_id,$caminho_absoluto.$arquivo['name'], $arquivo['tmp_name'],FTP_BINARY);
-
-            $imagem = $service->call('empresa.insert_imagem',array($arquivo['name']));
-        }
+            $imagem = 1;
 
         $delivery = 0;
         if(isset($_POST["delivery"]))
@@ -60,11 +45,31 @@
         for($i=0;$i<count($tipo);$i++)
             if(isset($_POST[$tipo[$i]->id]))
                 $tipos[] = $tipo[$i]->id;
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],1,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
+        {
+            if($_POST["imagem_id"] == "upload")
+            {
+                $servidor = 'olar.esy.es';
+                $caminho_absoluto = '/public_html/';
+
+                $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
+                ftp_login($con_id,'u274667541','batata');
+                ftp_pasv($con_id, true);
+
+                $arquivo = $_FILES['wizard-picture'];
+                $extension = explode(".",$arquivo["name"]);
+                $arquivo["name"] = 'cupom'.$insert.'.'.$extension[1];
+
+                ftp_put($con_id,$caminho_absoluto.$arquivo['name'], $arquivo['tmp_name'],FTP_BINARY);
+
+                $imagem = $service->call('empresa.insert_imagem',array($arquivo['name']));
+                $edit = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+            }
             header("location: meus_cupons.php?aprovar=0");
+        }
     }
 
     if(isset($_GET["editar"]))
