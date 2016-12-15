@@ -80,9 +80,6 @@
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
 			$celular = preg_replace('![*#/\"´`]+!','',$celular);
-			$data = new DateTime();
-		    $data = $data->createFromFormat('d/m/Y',$nascimento);
-		    $nascimento = $data->format("Y-m-d");
 			$senha = md5(sha1($senha));
 
 			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
@@ -545,6 +542,15 @@
 			$conexao->close();
 			return $query;
 		}
+
+		function delete_imagem($id)
+		{
+			$conexao = mysqli_connect("mysql.hostinger.com.br","u274667541_root","oieoie","u274667541_app");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("DELETE FROM imagem WHERE id = $id");
+			$conexao->close();
+			return $query;
+		}
 	}
 
 	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
@@ -567,6 +573,7 @@
 	$server->register('empresa.select_notificacoes', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar todas as notificações.');
 	$server->register('empresa.select_nao_visualizadas', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Retorna numéro de notificações não visualizadas.');
 	$server->register('empresa.desativar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa um cupom.');
+	$server->register('empresa.delete_imagem', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Deleta a imgagemde um cupom.');
 
 	class admin
 	{
