@@ -53,13 +53,13 @@
                         elseif($page == "cupom")
                         {
                     ?>
-                        <p class="navbar-brand">Detalhes d Cupom</p>
+                        <p class="navbar-brand">Detalhes do cupom</p>
                     <?php
                         }
                         elseif($page == "notificacoes")
                         {
                     ?>
-                        <p class="navbar-brand">Notificações</p>
+                        <p class="navbar-brand">Central de notificações</p>
                     <?php
                         }
                     ?>

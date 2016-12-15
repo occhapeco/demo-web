@@ -60,28 +60,28 @@
                 $cupom = json_decode($json_dados);
              ?>
              <div class="col-lg-12">
-                <div class="card">
-                    <div class="content">
-                        <a href="cupom.php?id_cupom="<?php echo $notificacoes[$i]->cupom_id; ?>>
-                            <div class="row">
-                                <?php 
-                                    if($notificacoes[$i]->tipo == 1)
-                                    {
-                                ?>
-                                    <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi aprovada. </label><br>
-                                <?php
-                                    }
-                                    elseif($notificacoes[$i]->tipo == 0)
-                                    {
-                                ?>
-                                    <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi recusada. </label><br>
-                                <?php
-                                    }
-                                ?>
-                            </div>
-                        </a>
+                <a href="cupom.php?id_cupom=<?php echo $notificacoes[$i]->cupom_id; ?>">
+                    <div class="card">
+                        <div class="content">
+                                <div class="row">
+                                    <?php 
+                                        if($notificacoes[$i]->tipo == 1)
+                                        {
+                                    ?>
+                                        <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi aprovada. </label><br>
+                                    <?php
+                                        }
+                                        elseif($notificacoes[$i]->tipo == 0)
+                                        {
+                                    ?>
+                                        <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi recusada. </label><br>
+                                    <?php
+                                        }
+                                    ?>
+                                </div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <?php
             }
