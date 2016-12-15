@@ -10,6 +10,20 @@
     {
         $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Oferta enviada para aprovação!</b></span></div>';
     }
+
+    if(isset($_POST["cancelar"]))
+    {
+        $json_dados = $service->call('empresa.desativar_cupom', array($_POST["cupom_id"]));
+        $cancelar = json_decode($json_dados);
+        if ($cancelar == 1)
+        {
+            $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Cupom desativado com sucesso!</b></span></div>';
+        }
+        if ($cancelar == 0)
+        {
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Não foi possível desativar este cupom</b></span></div>';
+        }
+    }
 ?>
 <html lang="pt">
 <head>
@@ -57,70 +71,85 @@
             $json_dados = $service->call('empresa.select_cupons', array($_SESSION["id"]));
             $cupom = json_decode($json_dados);
             $estado = "";
-           for($i = 0; $i<count($cupom); $i++)
+            if(count($cupom) == 0)
             {
-                 if ($cupom[$i]->estado == -1)
+            ?>
+                <h3>Você não possui cupons cadastrados. Para inserir um cupom <a href="cad_cupom.php">Clique aqui.</a></h3>
+            <?php
+            }
+            else{
+               for($i = 0; $i<count($cupom); $i++)
                 {
-                    $estado = "Enviado para aprovação";
-                }
-                if($cupom[$i]->estado == -2)
-                {
-                    $estado = "Inativo";
-                }
-                if($cupom[$i]->estado == 0)
-                {
-                    $estado = "Ativo";
-                }
-             ?>
-            <div class="col-lg-6 col-sm-6">
-                <div class="card">
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-xs-5">
-                                <div class="icon-big icon-warning text-center">
-                                    <img src="../imgs/<?php echo $cupom[$i]->caminho ?>" width="100px" class="img-responsive">
+                     if ($cupom[$i]->estado == -1)
+                    {
+                        $estado = "Enviado para aprovação";
+                    }
+                    if($cupom[$i]->estado == -2)
+                    {
+                        $estado = "Inativo";
+                    }
+                    if($cupom[$i]->estado == 0)
+                    {
+                        $estado = "Ativo";
+                    }
+                 ?>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="card">
+                        <div class="content">
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <div class="icon-big icon-warning text-center">
+                                        <img src="../imgs/<?php echo $cupom[$i]->caminho ?>" width="100px" class="img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-7">
+                                    <div class="numbers">
+                                        <p><?php echo $cupom[$i]->titulo ?></p>
+                                        <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
+                                        <p style="color: #aaa"><?php echo $estado ?></p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-7">
-                                <div class="numbers">
-                                    <p><?php echo $cupom[$i]->titulo ?></p>
-                                    <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
-                                    <p style="color: #aaa"><?php echo $estado ?></p>
-                                </div>
+                            <div class="footer status">
+                                <hr />
+                                    <div class="pull-right" >
+                                        <form action="cupom.php" method="get" style="margin-left:150px;margin-top:15">
+                                            <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                            <button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
+                                        </form>
+                                        <?php
+                                         if($estado == "Enviado para aprovação")
+                                         {
+                                        ?>
+                                        <form action="cad_cupom.php" method="get" style="margin-left:250px;margin-top:-52">
+                                            <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                            <button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button>
+                                        </form>   
+                                        <?php
+                                            }
+                                        ?>
+                                        <?php if($estado == "Inativo") { ?>
+                                            <form action="cad_cupom.php" method="get" style=" margin-left:250px; margin-top:-52">
+                                                <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                                <button type="submit" class=" btn btn-primary btn-info" name="editar" style="font-size:14px"><i class="ti-reload"></i> Editar e Ativar</button>
+                                            </form>
+                                        <?php } ?>
+                                        <?php if($estado == "Ativo") { ?>
+                                            <form action="#" method="post" style=" margin-left:250px; margin-top:-52">
+                                                <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                                <button type="submit" class=" btn btn-primary btn-danger" name="cancelar" style="font-size:14px"><i class="ti-close"></i> Desativar</button>
+                                            </form>
+                                        <?php } ?>
+                                    </div>
+                                    <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div><br> <s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
                             </div>
-                        </div>
-                        <div class="footer status">
-                            <hr />
-                                <div class="pull-right" >
-                                    <form action="cupom.php" method="get" style="margin-left:150px;">
-                                        <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                        <button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
-                                    </form>
-                                    <form action="cad_cupom.php" method="get" style="margin-left:250px;margin-top:-56">
-                                        <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                        <button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button>
-                                    </form>   
-                                    <?php if($estado == "Inativo") { ?>
-                                        <form action="cad_cupom.php" method="get" style=" margin-left:300px; margin-top:-56">
-                                            <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                            <button class=" btn btn-simple btn-info" name="editar"><i class="ti-reload" style="font-size: 20px"></i></button>
-                                        </form>
-                                    <?php } ?>
-                                    <?php if($estado == "Ativo") { ?>
-                                        <form action="#" method="get" style=" margin-left:300px; margin-top:-56">
-                                            <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                            <button class=" btn btn-simple btn-danger" name="cancelar"><i class="ti-close" style="font-size: 20px"></i></button>
-                                        </form>
-                                    <?php } ?>
-                                </div>
-                                <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div> <s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
                         </div>
                     </div>
                 </div>
-            </div>
-            <?php
-              }
-            ?>            
+                <?php
+                  }
+                }
+                ?>            
         </div>
 </div>
 

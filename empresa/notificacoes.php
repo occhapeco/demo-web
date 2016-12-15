@@ -54,38 +54,46 @@
          <?php
             $json_dados = $service->call('empresa.select_notificacoes', array($_SESSION["id"]));
             $notificacoes = json_decode($json_dados);
-            for($i = 0; $i<count($notificacoes); $i++)
+            if(count($notificacoes) == 0)
             {
-                $json_dados = $service->call('empresa.select_cupom', array($notificacoes[$i]->cupom_id));
-                $cupom = json_decode($json_dados);
-             ?>
-             <div class="col-lg-12">
-                <a href="cupom.php?id_cupom=<?php echo $notificacoes[$i]->cupom_id; ?>">
-                    <div class="card">
-                        <div class="content">
-                                <div class="row">
-                                    <?php 
-                                        if($notificacoes[$i]->tipo == 1)
-                                        {
-                                    ?>
-                                        <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi aprovada. </label><br>
-                                    <?php
-                                        }
-                                        elseif($notificacoes[$i]->tipo == 0)
-                                        {
-                                    ?>
-                                        <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi recusada. </label><br>
-                                    <?php
-                                        }
-                                    ?>
-                                </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            ?>
+                <h3>Você não possui notificações.</h3>
             <?php
             }
-        ?>
+            else{
+                for($i = 0; $i<count($notificacoes); $i++)
+                {
+                    $json_dados = $service->call('empresa.select_cupom', array($notificacoes[$i]->cupom_id));
+                    $cupom = json_decode($json_dados);
+                 ?>
+                 <div class="col-lg-12">
+                    <a href="cupom.php?id_cupom=<?php echo $notificacoes[$i]->cupom_id; ?>">
+                        <div class="card">
+                            <div class="content">
+                                    <div class="row">
+                                        <?php 
+                                            if($notificacoes[$i]->tipo == 1)
+                                            {
+                                        ?>
+                                            <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi aprovada. </label><br>
+                                        <?php
+                                            }
+                                            elseif($notificacoes[$i]->tipo == 0)
+                                            {
+                                        ?>
+                                            <label>&nbsp&nbsp A oferta <?php echo $cupom->titulo ?> foi recusada. </label><br>
+                                        <?php
+                                            }
+                                        ?>
+                                    </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <?php
+                }
+            }
+            ?>
          </div>
     </div>
 

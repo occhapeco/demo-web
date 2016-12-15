@@ -1,6 +1,4 @@
 <?php
-    require_once("../conectar_service.php");
-
     $num = $service->call('empresa.select_nao_visualizadas', array($_SESSION["id"]));
 ?>
     <div class="main-panel">

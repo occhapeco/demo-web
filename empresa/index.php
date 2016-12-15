@@ -1,5 +1,6 @@
 <?php
     require_once("permissao.php");
+    require_once("../conectar_service.php");
 
     $page = basename(__FILE__, '.php');
 ?>
