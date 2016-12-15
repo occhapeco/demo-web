@@ -79,10 +79,11 @@
             $extension = explode("/",$arquivo["type"]);
             $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[1];
 
-            //$con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
-            //ftp_login( $con_id, 'u274667541', 'batata' );
+            $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
+            ftp_login( $con_id, 'u274667541', 'batata' );
 
-            //ftp_delete($conn_id,$caminho_absoluto.$arquivo['cupom'.$_POST["edit"]]);
+            if(!ftp_delete($con_id,$caminho_absoluto.$arquivo['name']))
+                echo "<br><br><br><br><br><br><br><br><br><br>huehue";
             //ftp_put($con_id,$caminho_absoluto.$arquivo['cupom'.$_POST["edit"]], $arquivo['tmp_name'], FTP_BINARY );
         }
 
