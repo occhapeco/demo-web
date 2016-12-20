@@ -1,9 +1,9 @@
-<div class="sidebar" data-background-color="white" data-active-color="danger">
+<div class="sidebar" data-background-color="white" data-active-color="warning">
 
     	<div class="sidebar-wrapper">
             <div class="logo">
                 <a href="index.php" class="simple-text">
-                    Nome
+                    <img src="../imgs/logo/escudo_corel.png" height="45px" width="220px">
                 </a>
             </div>
 

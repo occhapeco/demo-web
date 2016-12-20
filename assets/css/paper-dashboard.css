@@ -12,7 +12,7 @@
 }
 
 .ct-orange {
-  stroke: #F3BB45 !important;
+  stroke: #F5A217 !important;
 }
 
 .ct-red {
@@ -135,7 +135,7 @@ strong {
 }
 
 .icon-warning {
-  color: #F3BB45;
+  color: #F5A217;
 }
 
 .icon-danger {
@@ -152,7 +152,7 @@ strong {
   color: #7AC29A;
 }
 .chart-legend .text-warning, .chart-legend .text-warning:hover {
-  color: #F3BB45;
+  color: #F5A217;
 }
 .chart-legend .text-danger, .chart-legend .text-danger:hover {
   color: #EB5E28;
@@ -320,7 +320,7 @@ hr {
 }
 .sidebar .nav li.active > a,
 .off-canvas-sidebar .nav li.active > a {
-  color: #7A9E9F;
+  color: #F5A217;
   opacity: 1;
 }
 .sidebar .nav li.active > a:before,
@@ -449,7 +449,7 @@ hr {
 }
 .sidebar[data-active-color="warning"] .nav li.active > a,
 .off-canvas-sidebar[data-active-color="warning"] .nav li.active > a {
-  color: #F3BB45;
+  color: #F5A217;
   opacity: 1;
 }
 .sidebar[data-active-color="danger"] .nav li.active > a,
@@ -740,24 +740,24 @@ hr {
 }
 
 .navbar .navbar-nav > li > a.btn-warning, .btn-warning {
-  border-color: #F3BB45;
-  color: #F3BB45;
+  border-color: #F5A217;
+  color: #F5A217;
 }
 .navbar .navbar-nav > li > a.btn-warning:hover, .navbar .navbar-nav > li > a.btn-warning:focus, .navbar .navbar-nav > li > a.btn-warning:active, .navbar .navbar-nav > li > a.btn-warning.active, .open > .navbar .navbar-nav > li > a.btn-warning.dropdown-toggle, .btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.active, .open > .btn-warning.dropdown-toggle {
-  background-color: #F3BB45;
+  background-color: #F5A217;
   color: rgba(255, 255, 255, 0.7);
-  border-color: #F3BB45;
+  border-color: #F5A217;
 }
 .navbar .navbar-nav > li > a.btn-warning:hover .caret, .navbar .navbar-nav > li > a.btn-warning:focus .caret, .navbar .navbar-nav > li > a.btn-warning:active .caret, .navbar .navbar-nav > li > a.btn-warning.active .caret, .open > .navbar .navbar-nav > li > a.btn-warning.dropdown-toggle .caret, .btn-warning:hover .caret, .btn-warning:focus .caret, .btn-warning:active .caret, .btn-warning.active .caret, .open > .btn-warning.dropdown-toggle .caret {
   border-top-color: rgba(255, 255, 255, 0.7);
 }
 .navbar .navbar-nav > li > a.btn-warning.disabled, .navbar .navbar-nav > li > a.btn-warning.disabled:hover, .navbar .navbar-nav > li > a.btn-warning.disabled:focus, .navbar .navbar-nav > li > a.btn-warning.disabled.focus, .navbar .navbar-nav > li > a.btn-warning.disabled:active, .navbar .navbar-nav > li > a.btn-warning.disabled.active, .navbar .navbar-nav > li > a.btn-warning:disabled, .navbar .navbar-nav > li > a.btn-warning:disabled:hover, .navbar .navbar-nav > li > a.btn-warning:disabled:focus, .navbar .navbar-nav > li > a.btn-warning:disabled.focus, .navbar .navbar-nav > li > a.btn-warning:disabled:active, .navbar .navbar-nav > li > a.btn-warning:disabled.active, .navbar .navbar-nav > li > a.btn-warning[disabled], .navbar .navbar-nav > li > a.btn-warning[disabled]:hover, .navbar .navbar-nav > li > a.btn-warning[disabled]:focus, .navbar .navbar-nav > li > a.btn-warning[disabled].focus, .navbar .navbar-nav > li > a.btn-warning[disabled]:active, .navbar .navbar-nav > li > a.btn-warning[disabled].active, fieldset[disabled] .navbar .navbar-nav > li > a.btn-warning, fieldset[disabled] .navbar .navbar-nav > li > a.btn-warning:hover, fieldset[disabled] .navbar .navbar-nav > li > a.btn-warning:focus, fieldset[disabled] .navbar .navbar-nav > li > a.btn-warning.focus, fieldset[disabled] .navbar .navbar-nav > li > a.btn-warning:active, fieldset[disabled] .navbar .navbar-nav > li > a.btn-warning.active, .btn-warning.disabled, .btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled.focus, .btn-warning.disabled:active, .btn-warning.disabled.active, .btn-warning:disabled, .btn-warning:disabled:hover, .btn-warning:disabled:focus, .btn-warning:disabled.focus, .btn-warning:disabled:active, .btn-warning:disabled.active, .btn-warning[disabled], .btn-warning[disabled]:hover, .btn-warning[disabled]:focus, .btn-warning[disabled].focus, .btn-warning[disabled]:active, .btn-warning[disabled].active, fieldset[disabled] .btn-warning, fieldset[disabled] .btn-warning:hover, fieldset[disabled] .btn-warning:focus, fieldset[disabled] .btn-warning.focus, fieldset[disabled] .btn-warning:active, fieldset[disabled] .btn-warning.active {
   background-color: transparent;
-  border-color: #F3BB45;
+  border-color: #F5A217;
 }
 .navbar .navbar-nav > li > a.btn-warning.btn-fill, .btn-warning.btn-fill {
   color: #FFFFFF;
-  background-color: #F3BB45;
+  background-color: #F5A217;
   opacity: 1;
   filter: alpha(opacity=100);
 }
