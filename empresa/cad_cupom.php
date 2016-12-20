@@ -138,7 +138,7 @@
             if(isset($_POST[$tipo[$i]->id]))
                 $tipos[] = $tipo[$i]->id;
         $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
-        if($_POST["imagem_id"] != "upload" && isset($_POST["trocar"]))
+        if($_POST["imagem_id"] != "upload" && isset($_POST["trocar"]) && $_POST["imagem_id"] != $_POST["trocar"])
         {
             $servidor = 'olar.esy.es';
             $caminho_absoluto = '/public_html/';
@@ -507,6 +507,8 @@
     <script src="../assets/js/jquery.validate.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
+
+        $("#wizard-picture").hide();
 
         jQuery(function($){
            $("#prazo").mask("99/99/9999 99:99");

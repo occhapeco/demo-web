@@ -58,7 +58,7 @@
         $json_dados = $service->call('admin.select_cupons',array());
         $cupom = json_decode($json_dados);
         if(count($cupom) == 0)
-            echo "<br><br><br><br><br><h2 class='text-center'>Sem ofertas para aprovar.</h2>";
+            echo "<br><br><br><br><br><h2 class='text-center'>Sem ofertas para avaliar.</h2>";
         for($i=0;$i<count($cupom);$i++)
         {
             $str_tipos = "";
