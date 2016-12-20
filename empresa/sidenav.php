@@ -3,7 +3,7 @@
     	<div class="sidebar-wrapper">
             <div class="logo">
                 <a href="index.php" class="simple-text">
-                    Nome
+                    <img src="../imgs/logo/escudo_corel.png" height="50px" width="170px">
                 </a>
             </div>
 

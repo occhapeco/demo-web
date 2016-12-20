@@ -26,11 +26,11 @@
 <html lang="pt">
 <head>
 	<meta charset="utf-8" />
-	<link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="../assets/img/favicon.png">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" sizes="96x76" href="imgs/logo/escudo_clube.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-	<title>Paper Dashboard by Creative Tim</title>
+    <title>Clube de Ofertas</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -131,9 +131,8 @@
                     <div class="footer status" style="padding-bottom:50px;">
                         <hr />
                         
-                            <div class="pull-right" >
-                                <form action="cad_cupom.php" method="get" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$id_cupom."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="editar"><i class="ti-pencil" style="font-size: 20px"></i></button></form>     
-                                <form action="#" method="post" style=" margin-left:300px; margin-top:-56"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$id_cupom."'"; ?>><button class=" btn btn-simple btn-info"><i class="ti-reload" style="font-size: 20px"></i></button></form>
+                            <div class="pull-right" style="margin-right:10px">
+                                <form action="cad_cupom.php" method="get" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$id_cupom."'"; ?>><button type="submit" class="btn btn-primary btn-warning" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button></form>
                             </div>
                     </div>
                     </div>
