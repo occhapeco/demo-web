@@ -37,11 +37,10 @@
 <html lang="pt">
 <head>
 	<meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+    <link rel="icon" type="image/png" sizes="96x76" href="imgs/logo/escudo_clube.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <title>Paper Dashboard by Creative Tim</title>
+    <title>Clube de Ofertas</title>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -87,44 +86,32 @@
 		                    <form action="#" id="frm" method="post">
 		                    	<input type="hidden" name="latitude" id="latitude">
 		                    	<input type="hidden" name="longitude" id="longitude">
-
+		                    	<center>
+									<div class="logo" style="margin-top:20px">
+						                <a href="index.php" class="simple-text">
+						                    <img src="imgs/logo/escudo_corel.png" height="77px" width="350px">
+						                </a>
+						            </div>
+								</center>
 		                    	<div class="wizard-header text-center">
 		                        	<h3 class="wizard-title">Realizar login</h3>
 		                    	</div>
 
-								<div class="wizard-navigation">
-									<div class="progress-with-circle">
-									     <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" style="width: 21%;"></div>
-									</div>
-									<ul>
-			                            <li>
-											<a href="#about" data-toggle="tab">
-												<div class="icon-circle">
-													<i class="ti-user"></i>
-												</div>
-											</a>
-										</li>
-			                        </ul>
-								</div>
-		                        <div class="tab-content" style="min-height: 320px;">
-		                            <div class="tab-pane" id="about">
-		                            	<div class="row">
-											<div class="col-sm-1"></div>
-											<div class="col-sm-10">
-												<div class="form-group">
-													<label>Email <small>(obrigatório)</small></label>
-													<input type="email" class="form-control" name="email" id="email" placeholder="informe um email" maxlength="40" required>
-												</div>
-												<div class="form-group">
-													<label>Senha <small>(obrigatório)</small></label>
-													<input type="password" class="form-control" name="senha" id="senha" placeholder="Digite sua senha" maxlength="12" required>
-												</div>
-											</div>
-											<div class="col-sm-1"></div>
-											<div class="col-sm-12 text-center"><a href="cad_empresa.php">Não possui cadastro? Clique aqui!</a></div>
+                            	<div class="row" style="margin-top:20px;">
+									<div class="col-sm-1"></div>
+									<div class="col-sm-10">
+										<div class="form-group">
+											<label>Email <small>(obrigatório)</small></label>
+											<input type="email" class="form-control" name="email" id="email" placeholder="informe um email" maxlength="40" required>
 										</div>
-		                            </div>
-		                        </div>
+										<div class="form-group">
+											<label>Senha <small>(obrigatório)</small></label>
+											<input type="password" class="form-control" name="senha" id="senha" placeholder="Digite sua senha" maxlength="12" required>
+										</div>
+									</div>
+									<div class="col-sm-1"></div>
+									<div class="col-sm-12 text-center"><a href="cad_empresa.php">Não possui cadastro? Clique aqui!</a></div>
+								</div>
 		                        <div class="wizard-footer">
 		                            <div class="pull-right">
 		                                <input type='button' class='btn btn-next btn-fill btn-warning btn-wd' name='next' value='Próximo' />
