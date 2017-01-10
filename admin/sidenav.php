@@ -31,6 +31,50 @@
                 </li>
             <?php
                 }
+			else
+                {
+            ?>
+                <li>
+                    <a href="cad_cidade.php">
+                        <i class="ti-layers-alt"></i>
+                        <p>Cidades</p>
+                    </a>
+                </li>
+            <?php
+                }
+			else
+                {
+            ?>
+                <li>
+                    <a href="cad_categoria.php">
+                        <i class="ti-layers-alt"></i>
+                        <p>Categorias de cupom</p>
+                    </a>
+                </li>
+            <?php
+                }
+			else
+                {
+            ?>
+                <li>
+                    <a href="empresa.php">
+                        <i class="ti-layers-alt"></i>
+                        <p>Empresas</p>
+                    </a>
+                </li>
+            <?php
+                }
+			else
+                {
+            ?>
+                <li>
+                    <a href="cupom.php">
+                        <i class="ti-layers-alt"></i>
+                        <p>Cupons</p>
+                    </a>
+                </li>
+            <?php
+                }
             ?>
                 <li>
                     <a href="../logout.php">

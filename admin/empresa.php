@@ -55,54 +55,31 @@
 	<?php 
         require_once("sidenav.php");
         require_once("topnav.php");
-        $json_dados = $service->call('admin.select_cupons',array());
-        $cupom = json_decode($json_dados);
-        if(count($cupom) == 0)
+        $json_dados = $service->call('admin.select_empresas',array(0));
+        $empresa = json_decode($json_dados);
+        if(count($empresa) == 0)
             echo "<br><br><br><br><br><h2 class='text-center'>Sem novas requisições.</h2>";
-        for($i=0;$i<count($cupom);$i++)
+        for($i=0;$i<count($empresa);$i++)
         {
-            $str_tipos = "";
-            for($j=0;$j<count($cupom[$i]->tipo);$j++)
-            {
-                if($j>0)
-                    $str_tipos .= ", ";
-                $str_tipos .= $cupom[$i]->tipo[$j]->nome;
-            }
-
+			$endereco = $service->call('empresa.select_enderecos', array($_SESSION["id"]));
     ?>
     <div class="content">
         <div class="col-lg-12">
             <div class="card">
                 <div class="content">
                     <div class="row">
-                        <div class="col-xs-3">
-                            <div class="icon-big icon-warning text-center">
-                                <img src="http://olar.esy.es/<?php echo $cupom[$i]->caminho; ?>" class="img-responsive">
-                            </div>
-                        </div>
-                        <div class="col-xs-9">
                             <div class="col-xs-12">
-                                <h3 class="text-center" style="margin-top: -5px;color:#252422"><?php echo $cupom[$i]->titulo; ?></h3>
+                                <h3 class="text-center" style="margin-top: -5px;color:#252422"><?php echo $empresa[$i]->razao_social; ?></h3>
                             </div>
                             <div class="col-xs-12">
-                                <label>Descrição:</label><label style="color:#252422"><?php echo $cupom[$i]->descricao; ?></label>
+                                <label>CNPJ/CPF:</label><label style="color:#252422"><?php echo $empresa[$i]->cnpj; ?></label>
                             </div>
                             <div class="col-xs-12">
-                                <label>Regras:</label><label style="color:#252422"><?php echo $cupom[$i]->regras; ?></label>
+                                <label>Telefone:</label><label style="color:#252422"><?php echo $empresa[$i]->celular; ?></label>
                             </div>
                             <div class="col-xs-12">
-                                <label>Endereço:</label><label style="color:#252422"><?php echo $cupom[$i]->bairro.", ".$cupom[$i]->rua.", ".$cupom[$i]->num.", ".$cupom[$i]->complemento.", ".$cupom[$i]->cep;?></label>
+                                <label>Endereço:</label><label style="color:#252422"><?php echo $endereco[0]->bairro.", ".$endereco[0]->rua.", ".$endereco[0]->num.", ".$endereco[0]->complemento.", ".$endereco[0]->cep;?></label>
                             </div>
-                            <div class="col-xs-12">
-                                <label>Prazo:</label><label style="color:#252422"><?php echo $cupom[$i]->prazo; ?></label>
-                                <label>Valor:</label><label style="color:#252422">R$<?php echo $cupom[$i]->preco_cupom; ?></label>
-                                <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom[$i]->quantidade; ?></label>
-                            </div>
-                            <div class="col-xs-12">
-                                <label>Tipos:</label><label style="color:#252422"><?php echo $str_tipos; ?></label>
-                                <label>Empresa:</label><label style="color:#252422"><?php echo $cupom[$i]->nome_fantasia; ?></label>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="footer status">
@@ -111,20 +88,7 @@
                             <label>
                                 <form action="#" method="post">
                                     <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                    <button type="submit" class="btn btn-primary btn-success" name="aprovar" style="font-size: 16px"><i class="ti-check"></i> Aprovar</button>
-                                </form>
-                            </label>
-                            <label>
-                                <form action="#" method="post">
-                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                    <button class=" btn btn-primary btn-danger" name="recusar" style="font-size: 16px"><i class="ti-close"></i> Recusar</button>
-                                </form>
-                            </label>
-                            <label>
-                                <form action="cad_cupom.php" method="get">
-                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                    <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$cupom[$i]->empresa_id."'"; ?>>
-                                    <button type="submit" class="btn btn-primary btn-warning" name="editar" style="font-size: 16px"><i class="ti-pencil"></i> Editar e aprovar</button>
+                                    <button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px"><i class="ti-lock"></i> Bloquear</button>
                                 </form>
                             </label>
                         </center>

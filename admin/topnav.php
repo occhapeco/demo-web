@@ -12,37 +12,31 @@
                         if($page == "index")
                         {
                     ?>
-                        <p class="navbar-brand">Estatísticas</p>
+                        <p class="navbar-brand">Requisições</p>
                     <?php
                         }
-                        elseif($page == "cad_cupom")
+                        elseif($page == "cad_cidade")
                         {
                     ?>
-                        <p class="navbar-brand">Cadastro de cupom</p>
+                        <p class="navbar-brand">Cidades</p>
                     <?php
                         }
-                        elseif($page == "meus_cupons")
+                        elseif($page == "cad_categoria")
                         {
                     ?>
-                        <p class="navbar-brand">Meus cupons</p>
+                        <p class="navbar-brand">Categoria de cupom</p>
                     <?php
                         }
-                        elseif($page == "config")
+                        elseif($page == "empresa")
                         {
                     ?>
-                        <p class="navbar-brand">Configurações</p>
+                        <p class="navbar-brand">Empresas</p>
                     <?php
                         }
-                        elseif($page == "endereco")
+                        elseif($page == "cupom")
                         {
                     ?>
-                        <p class="navbar-brand">Novo endereço</p>
-                    <?php
-                        }
-                        elseif($page == "meus_enderecos")
-                        {
-                    ?>
-                        <p class="navbar-brand">Meus endereços</p>
+                        <p class="navbar-brand">Cupons</p>
                     <?php
                         }
                     ?>

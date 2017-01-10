@@ -113,15 +113,15 @@
 		                            	<div class="row">
 											<div class="col-sm-6">
 												<div class="form-group">
-													<label>Razão Social <small>(obrigatório)</small></label>
+													<label>Razão Social/Nome <small>(obrigatório)</small></label>
 													<input type="text" class="form-control" name="razao_social" id="razao_social" placeholder="Digite a razão social" maxlength="20" required>
 												</div>
 												<div class="form-group">
-													<label>Nome Fantasia <small>(obrigatório)</small></label>
-													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" maxlength="20" required>
+													<label>Nome Fantasia <small></small></label>
+													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" maxlength="20">
 												</div>
 												<div class="form-group">
-													<label>CNPJ <small>(obrigatório)</small></label>
+													<label>CNPJ/CPF <small>(obrigatório)</small></label>
 													<input type="text" class="form-control" name="cnpj" id="cnpj" placeholder="Informe seu CNPJ" maxlength="18" required>
 												</div>
 												<div class="form-group">

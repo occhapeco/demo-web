@@ -17,7 +17,7 @@
                 $usuarios[] = $usuario_has_cupom[$i]->id;
         $json = $service->call('empresa.dar_baixa', array(json_encode($usuarios)));
         if($json)
-            $alert = '<div class="alert alert-successs" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
+            $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
         else
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
     }
