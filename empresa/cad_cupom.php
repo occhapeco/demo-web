@@ -9,7 +9,6 @@
     $endereco_id = 0;
     $imagem_id = 0;
     $imagem_caminho = "";
-    $imagem_tipo = 1;
     $titulo = "";
     $regras = "";
     $descricao = "";
@@ -52,11 +51,11 @@
         {
             if($_POST["imagem_id"] == "upload")
             {
-                $servidor = 'olar.esy.es';
-                $caminho_absoluto = '/public_html/';
+                $servidor = 'ftp.noxgames.com.br';
+                $caminho_absoluto = '/public_html/clube/';
 
                 $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
-                ftp_login($con_id,'u274667541','batata');
+                ftp_login($con_id,'noxgames','nox321batata');
                 ftp_pasv($con_id, true);
 
                 $arquivo = $_FILES['wizard-picture'];
@@ -79,7 +78,6 @@
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
         $imagem_id = $cupom->imagem_id;
-        $imagem_tipo = $cupom->imagem_tipo;
         $imagem_caminho = $cupom->caminho;
         $titulo = $cupom->titulo;
         $regras = $cupom->regras;
@@ -100,11 +98,11 @@
 
         if($_POST["imagem_id"] == "upload")
         {
-            $servidor = 'olar.esy.es';
-            $caminho_absoluto = '/public_html/';
+           $servidor = 'ftp.noxgames.com.br';
+            $caminho_absoluto = '/public_html/clube/';
 
             $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
-            ftp_login($con_id,'u274667541','batata');
+            ftp_login($con_id,'noxgames','nox321batata');
             ftp_pasv($con_id, true);
 
             $arquivo = $_FILES['wizard-picture'];
@@ -138,19 +136,7 @@
             if(isset($_POST[$tipo[$i]->id]))
                 $tipos[] = $tipo[$i]->id;
         $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
-        if($_POST["imagem_id"] != "upload" && isset($_POST["trocar"]) && $_POST["imagem_id"] != $_POST["trocar"])
-        {
-            $servidor = 'olar.esy.es';
-            $caminho_absoluto = '/public_html/';
 
-            $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
-            ftp_login($con_id,'u274667541','batata');
-            ftp_pasv($con_id, true);
-            
-            ftp_delete($con_id,$caminho_absoluto.'cupom'.$_POST["edit"].'.png');
-            ftp_delete($con_id,$caminho_absoluto.'cupom'.$_POST["edit"].'.jpg');
-            $insert = $service->call('empresa.delete_imagem',array($_POST["trocar"]));
-        }
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
@@ -399,7 +385,8 @@
                                     </div>
                                     <div class="tab-pane" id="address">
                                         <div class="row">
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2"></div>
+                                            <div class="col-sm-4">
                                                 <input type="file" id="wizard-picture" name="wizard-picture" accept="image/x-png,image/jpeg">
                                                 <label class="choice" data-toggle="wizard-radio"  onclick="$('#wizard-picture').click();">
                                                     <input type="radio" name="imagem_id" value="upload">
@@ -412,48 +399,16 @@
                                                 </label>
                                             </div>
                                             <?php
-                                                if($imagem_tipo == 0)
+                                                if($imagem_id != 0)
                                                 {
                                             ?>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <label class="choice active" data-toggle="wizard-radio">
                                                     <input type="hidden" name="trocar" <?php echo 'value="'.$imagem_id.'"'; ?>>
                                                     <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem_id.'" checked'; ?>>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img <?php echo 'src="http://olar.esy.es/'.$imagem_caminho.'"'; ?> class="picture-src" id="wizardPicturePreview" title="">
-                                                        </div>
-                                                    </div>
-                                                </label>
-                                            </div>
-                                            <?php
-                                                }
-                                                $json = $service->call("select_imagens",array());
-                                                $imagem = json_decode($json);
-                                                for($i=0;$i<count($imagem);$i++)
-                                                {
-                                                    $first = "checked";
-                                                    $class_first = 'class="choice active"';
-                                                    if($imagem_id > 0)
-                                                    {
-                                                        if($imagem[$i]->id != $imagem_id)
-                                                        {
-                                                            $first = "";
-                                                            $class_first = 'class="choice"';
-                                                        }
-                                                    }
-                                                    elseif($i > 0)
-                                                    {
-                                                        $first = "";
-                                                        $class_first = 'class="choice"';
-                                                    }
-                                            ?>
-                                            <div class="col-sm-3">
-                                                <label <?php echo $class_first; ?> data-toggle="wizard-radio">
-                                                    <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem[$i]->id.'" '.$first; ?>>
-                                                    <div class="card card-radios card-hover-effect">
-                                                        <div class="picture">
-                                                            <img <?php echo 'src="../imgs/'.$imagem[$i]->caminho.'" '; ?> class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img <?php echo 'src="../imgs/'.$imagem_caminho.'"'; ?> class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </label>
@@ -462,6 +417,7 @@
                                                 }
                                             ?>
                                         </div>
+                                        <div class="col-sm-2"></div>
                                     </div>
                                     <div class="wizard-footer">
                                         <div class="pull-right">
