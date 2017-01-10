@@ -10,9 +10,9 @@
 	{
 		$headers = "MIME-Version: 1.1\r\n";
 		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
-		$headers .= "From: $email\r\n";
-		$headers .= "Return-Path: $email\r\n";
-		$envio = mail("no-reply@clubeofertas.com","Clube de Ofertas - ".$assunto,$msg."<br><br>Atenciosamente, equipe Clube de Ofertas.",$headers);
+		$headers .= "From: no-reply@clubeofertas.com\r\n";
+		$headers .= "Return-Path: no-reply@clubeofertas.com\r\n";
+		$envio = mail($email,"Clube de Ofertas - ".$assunto,$msg."<br><br>Atenciosamente, equipe Clube de Ofertas.",$headers);
 		if(!envio)
 			return false;
 		else
@@ -318,7 +318,7 @@
 		    	return -2;
 		    }
 			$conexao->close();
-			mandar_email($email,"Solicitação de cadastro enviada.","Caro $nome, <br>sua solicitação de cadastro foi enviada com sucesso. Assim que um dos nossos administradores analisarem seus dados, retornaremos a resposta. Obrigado por escolher o Clube de Ofertas!");
+			mandar_email($email,"Solicitação de cadastro enviada.","Caro $nome_usuario, <br>sua solicitação de cadastro foi enviada com sucesso. Assim que um dos nossos administradores analisarem seus dados, retornaremos a resposta. Obrigado por escolher o Clube de Ofertas!");
 			return $empresa_id;
 		}
 
@@ -442,7 +442,7 @@
 			$senha = md5(sha1($senha));
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha' AND estado = 0");
+			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha'");
 			if($query->num_rows == 0)
 				return 0;
 			$row = $query->fetch_assoc();
@@ -691,6 +691,18 @@
 			return json_encode($dados);
 		}
 
+		function select_cidades()
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT * FROM cidade");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
 		function desativar_cidade($id)
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
@@ -702,6 +714,15 @@
 				$resultado = true;
 				$query = $conexao->query("UPDATE cidade SET estado = -1 WHERE id = $id");
 			}
+			$conexao->close();
+			return $resultado;
+		}
+
+		function ativar_cidade($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE cidade SET estado = 0 WHERE id = $id");
 			$conexao->close();
 			return $resultado;
 		}
@@ -748,9 +769,9 @@
 			$query = $conexao->query("UPDATE empresa SET estado = 0 WHERE id = $id");
 			if($query)
 			{
-				$sub_query = $conexao->query("SELECT email,nome FROM empresa WHERE id = $id");
+				$sub_query = $conexao->query("SELECT email,nome_usuario FROM empresa WHERE id = $id");
 				$row = $sub_query->fetch_assoc();
-				mandar_email($row["email"],"Cadastro aprovado!","Caro ".$row["nome"].", <br>seja bem-vindo ao Clube de Ofertas! Após analisarmos seus dados, o seu cadastro foi aprovado. Comece hoje mesmo a publicar ofertas e aumente seu número dos seus cliente clicando <a href='http://clubedeofertas.net/login.php'>aqui</a>!");
+				mandar_email($row["email"],"Cadastro aprovado!","Caro ".$row["nome_usuario"].", <br>seja bem-vindo ao Clube de Ofertas! Após analisarmos seus dados, o seu cadastro foi aprovado. Comece hoje mesmo a publicar ofertas e aumente seu número dos seus cliente clicando <a href='http://clubedeofertas.net/login.php'>aqui</a>!");
 			}
 			$conexao->close();
 			return $query;
@@ -760,9 +781,9 @@
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT email,nome FROM empresa WHERE id = $id");
+			$query = $conexao->query("SELECT email,nome_usuario FROM empresa WHERE id = $id");
 			$row = $query->fetch_assoc();
-			mandar_email($row["email"],"Cadastro recusado!","Caro ".$row["nome"].", <br>após analisarmos seus dados, o seu cadastro foi negado devido a algumas anormalidades em seus dados. Caso ainda queira participar do Clube de Ofertas, afetue seu cadastro novamente clicando <a href='http://clubedeofertas.net/cad_empresa.php'>aqui</a>.");
+			mandar_email($row["email"],"Cadastro recusado!","Caro ".$row["nome_usuario"].", <br>após analisarmos seus dados, o seu cadastro foi negado devido a algumas anormalidades em seus dados. Caso ainda queira participar do Clube de Ofertas, afetue seu cadastro novamente clicando <a href='http://clubedeofertas.net/cad_empresa.php'>aqui</a>.");
 			$query = $conexao->query("DELETE FROM endereco WHERE empresa_id = $id");
 			$query = $conexao->query("DELETE FROM empresa WHERE id = $id");
 			$conexao->close();
@@ -775,7 +796,9 @@
 	$server->register('admin.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realiza login do admin.');
 	$server->register('admin.select_cupons', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona cupons que precisam de aprovação.');
 	$server->register('admin.select_empresas', array('estado' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona empresas de acordo com o estado informado.');
+	$server->register('admin.select_cidades', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todas as cidades.');
 	$server->register('admin.desativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa uma cidade.');
+	$server->register('admin.ativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Ativa uma cidade.');
 	$server->register('admin.delete_tipo', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Deleta um tipo de cupom.');
 	$server->register('admin.aprovar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova um cupom.');
 	$server->register('admin.recusar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa um cupom.');

@@ -13,12 +13,7 @@
 		elseif($insert == -2)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
 		else
-		{
-			session_start();
-			$_SESSION["id"] = $insert;
-			$_SESSION["tipo"] = "empresa";
-			header("location: empresa/");
-		}
+			header("location: aprovacao.php?id=$insert");
 	}
 ?>
 <!doctype html>

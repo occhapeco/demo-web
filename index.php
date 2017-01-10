@@ -7,6 +7,7 @@
 	if (isset($_POST["concluir"]))
 	{
 		$json = $service->call('empresa.login', array($_POST["email"],$_POST["senha"]));
+		$empresa = json_decode($json);
 		if(!$json)
 		{
 			$json = $service->call('admin.login', array($_POST["email"],$_POST["senha"]));
@@ -23,14 +24,15 @@
 				header("location: admin/");
 			}
 		}
-		else
+		elseif($empresa->estado == 0)
 		{
 			session_start();
-			$empresa = json_decode($json);
 			$_SESSION["id"] = $empresa->id;
 			$_SESSION["tipo"] = "empresa";
 			header("location: empresa/");
 		}
+		else
+			header("location: aprovacao.php?id=".$empresa->id);
 	}
 ?>
 <!doctype html>
