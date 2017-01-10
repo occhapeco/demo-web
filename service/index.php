@@ -6,6 +6,19 @@
 	$namespace = 'urn:service';
 	$server->wsdl->schemaTargetNamespace = $namespace;
 
+	function mandar_email($email,$assunto,$msg)
+	{
+		$headers = "MIME-Version: 1.1\r\n";
+		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
+		$headers .= "From: $email\r\n";
+		$headers .= "Return-Path: $email\r\n";
+		$envio = mail("no-reply@clubeofertas.com","Clube de Ofertas - ".$assunto,$msg."<br><br>Atenciosamente, equipe Clube de Ofertas.",$headers);
+		if(!envio)
+			return false;
+		else
+			return true;
+	}
+
 	function converter_data($data,$tipo)
 	{
 		if($tipo)
@@ -47,6 +60,20 @@
 		$resto = $soma % 11;
 		return $cnpj{13} == ($resto < 2 ? 0 : 11 - $resto);
 	}
+
+	function query($sql_query)
+	{
+		$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+		$query = $conexao->query('SET CHARACTER SET utf8');
+		$query = $conexao->query($sql_query);
+		$dados = array();
+		while($row = $query->fetch_assoc())
+			$dados[] = $row;
+		$conexao->close();
+		return json_encode($dados);
+	}
+
+	$server->register('query', array('sql_query' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realiza uma query no banco.');
 
 	function select_cidades()
 	{
@@ -92,7 +119,7 @@
 
 	class usuario
 	{
-		function insert($nome,$email,$senha,$celular,$genero,$nascimento)
+		function insert($nome,$email,$senha,$celular,$genero,$nascimento,$token)
 		{
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
@@ -101,7 +128,7 @@
 
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0)");
+			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0,'$token')");
 			$id = 0;
 			if($query)
 		    	return $conexao->insert_id;
@@ -152,6 +179,7 @@
 			$str_tipo = "";
 			$inner = "";
 			$max = $num + 5;
+			$data = date(Y-m-d H:i:s);
 
 			for($i=0;$i<count($tipo_id);$i++)
 			{
@@ -168,7 +196,7 @@
 				$cond .= " AND cupom.delivery = ".$delivery;
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,imagem.caminho,empresa.nome_fantasia FROM cupom $inner INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE cidade.id = $cidade $str_tipo $cond AND cupom.quantidade > 0 AND cupom.estado = 0 LIMIT $num,$max");
+			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,imagem.caminho,empresa.nome_fantasia FROM cupom $inner INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE cidade.id = $cidade $str_tipo $cond AND cupom.quantidade > 0 AND cupom.estado = 0 AND cupom.prazo > $data LIMIT $num,$max");
 			$dados = array();
 			$i = 0;
 			while($row = $query->fetch_assoc())
@@ -245,7 +273,7 @@
 		}
 	}
 
-	$server->register('usuario.insert', array('nome' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de usuário.');
+	$server->register('usuario.insert', array('nome' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string','token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de usuário.');
 	$server->register('usuario.update_perfil', array('id' => 'xsd:integer','nome' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar perfil do usuário.');
 	$server->register('usuario.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha do usuário.');
 	$server->register('usuario.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login do usuário.');
@@ -273,7 +301,7 @@
 
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular','$data_cadastro',0)");
+			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular','$data_cadastro',0,0)");
 			if(!$query)
 		    	return -1;
 		    $empresa_id = $conexao->insert_id;
@@ -290,6 +318,7 @@
 		    	return -2;
 		    }
 			$conexao->close();
+			mandar_email($email,"Solicitação de cadastro enviada.","Caro $nome, <br>sua solicitação de cadastro foi enviada com sucesso. Assim que um dos nossos administradores analisarem seus dados, retornaremos a resposta. Obrigado por escolher o Clube de Ofertas!");
 			return $empresa_id;
 		}
 
@@ -413,7 +442,7 @@
 			$senha = md5(sha1($senha));
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha'");
+			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha' AND estado = 1");
 			if($query->num_rows == 0)
 				return 0;
 			$row = $query->fetch_assoc();
@@ -587,6 +616,35 @@
 
 	class admin
 	{
+		function insert_cidade($cidade,$uf)
+		{
+			$cidade = preg_replace('![*#/\"´`]+!','',$cidade);
+			$uf = preg_replace('![*#/\"´`]+!','',$uf);
+
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("INSERT INTO cidade VALUES(NULL,'$cidade','$uf')");
+			$id = 0;
+			if($query)
+		    	$id = $conexao->insert_id;
+			$conexao->close();
+			return $id;
+		}
+
+		function insert_tipo($nome)
+		{
+			$nome = preg_replace('![*#/\"´`]+!','',$nome);
+
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("INSERT INTO tipo VALUES(NULL,'$nome')");
+			$id = 0;
+			if($query)
+		    	c$conexao->insert_id;
+			$conexao->close();
+			return $id;
+		}
+
 		function login($email,$senha)
 		{
 			$senha = md5(sha1($senha));
@@ -621,7 +679,19 @@
 			return json_encode($dados);
 		}
 
-		function aprovar($id)
+		function select_empresas($estado)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT * FROM empresa WHERE estado = $estado");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function aprovar_cupom($id)
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
@@ -631,7 +701,7 @@
 			return $query;
 		}
 
-		function recusar($id)
+		function recusar_cupom($id)
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
@@ -640,12 +710,45 @@
 			$conexao->close();
 			return $query;
 		}
+
+		function aprovar_empresa($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE empresa SET estado = 1 WHERE id = $id");
+			if($query)
+			{
+				$sub_query = $conexao->query("SELECT email,nome FROM empresa WHERE id = $id");
+				$row = $sub_query->fetch_assoc();
+				mandar_email($row["email"],"Cadastro aprovado!","Caro ".$row["nome"].", <br>seja bem-vindo ao Clube de Ofertas! Após analisarmos seus dados, o seu cadastro foi aprovado. Comece hoje mesmo a publicar ofertas e aumente seu número dos seus cliente clicando <a href='http://clubedeofertas.net/login.php'>aqui</a>!");
+			}
+			$conexao->close();
+			return $query;
+		}
+
+		function recusar_empresa($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT email,nome FROM empresa WHERE id = $id");
+			$row = $query->fetch_assoc();
+			mandar_email($row["email"],"Cadastro recusado!","Caro ".$row["nome"].", <br>após analisarmos seus dados, o seu cadastro foi negado devido a algumas anormalidades em seus dados. Caso ainda queira participar do Clube de Ofertas, afetue seu cadastro novamente clicando <a href='http://clubedeofertas.net/cad_empresa.php'>aqui</a>.");
+			$query = $conexao->query("DELETE FROM endereco WHERE empresa_id = $id");
+			$query = $conexao->query("DELETE FROM empresa WHERE id = $id");
+			$conexao->close();
+			return $query;
+		}
 	}
 
-	$server->register('admin.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login do admin.');
-	$server->register('admin.select_cupons', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar cupons que precisam de aprovação.');
-	$server->register('admin.aprovar', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Aprova um cupom.');
-	$server->register('admin.recusar', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Recusa um cupom.');
+	$server->register('admin.insert_cidade', array('cidade' => 'xsd:string','uf' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra uma nova cidade.');
+	$server->register('admin.insert_tipo', array('nome' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra um novo tipo de cupom.');
+	$server->register('admin.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realiza login do admin.');
+	$server->register('admin.select_cupons', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona cupons que precisam de aprovação.');
+	$server->register('admin.select_empresas', array('estado' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona empresas de acordo com o estado informado.');
+	$server->register('admin.aprovar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova um cupom.');
+	$server->register('admin.recusar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa um cupom.');
+	$server->register('admin.aprovar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova uma empresa.');
+	$server->register('admin.recusar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa uma empresa.');
 
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA);
