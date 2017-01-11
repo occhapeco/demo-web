@@ -66,7 +66,7 @@
             {
                 if($j > 0)
                     $enderecos .= " / ";
-                $enderecos .= $endereco[0]->bairro.", ".$endereco[0]->rua.", ".$endereco[0]->num.", ".$endereco[0]->complemento.", ".$endereco[0]->cep;
+                $enderecos .= $endereco[$j]->bairro.", ".$endereco[$j]->rua.", ".$endereco[$j]->num.", ".$endereco[$j]->complemento.", ".$endereco[$j]->cep;
             }
     ?>
     <div class="content">
@@ -79,8 +79,6 @@
                             </div>
                             <div class="col-xs-12">
                                 <label>CNPJ/CPF:</label><label style="color:#252422"><?php echo $empresa[$i]->cnpj; ?></label>
-                            </div>
-                            <div class="col-xs-12">
                                 <label>Telefone:</label><label style="color:#252422"><?php echo $empresa[$i]->celular; ?></label>
                             </div>
                             <div class="col-xs-12">

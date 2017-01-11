@@ -771,17 +771,23 @@
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
-			if($query)
+			$query = $conexao->query("SELECT id FROM usuario_has_cupom WHERE usuario_id = $usuario_id AND cupom_id = $cupom_id");
+			$resultado = false;
+			if($query->num_rows == 0)
 			{
-				$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id AND quantidade = 0 AND estado = 0");
-				$query = $conexao->query("SELECT * FROM cupom WHERE id = $cupom_id");
-				$row = $query->fetch_assoc();
-				$data = date("Y-m-d H:i:s");
-				$query = $conexao->query("INSERT INTO usuario_has_cupom VALUES(NULL,$cupom_id,$usuario_id,0,".$row["preco_normal"].",".$row["preco_cupom"].",'".$row["prazo"]."',".$row["pagamento"].",".$row["delivery"].",'$data',NULL,NULL,NULL,NULL)");
+				$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
+				if($query)
+				{
+					$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id AND quantidade = 0 AND estado = 0");
+					$query = $conexao->query("SELECT * FROM cupom WHERE id = $cupom_id");
+					$row = $query->fetch_assoc();
+					$data = date("Y-m-d H:i:s");
+					$query = $conexao->query("INSERT INTO usuario_has_cupom VALUES(NULL,$cupom_id,$usuario_id,0,".$row["preco_normal"].",".$row["preco_cupom"].",'".$row["prazo"]."',".$row["pagamento"].",".$row["delivery"].",'$data',NULL,NULL,NULL,NULL)");
+					$resultado = true;
+				}
 			}
 			$conexao->close();
-			return $query;
+			return $resultado;
 		}
 
 		function select_perfil($id)
