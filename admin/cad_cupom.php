@@ -337,7 +337,7 @@
                                             <div class="col-sm-4">
                                                 <input type="file" id="wizard-picture" name="wizard-picture" accept="image/x-png,image/jpeg">
                                                 <label class="choice" data-toggle="wizard-radio"  onclick="$('#wizard-picture').click();">
-                                                    <input type="radio" name="imagem_id" value="upload">
+                                                    <input type="radio" name="imagem" value="upload">
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="" class="picture-src" id="wizardPicturePreview" title="">
@@ -347,12 +347,12 @@
                                                 </label>
                                             </div>
                                             <?php
-                                                if($imagem_id != 0)
+                                                if($imagem != 0)
                                                 {
                                             ?>
                                             <div class="col-sm-4">
                                                 <label class="choice active" data-toggle="wizard-radio">
-                                                    <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem.'" checked'; ?>>
+                                                    <input type="radio" name="imagem" <?php echo 'value="'.$imagem.'" checked'; ?>>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img <?php echo 'src="../imgs/'.$imagem.'"'; ?> class="picture-src" id="wizardPicturePreview" title="">
