@@ -14,6 +14,18 @@
         $bool = $service->call('admin.aprovar_cupom', array($_POST["cupom_id"]));
         header("location: index.php");
     }
+	
+	if(isset($_POST["aprovar_empresa"]))
+	{
+		$bool = $service->call('admin.aprovar_empresa', array($_POST["empresa_id"]));
+		header("location: index.php");
+	}
+	
+	if(isset($_POST["recusar_empresa"]))
+	{
+		$bool = $service->call('admin.recusar_empresa', array($_POST["empresa_id"]));
+		header("location: index.php");
+	}
 
 ?>
 <html lang="pt">
@@ -75,9 +87,14 @@
             <div class="card">
                 <div class="content">
                     <div class="row">
+						<div class="col-xs-12">
+                            <div class="icon-big icon-warning text-center">
+                                <label><b>Novo cupom cadastrado!</b></label>
+                            </div>
+                        </div>
                         <div class="col-xs-3">
                             <div class="icon-big icon-warning text-center">
-                                <img src="http://olar.esy.es/<?php echo $cupom[$i]->caminho; ?>" class="img-responsive">
+                                <img src="http://olar.esy.es/<?php echo $cupom[$i]->imagem; ?>" class="img-responsive">
                             </div>
                         </div>
                         <div class="col-xs-9">
@@ -125,6 +142,70 @@
                                     <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                     <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$cupom[$i]->empresa_id."'"; ?>>
                                     <button type="submit" class="btn btn-primary btn-warning" name="editar" style="font-size: 16px"><i class="ti-pencil"></i> Editar e aprovar</button>
+                                </form>
+                            </label>
+                        </center>
+                </div>
+                </div>
+            </div>
+        </div>
+    <?php
+        }
+    ?>
+	
+	<?php 
+      	$json_dados = $service->call('admin.select_empresas',array(-1));
+        $empresa = json_decode($json_dados);
+        for($i=0;$i<count($empresa);$i++)
+        {
+			$json = $service->call('empresa.select_enderecos', array($empresa[$i]->id));
+            $endereco = json_decode($json);
+            $enderecos = "";
+            for($j=0;$j<count($endereco);$j++)
+            {
+                if($j > 0)
+                    $enderecos .= " / ";
+                $enderecos .= $endereco[0]->bairro.", ".$endereco[0]->rua.", ".$endereco[0]->num.", ".$endereco[0]->complemento.", ".$endereco[0]->cep;
+            }
+
+    ?>
+    <div class="content">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="content">
+                    <div class="row">
+						<div class="col-xs-12">
+                            <div class="icon-big icon-warning text-center">
+                                <label><b>Nova empresa cadastrada!</b></label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                                <h3 class="text-center" style="margin-top: -5px;color:#252422"><?php echo $empresa[$i]->razao_social; ?></h3>
+                            </div>
+                            <div class="col-xs-12">
+                                <label>CNPJ/CPF:</label><label style="color:#252422"><?php echo $empresa[$i]->cnpj; ?></label>
+                            </div>
+                            <div class="col-xs-12">
+                                <label>Telefone:</label><label style="color:#252422"><?php echo $empresa[$i]->celular; ?></label>
+                            </div>
+                            <div class="col-xs-12">
+                                <label>Endereços:</label><label style="color:#252422"><?php echo $enderecos; ?></label>
+                            </div>
+                    </div>
+                </div>
+                <div class="footer status">
+                    <hr style="padding-top:10px;">
+                        <center>
+                            <label>
+                                <form action="#" method="post">
+                                    <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
+                                    <button type="submit" class="btn btn-primary btn-success" name="aprovar_empresa" style="font-size: 16px"><i class="ti-check"></i> Aprovar</button>
+                                </form>
+                            </label>
+                            <label>
+                                <form action="#" method="post">
+                                    <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
+                                    <button class=" btn btn-primary btn-danger" name="recusar_empresa" style="font-size: 16px"><i class="ti-close"></i> Recusar</button>
                                 </form>
                             </label>
                         </center>

@@ -20,7 +20,7 @@
 	
 	if(isset($_POST["excluir"]))
 	{
-		if($service->call('admin.delete_tipo', array($_POST["id_categoria"])))
+		if($service->call('admin.delete_tipo', array($_POST["categoria_id"])))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Categoria excluida com sucesso!</b></span></div>';
 		}
@@ -120,7 +120,7 @@
                                             ?>
                                             <tr>
                                                 <td><?php echo $categoria[$i]->nome; ?></td>
-                                                <td><form action="#" method="get" style="margin-left:250px;"><input type="hidden" name="categoria_id" id="categoria_id" <?php echo "value='".$categoria[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="excluir" style="font-size: 14px"><i class="ti-trash"></i></button></form></td>
+                                                <td><form action="#" method="post"><input type="hidden" name="categoria_id" id="categoria_id" <?php echo "value='".$categoria[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="excluir" style="font-size: 14px"><i class="ti-trash"></i></button></form></td>
                                             </tr>
                                             <?php
                                                 }
