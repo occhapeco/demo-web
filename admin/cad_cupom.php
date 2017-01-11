@@ -7,8 +7,7 @@
     $alert = "";
     
     $endereco_id = 0;
-    $imagem_id = 0;
-    $imagem_caminho = "";
+    $imagem = "";
     $titulo = "";
     $regras = "";
     $descricao = "";
@@ -28,9 +27,7 @@
         $json = $service->call('empresa.select_cupom', array($cupom_id));
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
-        $imagem_id = $cupom->imagem_id;
-        $imagem_tipo = $cupom->imagem_tipo;
-        $imagem_caminho = $cupom->caminho;
+        $imagem = $cupom->imagem;
         $titulo = $cupom->titulo;
         $regras = $cupom->regras;
         $descricao = $cupom->descricao;
@@ -48,12 +45,12 @@
 
     if(isset($_POST["edit"]))
     {
-        $imagem = $_POST["imagem_id"];
+        $imagem = $_POST["imagem"];
 
-        if($_POST["imagem_id"] == "upload")
+        if($_POST["imagem"] == "upload")
         {
            $servidor = 'ftp.noxgames.com.br';
-            $caminho_absoluto = '/public_html/clube/';
+            $caminho_absoluto = '/public_html/clube/imgs/';
 
             $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
             ftp_login($con_id,'noxgames','nox321batata');
@@ -66,11 +63,7 @@
             ftp_delete($con_id,$caminho_absoluto.'cupom'.$_POST["edit"].'.png');
             ftp_delete($con_id,$caminho_absoluto.'cupom'.$_POST["edit"].'.jpg');
             ftp_put($con_id,$caminho_absoluto.$arquivo['name'], $arquivo['tmp_name'],FTP_BINARY);
-
-            if(isset($_POST["trocar"]))
-                $imagem = $_POST["trocar"];
-            else
-                $imagem = $service->call('empresa.insert_imagem',array($arquivo['name']));
+            $imagem = $arquivo["name"];
         }
 
         $delivery = 0;
@@ -83,13 +76,14 @@
         if(isset($_POST["credito"]))
             $pagamento += 2;
 
-        $tipos = array();
+        $types = array();
         $json = $service->call("select_tipos",array());
-        $tipo = json_decode($json);
-        for($i=0;$i<count($tipo);$i++)
-            if(isset($_POST[$tipo[$i]->id]))
-                $tipos[] = $tipo[$i]->id;
-        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+        $type = json_decode($json);
+        for($i=0;$i<count($type);$i++)
+            if(isset($_POST[$type[$i]->id]))
+                $types[] = $type[$i]->id;
+        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+
         $insert = $service->call('admin.aprovar_cupom',array($_POST["edit"]));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
@@ -358,11 +352,10 @@
                                             ?>
                                             <div class="col-sm-4">
                                                 <label class="choice active" data-toggle="wizard-radio">
-                                                    <input type="hidden" name="trocar" <?php echo 'value="'.$imagem_id.'"'; ?>>
-                                                    <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem_id.'" checked'; ?>>
+                                                    <input type="radio" name="imagem_id" <?php echo 'value="'.$imagem.'" checked'; ?>>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
-                                                            <img <?php echo 'src="../imgs/'.$imagem_caminho.'"'; ?> class="picture-src" id="wizardPicturePreview" title="">
+                                                            <img <?php echo 'src="../imgs/'.$imagem.'"'; ?> class="picture-src" id="wizardPicturePreview" title="">
                                                         </div>
                                                     </div>
                                                 </label>
