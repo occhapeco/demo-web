@@ -59,7 +59,15 @@
         $empresa = json_decode($json_dados);
         for($i=0;$i<count($empresa);$i++)
         {
-			$endereco = $service->call('empresa.select_enderecos', array($_SESSION["id"]));
+			$json = $service->call('empresa.select_enderecos', array($empresa[$i]->id));
+            $endereco = json_decode($json);
+            $enderecos = "";
+            for($j=0;$j<count($endereco);$j++)
+            {
+                if($j > 0)
+                    $enderecos .= " / ";
+                $enderecos .= $endereco[0]->bairro.", ".$endereco[0]->rua.", ".$endereco[0]->num.", ".$endereco[0]->complemento.", ".$endereco[0]->cep;
+            }
     ?>
     <div class="content">
         <div class="col-lg-12">
@@ -76,7 +84,7 @@
                                 <label>Telefone:</label><label style="color:#252422"><?php echo $empresa[$i]->celular; ?></label>
                             </div>
                             <div class="col-xs-12">
-                                <label>Endereço:</label><label style="color:#252422"><?php echo $endereco[0]->bairro.", ".$endereco[0]->rua.", ".$endereco[0]->num.", ".$endereco[0]->complemento.", ".$endereco[0]->cep;?></label>
+                                <label>Endereços:</label><label style="color:#252422"><?php echo $enderecos; ?></label>
                             </div>
                     </div>
                 </div>
@@ -85,7 +93,7 @@
                         <center>
                             <label>
                                 <form action="#" method="post">
-                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
+                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
                                     <button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px"><i class="ti-lock"></i> Bloquear</button>
                                 </form>
                             </label>

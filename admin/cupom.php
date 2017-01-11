@@ -68,13 +68,12 @@
 
         <div class="content">
             <?php
-            $json_dados = $service->call('admin.select_cupons', array());
-            $cupom = json_decode($json_dados);
-            $estado = "";
-            else{
-               for($i = 0; $i<count($cupom); $i++)
+                $json_dados = $service->call('admin.select_cupons', array());
+                $cupom = json_decode($json_dados);
+                $estado = "";
+                for($i = 0; $i<count($cupom); $i++)
                 {
-                     if ($cupom[$i]->estado == -1)
+                    if ($cupom[$i]->estado == -1)
                     {
                         $estado = "Enviado para aprovação";
                     }
@@ -142,7 +141,6 @@
                 </div>
                 <?php
                   }
-                }
                 ?>            
         </div>
 </div>

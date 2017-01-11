@@ -103,159 +103,98 @@
 
 	$server->register('select_tipos', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de cidades cadastradas para abrangência.');
 
-	function select_imagens()
+	class admin
 	{
-		$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-		$query = $conexao->query('SET CHARACTER SET utf8');
-		$query = $conexao->query("SELECT * FROM imagem WHERE tipo = 1");
-		$dados = array();
-		while($row = $query->fetch_assoc())
-			$dados[] = $row;
-		$conexao->close();
-		return json_encode($dados);
-	}
-
-	$server->register('select_imagens', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de imagens.');
-
-	class usuario
-	{
-		function insert($nome,$email,$senha,$celular,$genero,$nascimento,$token)
+		function insert_cidade($cidade,$uf)
 		{
-			$nome = preg_replace('![*#/\"´`]+!','',$nome);
-			$email = preg_replace('![*#/\"´`]+!','',$email);
-			$celular = preg_replace('![*#/\"´`]+!','',$celular);
-			$senha = md5(sha1($senha));
+			$cidade = preg_replace('![*#/\"´`]+!','',$cidade);
+			$uf = preg_replace('![*#/\"´`]+!','',$uf);
 
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0,'$token')");
+			$query = $conexao->query("INSERT INTO cidade VALUES(NULL,'$cidade','$uf',0)");
 			$id = 0;
 			if($query)
-		    	return $conexao->insert_id;
+		    	$id = $conexao->insert_id;
 			$conexao->close();
 			return $id;
 		}
 
-		function update_perfil($id,$nome,$celular,$genero,$nascimento)
+		function insert_tipo($nome)
 		{
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
-			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE usuario SET nome = '$nome', celular = '$celular', genero = $genero, nascimento = '$nascimento' WHERE id = $id");
+			$query = $conexao->query("INSERT INTO tipo VALUES(NULL,'$nome')");
+			$id = 0;
+			if($query)
+		    	$conexao->insert_id;
 			$conexao->close();
-			return $query;
-		}
-
-		function update_senha($id,$senha_antiga,$senha_nova)
-		{
-			$senha_antiga = md5(sha1($senha_antiga));
-			$senha_nova = md5(sha1($senha_nova));
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
-			$conexao->close();
-			return $query;
+			return $id;
 		}
 
 		function login($email,$senha)
 		{
+			return "SELECT * FROM admin WHERE email = '$email' AND senha = '$senha'";
 			$senha = md5(sha1($senha));
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'");
-			if($query->num_rows > 1 || $query->num_rows == 0)
+			$query = $conexao->query("SELECT * FROM admin WHERE email = '$email' AND senha = '$senha'");
+			if($query->num_rows == 0)
 				return 0;
-			$dados = array();
-			$row = $query->fetch_assoc();
-			$conexao->close();
-			return $row["id"];
-		}
-
-		function select_cupons($usuario_id,$cidade,$delivery,$pagamento,$tipo_id,$num)
-		{
-			$tipo_id = json_decode($tipo_id);
-			$str_tipo = "";
-			$inner = "";
-			$max = $num + 5;
-			$data = date("Y-m-d H:i:s");
-
-			for($i=0;$i<count($tipo_id);$i++)
-			{
-				if($i != 0)
-					$str_tipo .= "AND";
-				$str_tipo .= " cupom_has_tipo.tipo_id = ".$tipo_id[$i]." ";
-			}
-			if($str_tipo != "")
-				$inner = "INNER JOIN cupom_has_tipo ON (cupom.id = cupom_has_tipo.cupom_id)";
-			$cond = "";
-			if($pagamento > 0)
-				$cond .= " AND cupom.pagamento = ".$pagamento;
-			if($delivery > 0)
-				$cond .= " AND cupom.delivery = ".$delivery;
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,imagem.caminho,empresa.nome_fantasia FROM cupom $inner INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE cidade.id = $cidade $str_tipo $cond AND cupom.quantidade > 0 AND cupom.estado = 0 AND cupom.prazo > $data LIMIT $num,$max");
-			$dados = array();
-			$i = 0;
-			while($row = $query->fetch_assoc())
-			{
-				$dados[$i] = $row;
-			    $dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
-				$i++;
-			}
-			$conexao->close();
-			return json_encode($dados);
-		}
-
-		function select_detalhes_cupom($cupom_id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.estado,cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN imagem ON (imagem.id = cupom.imagem_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE cupom.id = $cupom_id");
-			$dados = array();
-			$row = $query->fetch_assoc();
-			$dados["detalhes"] = $row;
-			$query = $conexao->query("SELECT tipo.nome FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
-			while($row = $query->fetch_assoc())
-				$dados["tipos"][] = $row;
-			$conexao->close();
-			return json_encode($dados);
-		}
-
-		function pegar_cupom($usuario_id,$cupom_id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
-			if($query)
-			{
-				$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id AND quantidade = 0 AND estado = 0");
-				$query = $conexao->query("SELECT * FROM cupom WHERE id = $cupom_id");
-				$row = $query->fetch_assoc();
-				$data = date("Y-m-d H:i:s");
-				$query = $conexao->query("INSERT INTO usuario_has_cupom VALUES(NULL,$cupom_id,$usuario_id,0,".$row["preco_normal"].",".$row["preco_cupom"].",'".$row["prazo"]."',".$row["pagamento"].",".$row["delivery"].",'$data',NULL,NULL,NULL,NULL)");
-			}
-			$conexao->close();
-			return $query;
-		}
-
-		function select_perfil($id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM usuario WHERE id = $id");
 			$row = $query->fetch_assoc();
 			$conexao->close();
 			return json_encode($row);
 		}
 
-		function select_historico($id)
+		function select_cupons_avaliaveis()
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT usuario_has_cupom.id,usuario_has_cupom.cupom_id,usuario_has_cupom.estado,usuario_has_cupom.preco_normal,usuario_has_cupom.preco_cupom,usuario_has_cupom.prazo,usuario_has_cupom.pagamento,usuario_has_cupom.delivery,usuario_has_cupom.data_resgate,cupom.titulo,cupom.regras,cupom.descricao,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM usuario_has_cupom INNER JOIN usuario ON(usuario_has_cupom.usuario_id = usuario.id) INNER JOIN cupom ON(cupom.id = usuario_has_cupom.cupom_id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE usuario.id = $id ORDER BY data_resgate DESC");
+			$query = $conexao->query("SELECT cupom.id,cupom.imagem_id,cupom.empresa_id,imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,empresa.nome_fantasia,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) INNER JOIN empresa ON(cupom.empresa_id = empresa.id) WHERE cupom.estado = -1");
+			$dados = array();
+			$i = 0;
+			while($row = $query->fetch_assoc())
+			{
+				$dados[$i] = $row;
+				$sub_query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
+				$dados[$i]["tipo"] = array();
+				while($row = $sub_query->fetch_assoc())
+					$dados[$i]["tipo"][] = $row;
+			    $dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
+			    $i++;
+			}
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function select_cupons()
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT cupom.estado,cupom.id,cupom.imagem_id,cupom.empresa_id,imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,empresa.nome_fantasia,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) INNER JOIN empresa ON(cupom.empresa_id = empresa.id) ORDER BY cupom.estado DESC");
+			$dados = array();
+			$i = 0;
+			while($row = $query->fetch_assoc())
+			{
+				$dados[$i] = $row;
+				$sub_query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
+				$dados[$i]["tipo"] = array();
+				while($row = $sub_query->fetch_assoc())
+					$dados[$i]["tipo"][] = $row;
+			    $dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
+			    $i++;
+			}
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function select_empresas($estado)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT * FROM empresa WHERE estado = $estado");
 			$dados = array();
 			while($row = $query->fetch_assoc())
 				$dados[] = $row;
@@ -263,26 +202,120 @@
 			return json_encode($dados);
 		}
 
-		function avaliar($id,$produto,$atendimento,$ambiente,$comentarios)
+		function select_cidades()
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE usuario_has_cupom SET produto=$produto,atendimento=$atendimento,ambiente=$ambiente,comentarios='$comentarios',estado=2 WHERE id = $id");
+			$query = $conexao->query("SELECT * FROM cidade");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function desativar_cidade($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT cidade.id FROM cidade INNER JOIN endereco ON(endereco.cidade_id = cidade.id) INNER JOIN cupom ON(cupom.endereco_id = endereco.id) WHERE cidade.id = $id AND cupom.estado = 0");
+			$resultado = false;
+			if($query->num_rows == 0)
+			{
+				$resultado = true;
+				$query = $conexao->query("UPDATE cidade SET estado = -1 WHERE id = $id");
+			}
+			$conexao->close();
+			return $resultado;
+		}
+
+		function ativar_cidade($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE cidade SET estado = 0 WHERE id = $id");
+			$conexao->close();
+			return $resultado;
+		}
+
+		function delete_tipo($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT id FROM cupom_has_tipo WHERE tipo_id = $id");
+			$resultado = false;
+			if($query->num_rows == 0)
+			{
+				$resultado = true;
+				$query = $conexao->query("DELETE FROM tipo WHERE id = $id");
+			}
+			$conexao->close();
+			return $resultado;
+		}
+
+		function aprovar_cupom($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE cupom SET estado = 0 WHERE id = $id");
+			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,1,0)");
+			$conexao->close();
+			return $query;
+		}
+
+		function recusar_cupom($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE cupom SET estado = -2 WHERE id = $id");
+			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,0,0)");
+			$conexao->close();
+			return $query;
+		}
+
+		function aprovar_empresa($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE empresa SET estado = 0 WHERE id = $id");
+			if($query)
+			{
+				$sub_query = $conexao->query("SELECT email,nome_usuario FROM empresa WHERE id = $id");
+				$row = $sub_query->fetch_assoc();
+				mandar_email($row["email"],"Cadastro aprovado!","Caro ".$row["nome_usuario"].", <br>seja bem-vindo ao Clube de Ofertas! Após analisarmos seus dados, o seu cadastro foi aprovado. Comece hoje mesmo a publicar ofertas e aumente seu número dos seus cliente clicando <a href='http://clubedeofertas.net/login.php'>aqui</a>!");
+			}
+			$conexao->close();
+			return $query;
+		}
+
+		function recusar_empresa($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT email,nome_usuario FROM empresa WHERE id = $id");
+			$row = $query->fetch_assoc();
+			mandar_email($row["email"],"Cadastro recusado!","Caro ".$row["nome_usuario"].", <br>após analisarmos seus dados, o seu cadastro foi negado devido a algumas anormalidades em seus dados. Caso ainda queira participar do Clube de Ofertas, afetue seu cadastro novamente clicando <a href='http://clubedeofertas.net/cad_empresa.php'>aqui</a>.");
+			$query = $conexao->query("DELETE FROM endereco WHERE empresa_id = $id");
+			$query = $conexao->query("DELETE FROM empresa WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
 	}
 
-	$server->register('usuario.insert', array('nome' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string','token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de usuário.');
-	$server->register('usuario.update_perfil', array('id' => 'xsd:integer','nome' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar perfil do usuário.');
-	$server->register('usuario.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha do usuário.');
-	$server->register('usuario.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login do usuário.');
-	$server->register('usuario.select_cupons', array('usuario_id' => 'xsd:integer','cidade' => 'xsd:integer','delivery' => 'xsd:integer','pagamento' => 'xsd:integer','tipo_id' => 'xsd:string','num' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar cupons com filtros e limite de 5. ');
-	$server->register('usuario.select_detalhes_cupom', array('cupom_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar detalhes de um cupom. ');
-	$server->register('usuario.pegar_cupom', array('usuario_id' => 'xsd:integer','cupom_id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Pegar cupom, baixa automaticamente');
-	$server->register('usuario.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um usuario.');
-	$server->register('usuario.select_historico', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
-	$server->register('usuario.avaliar', array('id' => 'xsd:integer','produto' => 'xsd:integer','atendimento' => 'xsd:integer','ambiente' => 'xsd:integer','comentarios' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
+	$server->register('admin.insert_cidade', array('cidade' => 'xsd:string','uf' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra uma nova cidade.');
+	$server->register('admin.insert_tipo', array('nome' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra um novo tipo de cupom.');
+	$server->register('admin.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realiza login do admin.');
+	$server->register('admin.select_cupons_avaliaveis', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona cupons que precisam de aprovação.');
+	$server->register('admin.select_cupons', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todos os cupons.');
+	$server->register('admin.select_empresas', array('estado' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona empresas de acordo com o estado informado.');
+	$server->register('admin.select_cidades', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todas as cidades.');
+	$server->register('admin.desativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa uma cidade.');
+	$server->register('admin.ativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Ativa uma cidade.');
+	$server->register('admin.delete_tipo', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Deleta um tipo de cupom.');
+	$server->register('admin.aprovar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova um cupom.');
+	$server->register('admin.recusar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa um cupom.');
+	$server->register('admin.aprovar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova uma empresa.');
+	$server->register('admin.recusar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa uma empresa.');
 
 	class empresa
 	{
@@ -488,7 +521,7 @@
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.imagem_id,imagem.caminho,imagem.tipo AS imagem_tipo,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.estado,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) WHERE cupom.id = $id");
+			$query = $conexao->query("SELECT cupom.imagem_id,imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.estado,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) WHERE cupom.id = $id");
 			$dados = $query->fetch_assoc();
 			$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = $id");
 			$dados["tipo"] = array();
@@ -614,35 +647,47 @@
 	$server->register('empresa.desativar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa um cupom.');
 	$server->register('empresa.delete_imagem', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Deleta a imgagemde um cupom.');
 
-	class admin
+
+	class usuario
 	{
-		function insert_cidade($cidade,$uf)
+		function insert($nome,$email,$senha,$celular,$genero,$nascimento,$token)
 		{
-			$cidade = preg_replace('![*#/\"´`]+!','',$cidade);
-			$uf = preg_replace('![*#/\"´`]+!','',$uf);
+			$nome = preg_replace('![*#/\"´`]+!','',$nome);
+			$email = preg_replace('![*#/\"´`]+!','',$email);
+			$celular = preg_replace('![*#/\"´`]+!','',$celular);
+			$senha = md5(sha1($senha));
 
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("INSERT INTO cidade VALUES(NULL,'$cidade','$uf',0");
+			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0,'$token')");
 			$id = 0;
 			if($query)
-		    	$id = $conexao->insert_id;
+		    	return $conexao->insert_id;
 			$conexao->close();
 			return $id;
 		}
 
-		function insert_tipo($nome)
+		function update_perfil($id,$nome,$celular,$genero,$nascimento)
 		{
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
+			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("INSERT INTO tipo VALUES(NULL,'$nome')");
-			$id = 0;
-			if($query)
-		    	$conexao->insert_id;
+			$query = $conexao->query("UPDATE usuario SET nome = '$nome', celular = '$celular', genero = $genero, nascimento = '$nascimento' WHERE id = $id");
 			$conexao->close();
-			return $id;
+			return $query;
+		}
+
+		function update_senha($id,$senha_antiga,$senha_nova)
+		{
+			$senha_antiga = md5(sha1($senha_antiga));
+			$senha_nova = md5(sha1($senha_nova));
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
+			$conexao->close();
+			return $query;
 		}
 
 		function login($email,$senha)
@@ -650,161 +695,128 @@
 			$senha = md5(sha1($senha));
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM admin WHERE email = '$email' AND senha = '$senha'");
-			if($query->num_rows == 0)
+			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'");
+			if($query->num_rows > 1 || $query->num_rows == 0)
 				return 0;
+			$dados = array();
 			$row = $query->fetch_assoc();
 			$conexao->close();
-			return json_encode($row);
+			return $row["id"];
 		}
 
-		function select_cupons()
+		function select_cupons($usuario_id,$cidade,$delivery,$pagamento,$tipo_id,$num)
 		{
+			$tipo_id = json_decode($tipo_id);
+			$str_tipo = "";
+			$inner = "";
+			$max = $num + 5;
+			$data = date("Y-m-d H:i:s");
+
+			for($i=0;$i<count($tipo_id);$i++)
+			{
+				if($i != 0)
+					$str_tipo .= "AND";
+				$str_tipo .= " cupom_has_tipo.tipo_id = ".$tipo_id[$i]." ";
+			}
+			if($str_tipo != "")
+				$inner = "INNER JOIN cupom_has_tipo ON (cupom.id = cupom_has_tipo.cupom_id)";
+			$cond = "";
+			if($pagamento > 0)
+				$cond .= " AND cupom.pagamento = ".$pagamento;
+			if($delivery > 0)
+				$cond .= " AND cupom.delivery = ".$delivery;
+
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.id,cupom.imagem_id,cupom.empresa_id,imagem.caminho,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,empresa.nome_fantasia,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN imagem ON(imagem.id = cupom.imagem_id) INNER JOIN empresa ON(cupom.empresa_id = empresa.id) WHERE cupom.estado = -1");
+			$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.preco_normal,cupom.preco_cupom,cupom.prazo,cupom.quantidade,imagem.caminho,empresa.nome_fantasia FROM cupom $inner INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN empresa ON (cupom.empresa_id = empresa.id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN cidade ON (endereco.cidade_id = cidade.id) WHERE cidade.id = $cidade $str_tipo $cond AND cupom.quantidade > 0 AND cupom.estado = 0 AND cupom.prazo > '$data' LIMIT $num,$max");
 			$dados = array();
 			$i = 0;
 			while($row = $query->fetch_assoc())
 			{
 				$dados[$i] = $row;
-				$sub_query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
-				$dados[$i]["tipo"] = array();
-				while($row = $sub_query->fetch_assoc())
-					$dados[$i]["tipo"][] = $row;
 			    $dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
-			    $i++;
+				$i++;
 			}
 			$conexao->close();
 			return json_encode($dados);
 		}
 
-		function select_empresas($estado)
+		function select_detalhes_cupom($cupom_id)
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM empresa WHERE estado = $estado");
+			$query = $conexao->query("SELECT cupom.estado,cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN imagem ON (imagem.id = cupom.imagem_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE cupom.id = $cupom_id");
 			$dados = array();
+			$row = $query->fetch_assoc();
+			$dados["detalhes"] = $row;
+			$query = $conexao->query("SELECT tipo.nome FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
 			while($row = $query->fetch_assoc())
-				$dados[] = $row;
+				$dados["tipos"][] = $row;
 			$conexao->close();
 			return json_encode($dados);
 		}
 
-		function select_cidades()
+		function pegar_cupom($usuario_id,$cupom_id)
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM cidade");
-			$dados = array();
-			while($row = $query->fetch_assoc())
-				$dados[] = $row;
-			$conexao->close();
-			return json_encode($dados);
-		}
-
-		function desativar_cidade($id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cidade.id FROM cidade INNER JOIN endereco ON(endereco.cidade_id = cidade.id) INNER JOIN cupom ON(cupom.endereco_id = endereco.id) WHERE cidade.id = $id AND cupom.estado = 0");
-			$resultado = false;
-			if($query->num_rows == 0)
-			{
-				$resultado = true;
-				$query = $conexao->query("UPDATE cidade SET estado = -1 WHERE id = $id");
-			}
-			$conexao->close();
-			return $resultado;
-		}
-
-		function ativar_cidade($id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE cidade SET estado = 0 WHERE id = $id");
-			$conexao->close();
-			return $resultado;
-		}
-
-		function delete_tipo($id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT id FROM cupom_has_tipo WHERE tipo_id = $id");
-			$resultado = false;
-			if($query->num_rows == 0)
-			{
-				$resultado = true;
-				$query = $conexao->query("DELETE FROM tipo WHERE id = $id");
-			}
-			$conexao->close();
-			return $resultado;
-		}
-
-		function aprovar_cupom($id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE cupom SET estado = 0 WHERE id = $id");
-			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,1,0)");
-			$conexao->close();
-			return $query;
-		}
-
-		function recusar_cupom($id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE cupom SET estado = -2 WHERE id = $id");
-			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,0,0)");
-			$conexao->close();
-			return $query;
-		}
-
-		function aprovar_empresa($id)
-		{
-			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE empresa SET estado = 0 WHERE id = $id");
+			$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
 			if($query)
 			{
-				$sub_query = $conexao->query("SELECT email,nome_usuario FROM empresa WHERE id = $id");
-				$row = $sub_query->fetch_assoc();
-				mandar_email($row["email"],"Cadastro aprovado!","Caro ".$row["nome_usuario"].", <br>seja bem-vindo ao Clube de Ofertas! Após analisarmos seus dados, o seu cadastro foi aprovado. Comece hoje mesmo a publicar ofertas e aumente seu número dos seus cliente clicando <a href='http://clubedeofertas.net/login.php'>aqui</a>!");
+				$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id AND quantidade = 0 AND estado = 0");
+				$query = $conexao->query("SELECT * FROM cupom WHERE id = $cupom_id");
+				$row = $query->fetch_assoc();
+				$data = date("Y-m-d H:i:s");
+				$query = $conexao->query("INSERT INTO usuario_has_cupom VALUES(NULL,$cupom_id,$usuario_id,0,".$row["preco_normal"].",".$row["preco_cupom"].",'".$row["prazo"]."',".$row["pagamento"].",".$row["delivery"].",'$data',NULL,NULL,NULL,NULL)");
 			}
 			$conexao->close();
 			return $query;
 		}
 
-		function recusar_empresa($id)
+		function select_perfil($id)
 		{
 			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT email,nome_usuario FROM empresa WHERE id = $id");
+			$query = $conexao->query("SELECT * FROM usuario WHERE id = $id");
 			$row = $query->fetch_assoc();
-			mandar_email($row["email"],"Cadastro recusado!","Caro ".$row["nome_usuario"].", <br>após analisarmos seus dados, o seu cadastro foi negado devido a algumas anormalidades em seus dados. Caso ainda queira participar do Clube de Ofertas, afetue seu cadastro novamente clicando <a href='http://clubedeofertas.net/cad_empresa.php'>aqui</a>.");
-			$query = $conexao->query("DELETE FROM endereco WHERE empresa_id = $id");
-			$query = $conexao->query("DELETE FROM empresa WHERE id = $id");
+			$conexao->close();
+			return json_encode($row);
+		}
+
+		function select_historico($id)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT usuario_has_cupom.id,usuario_has_cupom.cupom_id,usuario_has_cupom.estado,usuario_has_cupom.preco_normal,usuario_has_cupom.preco_cupom,usuario_has_cupom.prazo,usuario_has_cupom.pagamento,usuario_has_cupom.delivery,usuario_has_cupom.data_resgate,cupom.titulo,cupom.regras,cupom.descricao,imagem.caminho,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM usuario_has_cupom INNER JOIN usuario ON(usuario_has_cupom.usuario_id = usuario.id) INNER JOIN cupom ON(cupom.id = usuario_has_cupom.cupom_id) INNER JOIN imagem ON (cupom.imagem_id = imagem.id) INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE usuario.id = $id ORDER BY data_resgate DESC");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function avaliar($id,$produto,$atendimento,$ambiente,$comentarios)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE usuario_has_cupom SET produto=$produto,atendimento=$atendimento,ambiente=$ambiente,comentarios='$comentarios',estado=2 WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
 	}
 
-	$server->register('admin.insert_cidade', array('cidade' => 'xsd:string','uf' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra uma nova cidade.');
-	$server->register('admin.insert_tipo', array('nome' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra um novo tipo de cupom.');
-	$server->register('admin.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realiza login do admin.');
-	$server->register('admin.select_cupons', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona cupons que precisam de aprovação.');
-	$server->register('admin.select_empresas', array('estado' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona empresas de acordo com o estado informado.');
-	$server->register('admin.select_cidades', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todas as cidades.');
-	$server->register('admin.desativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa uma cidade.');
-	$server->register('admin.ativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Ativa uma cidade.');
-	$server->register('admin.delete_tipo', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Deleta um tipo de cupom.');
-	$server->register('admin.aprovar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova um cupom.');
-	$server->register('admin.recusar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa um cupom.');
-	$server->register('admin.aprovar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova uma empresa.');
-	$server->register('admin.recusar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa uma empresa.');
+	$server->register('usuario.insert', array('nome' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string','token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de usuário.');
+	$server->register('usuario.update_perfil', array('id' => 'xsd:integer','nome' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar perfil do usuário.');
+	$server->register('usuario.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha do usuário.');
+	$server->register('usuario.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login do usuário.');
+	$server->register('usuario.select_cupons', array('usuario_id' => 'xsd:integer','cidade' => 'xsd:integer','delivery' => 'xsd:integer','pagamento' => 'xsd:integer','tipo_id' => 'xsd:string','num' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar cupons com filtros e limite de 5. ');
+	$server->register('usuario.select_detalhes_cupom', array('cupom_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar detalhes de um cupom. ');
+	$server->register('usuario.pegar_cupom', array('usuario_id' => 'xsd:integer','cupom_id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Pegar cupom, baixa automaticamente');
+	$server->register('usuario.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um usuario.');
+	$server->register('usuario.select_historico', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
+	$server->register('usuario.avaliar', array('id' => 'xsd:integer','produto' => 'xsd:integer','atendimento' => 'xsd:integer','ambiente' => 'xsd:integer','comentarios' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
 
+	
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA);
 ?>

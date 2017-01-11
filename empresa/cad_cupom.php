@@ -18,7 +18,7 @@
     $quantidade = "";
     $pagamento = 0;
     $delivery = 0;
-    $tipo = NULL;
+    $type = NULL;
     $operacao = '<input type="hidden" name="cadastrar">';
 
     if(isset($_POST["cadastrar"]))
@@ -38,13 +38,13 @@
         if(isset($_POST["credito"]))
             $pagamento += 2;
 
-        $tipos = array();
+        $types = array();
         $json = $service->call("select_tipos",array());
-        $tipo = json_decode($json);
-        for($i=0;$i<count($tipo);$i++)
-            if(isset($_POST[$tipo[$i]->id]))
-                $tipos[] = $tipo[$i]->id;
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],1,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+        $type = json_decode($json);
+        for($i=0;$i<count($type);$i++)
+            if(isset($_POST[$type[$i]->id]))
+                $types[] = $type[$i]->id;
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],1,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
@@ -65,7 +65,7 @@
                 ftp_put($con_id,$caminho_absoluto.$arquivo['name'], $arquivo['tmp_name'],FTP_BINARY);
 
                 $imagem = $service->call('empresa.insert_imagem',array($arquivo['name']));
-                $edit = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+                $edit = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
             }
             header("location: meus_cupons.php?aprovar=0");
         }
@@ -88,7 +88,7 @@
         $quantidade = $cupom->quantidade;
         $pagamento = $cupom->pagamento;
         $delivery = $cupom->delivery;
-        $tipo = $cupom->tipo;
+        $type = $cupom->tipo;
         $operacao = '<input type="hidden" name="edit" value="'.$cupom_id.'">';
     }
 
@@ -129,13 +129,13 @@
         if(isset($_POST["credito"]))
             $pagamento += 2;
 
-        $tipos = array();
+        $types = array();
         $json = $service->call("select_tipos",array());
-        $tipo = json_decode($json);
-        for($i=0;$i<count($tipo);$i++)
-            if(isset($_POST[$tipo[$i]->id]))
-                $tipos[] = $tipo[$i]->id;
-        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($tipos)));
+        $type = json_decode($json);
+        for($i=0;$i<count($type);$i++)
+            if(isset($_POST[$type[$i]->id]))
+                $types[] = $type[$i]->id;
+        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
 
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
@@ -346,16 +346,16 @@
                                         <div class="row">
                                         <?php
                                             $json = $service->call("select_tipos",array());
-                                            $tipos = json_decode($json);
-                                            for($i=0;$i<count($tipos);$i++)
+                                            $types = json_decode($json);
+                                            for($i=0;$i<count($types);$i++)
                                             {
                                                 $first = "checked";
                                                 $class_first = 'class="choice active"';
                                                 $selected = false;
-                                                if(count($tipo) > 0)
+                                                if(count($type) > 0)
                                                 {
-                                                    for($j=0;$j<count($tipo);$j++)
-                                                        if($tipo[$j]->tipo_id == $tipos[$i]->id)
+                                                    for($j=0;$j<count($type);$j++)
+                                                        if($type[$j]->tipo_id == $types[$i]->id)
                                                         {
                                                             $first = "";
                                                             $class_first = 'class="choice"';
@@ -368,11 +368,11 @@
                                                 }
                                                 
 
-                                                $str = "<p>".$tipos[$i]->nome."</p>";
+                                                $str = "<p>".$types[$i]->nome."</p>";
                                         ?>
                                             <div class="col-sm-2">
                                                 <label <?php echo $class_first; ?> data-toggle="wizard-checkbox">
-                                                    <input type="checkbox" name="<?php echo $tipos[$i]->id; ?>" <?php echo $first; ?>>
+                                                    <input type="checkbox" name="<?php echo $types[$i]->id; ?>" <?php echo $first; ?>>
                                                     <div class="card card-checkboxes card-hover-effect">
                                                         <?php echo $str; ?>
                                                     </div>
