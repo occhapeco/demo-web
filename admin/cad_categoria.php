@@ -20,7 +20,14 @@
 	
 	if(isset($_POST["excluir"]))
 	{
-		if($service->call('admin.delete_tipo', array($_POST["id_categoria"]))
+		if($service->call('admin.delete_tipo', array($_POST["id_categoria"])))
+		{
+			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Categoria excluida com sucesso!</b></span></div>';
+		}
+		else
+		{
+			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao excluir categoria! Verifique os dados e tente novamente</b></span></div>';
+		}
 	}
 
 ?>
@@ -74,7 +81,7 @@
 							<div class="row">
 								<div class="form-group">
 									<div class="col-sm-3">
-										<label>Informe a categoria</label>
+										<label style="font-size:16px">Informe a categoria</label>
 									</div>
 									<div class="col-sm-9">
 										<input name="categoria" type="text" class="form-control" placeholder="Delivery" aria-required="true" aria-invalid="false" required>
@@ -101,7 +108,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Cidade</th>
+                                            <th>Categoria</th>
                                             <th>Excluir</th>
                                         </tr>
                                         <tbody>

@@ -58,12 +58,6 @@
                                 <li><a href="#">Another notification</a></li>
                               </ul>
                         </li>
-                        <li>
-                            <a href="config.php">
-                                <i class="ti-settings"></i>
-                                <p>Configurações</p>
-                            </a>
-                        </li>
                     </ul>
 
                 </div>

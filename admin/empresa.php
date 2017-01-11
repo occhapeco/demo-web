@@ -57,8 +57,6 @@
         require_once("topnav.php");
         $json_dados = $service->call('admin.select_empresas',array(0));
         $empresa = json_decode($json_dados);
-        if(count($empresa) == 0)
-            echo "<br><br><br><br><br><h2 class='text-center'>Sem novas requisições.</h2>";
         for($i=0;$i<count($empresa);$i++)
         {
 			$endereco = $service->call('empresa.select_enderecos', array($_SESSION["id"]));

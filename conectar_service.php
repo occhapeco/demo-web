@@ -5,6 +5,6 @@
 	$service = new nusoap_client('noxgames.com.br/clube/service/', true);
 
 	error_reporting(E_ALL);
-	ini_set("display_errors",0);
+	ini_set("display_errors",1);
 
 ?>

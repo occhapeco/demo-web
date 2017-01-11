@@ -454,7 +454,7 @@ hr {
 }
 .sidebar[data-active-color="danger"] .nav li.active > a,
 .off-canvas-sidebar[data-active-color="danger"] .nav li.active > a {
-  color: #EB5E28;
+  color: #F5A217;
   opacity: 1;
 }
 
@@ -1751,7 +1751,7 @@ textarea.form-control {
   font-size: 16px;
 }
 .card label {
-  font-size: 15px;
+  font-size: 17px;
   margin-bottom: 5px;
 }
 .card .title {

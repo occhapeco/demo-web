@@ -71,12 +71,6 @@
             $json_dados = $service->call('admin.select_cupons', array());
             $cupom = json_decode($json_dados);
             $estado = "";
-            if(count($cupom) == 0)
-            {
-            ?>
-                <h3>Você não possui cupons cadastrados. Para inserir um cupom <a href="cad_cupom.php">Clique aqui.</a></h3>
-            <?php
-            }
             else{
                for($i = 0; $i<count($cupom); $i++)
                 {
