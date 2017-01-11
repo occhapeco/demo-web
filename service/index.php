@@ -300,6 +300,15 @@
 			$conexao->close();
 			return $query;
 		}
+
+		function bloquear_empresa($id,$dias)
+		{
+			$conexao = mysqli_connect("demoapp.mysql.dbaas.com.br","demoapp","demo123321","demoapp");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE empresa SET dias_bloqueio = $dias WHERE id = $id");
+			$conexao->close();
+			return $query;
+		}
 	}
 
 	$server->register('admin.insert_cidade', array('cidade' => 'xsd:string','uf' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra uma nova cidade.');
@@ -316,6 +325,8 @@
 	$server->register('admin.recusar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa um cupom.');
 	$server->register('admin.aprovar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova uma empresa.');
 	$server->register('admin.recusar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa uma empresa.');
+	$server->register('admin.bloquear_empresa', array('id' => 'xsd:integer','dias' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Bloqueia uma empresa por um número de dias.');
+
 
 	class empresa
 	{
