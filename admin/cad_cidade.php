@@ -8,7 +8,7 @@
 	
 	if(isset($_POST["cad_cidade"]))
 	{
-		if($service->call('admin.insert_cidade', array($_POST["nome_cidade"])))
+		if($service->call('admin.insert_cidade', array($_POST["nome_cidade"],$_POST["uf"])))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Cidade cadastrada com sucesso!</b></span></div>';
 		}
@@ -34,11 +34,11 @@
 	{
 		if($service->call('admin.ativar_cidade', array($_POST["cidade_id"])))
 		{
-			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Cidade desativada com sucesso!</b></span></div>';
+			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Cidade ativada com sucesso!</b></span></div>';
 		}
 		else
 		{
-			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao desativar cidade! Verifique os dados e tente novamente</b></span></div>';
+			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao ativar cidade! Verifique os dados e tente novamente</b></span></div>';
 		}
 	}
 
@@ -99,6 +99,14 @@
 										<input name="nome_cidade" type="text" class="form-control" placeholder="Chapecó" aria-required="true" aria-invalid="false" required>
 									</div>
 								</div>
+								<div class="form-group">
+									<div class="col-sm-3">
+										<label>Informe o estado desta cidade</label>
+									</div>
+									<div class="col-sm-9">
+										<input name="uf" type="text" class="form-control" placeholder="SC" aria-required="true" aria-invalid="false" required>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="footer status" style="padding-bottom:50px;">
@@ -121,19 +129,48 @@
                                     <thead>
                                         <tr>
                                             <th>Cidade</th>
+											<th>UF</th>
                                             <th>Bloquear</th>
+											<th>Desbloquear</th>
                                         </tr>
                                         <tbody>
                                             <?php
-                                                $select = $service->call('select_cidade', array());
+                                                $select = $service->call('admin.select_cidades', array());
                                                 $cidade = json_decode($select);
                                                 for($i = 0; $i<count($cidade); $i++)
                                                 {
                                             ?>
                                             <tr>
                                                 <td><?php echo $cidade[$i]->nome; ?></td>
-                                                <td><form action="#" method="get" style="margin-left:250px;"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="bloq_cidade" style="font-size: 14px"><i class="ti-lock"></i></button></form></td>
-                                            </tr>
+												<td><?php echo $cidade[$i]->uf; ?></td>
+											<?php
+												if($cidade[$i]->estado == 0) 
+												{
+											?>
+													<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="bloq_cidade" style="font-size: 14px"><i class="ti-lock"></i></button></form></td>
+                                            <?php
+												}
+												else
+												{
+											?>
+													<td><center>-</center></td>
+											<?php
+												}
+												if($cidade[$i]->estado == -1)
+												{
+											?>
+													<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-info" name="desbloquear" style="font-size: 14px"><i class="ti-unlock"></i></button></form></td>
+											
+											<?php
+												}
+												else
+												{
+											?>
+													<td>-</td>;
+											<?php
+												}
+											?>
+											</tr>
                                             <?php
                                                 }
                                             ?>
