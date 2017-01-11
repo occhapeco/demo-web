@@ -7,6 +7,7 @@
 	if (isset($_POST["concluir"]))
 	{
 		$json = $service->call('empresa.login', array($_POST["email"],$_POST["senha"]));
+		var_dump($json);
 		$empresa = json_decode($json);
 		if(!$json)
 		{
@@ -117,12 +118,7 @@
 								</div>
 		                        <div class="wizard-footer">
 		                            <div class="pull-right">
-		                                <input type='button' class='btn btn-next btn-fill btn-warning btn-wd' name='next' value='Próximo' />
 		                                <input type='submit' class='btn btn-finish btn-fill btn-warning btn-wd' name='concluir' value='Concluir' />
-		                            </div>
-
-		                            <div class="pull-left">
-		                                <input type='button' class='btn btn-previous btn-default btn-wd' name='previous' value='Voltar' />
 		                            </div>
 		                            <div class="clearfix"></div>
 		                        </div>
