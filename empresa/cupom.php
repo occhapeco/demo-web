@@ -97,7 +97,7 @@
                         <div class="row">
                             <div class="col-xs-3">
                                 <div class="icon-big icon-warning text-center">
-                                    <img src="http://olar.esy.es/<?php echo $cupom->imagem; ?>" class="img-responsive">
+                                    <img src="../imgs/<?php echo $cupom->imagem; ?>" class="img-responsive">
                                 </div>
                             </div>
                             <div class="col-xs-9">

@@ -17,7 +17,7 @@
     $quantidade = "";
     $pagamento = 0;
     $delivery = 0;
-    $tipo = NULL;
+    $type = NULL;
     $operacao = '<input type="hidden" name="cadastrar">';
 
     if(isset($_GET["editar"]))
@@ -37,7 +37,7 @@
         $quantidade = $cupom->quantidade;
         $pagamento = $cupom->pagamento;
         $delivery = $cupom->delivery;
-        $tipo = $cupom->tipo;
+        $type = $cupom->tipo;
         $operacao = '<input type="hidden" name="edit" value="'.$cupom_id.'">';
     }
     else
@@ -294,16 +294,16 @@
                                         <div class="row">
                                         <?php
                                             $json = $service->call("select_tipos",array());
-                                            $tipos = json_decode($json);
-                                            for($i=0;$i<count($tipos);$i++)
+                                            $types = json_decode($json);
+                                            for($i=0;$i<count($types);$i++)
                                             {
                                                 $first = "checked";
                                                 $class_first = 'class="choice active"';
                                                 $selected = false;
-                                                if(count($tipo) > 0)
+                                                if(count($type) > 0)
                                                 {
-                                                    for($j=0;$j<count($tipo);$j++)
-                                                        if($tipo[$j]->tipo_id == $tipos[$i]->id)
+                                                    for($j=0;$j<count($type);$j++)
+                                                        if($type[$j]->tipo_id == $types[$i]->id)
                                                         {
                                                             $first = "";
                                                             $class_first = 'class="choice"';
@@ -316,11 +316,11 @@
                                                 }
                                                 
 
-                                                $str = "<p>".$tipos[$i]->nome."</p>";
+                                                $str = "<p>".$types[$i]->nome."</p>";
                                         ?>
                                             <div class="col-sm-2">
                                                 <label <?php echo $class_first; ?> data-toggle="wizard-checkbox">
-                                                    <input type="checkbox" name="<?php echo $tipos[$i]->id; ?>" <?php echo $first; ?>>
+                                                    <input type="checkbox" name="<?php echo $types[$i]->id; ?>" <?php echo $first; ?>>
                                                     <div class="card card-checkboxes card-hover-effect">
                                                         <?php echo $str; ?>
                                                     </div>
@@ -347,7 +347,7 @@
                                                 </label>
                                             </div>
                                             <?php
-                                                if($imagem != 0)
+                                                if($imagem != "")
                                                 {
                                             ?>
                                             <div class="col-sm-4">
