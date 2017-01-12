@@ -43,7 +43,7 @@
         $extension = explode(".",$arquivo["name"]);
         $max = count($extension);
         $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[$max-1];
-        move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'clube/imgs/'.$arquivo["name"]);
+        move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
 
         $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$arquivo['name'],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
         if($insert == 0)
@@ -83,9 +83,9 @@
             $max = count($extension);
             $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[$max-1];
 
-            unlink($_SERVER['DOCUMENT_ROOT'].'clube/imgs/cupom'.$_POST["edit"].'.png');
-            unlink($_SERVER['DOCUMENT_ROOT'].'clube/imgs/cupom'.$_POST["edit"].'.jpg');
-            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'clube/imgs/'.$arquivo["name"]);
+            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.png');
+            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.jpg');
+            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
             $imagem = $arquivo["name"];
         }
 

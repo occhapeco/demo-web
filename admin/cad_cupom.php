@@ -54,9 +54,9 @@
             $max = count($extension);
             $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[$max-1];
 
-            unlink($_SERVER['DOCUMENT_ROOT'].'clube/imgs/cupom'.$_POST["edit"].'.png');
-            unlink($_SERVER['DOCUMENT_ROOT'].'clube/imgs/cupom'.$_POST["edit"].'.jpg');
-            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'clube/imgs/'.$arquivo["name"]);
+            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.png');
+            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.jpg');
+            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
             $imagem = $arquivo["name"];
         }
 
