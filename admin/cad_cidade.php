@@ -124,60 +124,58 @@
                 <div class="card">
                     <div class="content">
                        <div class="content table-responsive table-full-width">
-                            <form method="POST" action="cupom.php?id_cupom=<?php echo $id_cupom; ?>">
-                                <table class="table table-striped">
-                                    <thead>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Cidade</th>
+										<th>UF</th>
+                                        <th>Bloquear</th>
+										<th>Desbloquear</th>
+                                    </tr>
+                                    <tbody>
+                                        <?php
+                                            $select = $service->call('admin.select_cidades', array());
+                                            $cidade = json_decode($select);
+                                            for($i = 0; $i<count($cidade); $i++)
+                                            {
+                                        ?>
                                         <tr>
-                                            <th>Cidade</th>
-											<th>UF</th>
-                                            <th>Bloquear</th>
-											<th>Desbloquear</th>
-                                        </tr>
-                                        <tbody>
-                                            <?php
-                                                $select = $service->call('admin.select_cidades', array());
-                                                $cidade = json_decode($select);
-                                                for($i = 0; $i<count($cidade); $i++)
-                                                {
-                                            ?>
-                                            <tr>
-                                                <td><?php echo $cidade[$i]->nome; ?></td>
-												<td><?php echo $cidade[$i]->uf; ?></td>
-											<?php
-												if($cidade[$i]->estado == 0) 
-												{
-											?>
-													<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="bloq_cidade" style="font-size: 14px"><i class="ti-lock"></i></button></form></td>
-                                            <?php
-												}
-												else
-												{
-											?>
-													<td><center>-</center></td>
-											<?php
-												}
-												if($cidade[$i]->estado == -1)
-												{
-											?>
-													<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-info" name="desbloquear" style="font-size: 14px"><i class="ti-unlock"></i></button></form></td>
-											
-											<?php
-												}
-												else
-												{
-											?>
-													<td>-</td>
-											<?php
-												}
-											?>
-											</tr>
-                                            <?php
-                                                }
-                                            ?>
-                                        </tbody>
-                                    </thead>
-                                </table>
-                            </form>
+                                            <td><?php echo $cidade[$i]->nome; ?></td>
+											<td><?php echo $cidade[$i]->uf; ?></td>
+										<?php
+											if($cidade[$i]->estado == 0) 
+											{
+										?>
+												<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="bloq_cidade" style="font-size: 14px"><i class="ti-lock"></i></button></form></td>
+                                        <?php
+											}
+											else
+											{
+										?>
+												<td>-</td>
+										<?php
+											}
+											if($cidade[$i]->estado == -1)
+											{
+										?>
+												<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-info" name="desbloquear" style="font-size: 14px"><i class="ti-unlock"></i></button></form></td>
+										
+										<?php
+											}
+											else
+											{
+										?>
+												<td>-</td>
+										<?php
+											}
+										?>
+										</tr>
+                                        <?php
+                                            }
+                                        ?>
+                                    </tbody>
+                                </thead>
+                            </table>
                         </div>          
                     </div>
                 </div>

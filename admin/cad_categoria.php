@@ -20,7 +20,7 @@
 	
 	if(isset($_POST["excluir"]))
 	{
-		if($service->call('admin.delete_tipo', array($_POST["id_categoria"])))
+		if($service->call('admin.delete_tipo', array($_POST["categoria_id"])))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Categoria excluida com sucesso!</b></span></div>';
 		}
@@ -104,31 +104,29 @@
                 <div class="card">
                     <div class="content">
                        <div class="content table-responsive table-full-width">
-                            <form method="POST" action="cupom.php?id_cupom=<?php echo $id_cupom; ?>">
-                                <table class="table table-striped">
-                                    <thead>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Categoria</th>
+                                        <th>Excluir</th>
+                                    </tr>
+                                    <tbody>
+                                        <?php
+                                            $select = $service->call('select_tipos', array());
+                                            $categoria = json_decode($select);
+                                            for($i = 0; $i<count($categoria); $i++)
+                                            {
+                                        ?>
                                         <tr>
-                                            <th>Categoria</th>
-                                            <th>Excluir</th>
+                                            <td><?php echo $categoria[$i]->nome; ?></td>
+                                            <td><form action="#" method="post"><input type="hidden" name="categoria_id" id="categoria_id" <?php echo "value='".$categoria[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="excluir" style="font-size: 14px"><i class="ti-trash"></i></button></form></td>
                                         </tr>
-                                        <tbody>
-                                            <?php
-                                                $select = $service->call('select_tipos', array());
-                                                $categoria = json_decode($select);
-                                                for($i = 0; $i<count($categoria); $i++)
-                                                {
-                                            ?>
-                                            <tr>
-                                                <td><?php echo $categoria[$i]->nome; ?></td>
-                                                <td><form action="#" method="get"><input type="hidden" name="categoria_id" id="categoria_id" <?php echo "value='".$categoria[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="excluir" style="font-size: 14px"><i class="ti-trash"></i></button></form></td>
-                                            </tr>
-                                            <?php
-                                                }
-                                            ?>
-                                        </tbody>
-                                    </thead>
-                                </table>
-                            </form>
+                                        <?php
+                                            }
+                                        ?>
+                                    </tbody>
+                                </thead>
+                            </table>
                         </div>          
                     </div>
                 </div>

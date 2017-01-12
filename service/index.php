@@ -235,7 +235,7 @@
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE cidade SET estado = 0 WHERE id = $id");
 			$conexao->close();
-			return $resultado;
+			return $query;
 		}
 
 		function delete_tipo($id)
