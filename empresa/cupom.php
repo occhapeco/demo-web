@@ -157,8 +157,11 @@
                                             <?php
                                                 $select = $service->call('empresa.select_usuarios', array($id_cupom));
                                                 $usuario = json_decode($select);
+                                                $total_concluidos = 0;
+                                                $total = 0;
                                                 for($i = 0; $i<count($usuario); $i++)
                                                 {
+                                                    $total += $usuario[$i]->preco_cupom;
                                             ?>
                                             <tr>
                                             <?php
@@ -170,6 +173,7 @@
                                                 }
                                                 else
                                                 {
+                                                    $total_concluidos += $usuario[$i]->preco_cupom;
                                             ?>
                                                 <td> - </td>
                                             <?php
@@ -185,6 +189,8 @@
                                         </tbody>
                                     </thead>
                                 </table>
+                                <label>Total: </label><label style="color:#252422">R$<?php echo $total; ?></label>
+                                <label>Total concluídos: </label><label style="color:#252422">R$<?php echo $total_concluidos; ?></label><br>
                                 <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Dar Baixa" style="display: inline-block;">
                             </form>
                         </div>          

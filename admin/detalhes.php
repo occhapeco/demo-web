@@ -126,36 +126,40 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Marcar</th>
                                             <th>Nome</th>
                                             <th>Celular</th>
                                             <th>Valor</th>
+                                            <th>Estado</th>
                                         </tr>
                                         <tbody>
                                             <?php
                                                 $select = $service->call('empresa.select_usuarios', array($id_cupom));
                                                 $usuario = json_decode($select);
+                                                $total_concluidos = 0;
+                                                $total = 0;
                                                 for($i = 0; $i<count($usuario); $i++)
                                                 {
+                                                    $total += $usuario[$i]->preco_cupom;
                                             ?>
                                             <tr>
+                                                <td><?php echo $usuario[$i]->nome; ?></td>
+                                                <td><?php echo $usuario[$i]->celular; ?></td>
+                                                <td>R$<?php echo $usuario[$i]->preco_cupom; ?></td>
                                             <?php
                                                 if($usuario[$i]->estado == 0)
                                                 {
                                             ?>
-                                                <td><input type="checkbox" name="<?php echo $usuario[$i]->id; ?>"></td>
+                                                <td>Não concluído</td>
                                             <?php
                                                 }
                                                 else
                                                 {
+                                                    $total_concluidos += $usuario[$i]->preco_cupom;
                                             ?>
-                                                <td> - </td>
+                                                <td>Concluído</td>
                                             <?php
                                                 }
                                             ?>
-                                                <td><?php echo $usuario[$i]->nome; ?></td>
-                                                <td><?php echo $usuario[$i]->celular; ?></td>
-                                                <td>R$<?php echo $usuario[$i]->preco_cupom; ?></td>
                                             </tr>
                                             <?php
                                                 }
@@ -163,6 +167,8 @@
                                         </tbody>
                                     </thead>
                                 </table>
+                                <label>Total: </label><label style="color:#252422">R$<?php echo $total; ?></label>
+                                <label>Total concluídos: </label><label style="color:#252422">R$<?php echo $total_concluidos; ?></label>
                             </form>
                         </div>          
                     </div>
