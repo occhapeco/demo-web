@@ -74,7 +74,7 @@
             if(count($cupom) == 0)
             {
             ?>
-                <h3>Você não possui cupons cadastrados. Para inserir um cupom <a href="cad_cupom.php">Clique aqui.</a></h3>
+                <br><br><br><br><br><h2 class='text-center'>Você não possui cupons cadastrados. Para inserir um cupom <a href="cad_cupom.php">Clique aqui.</a></h^2>
             <?php
             }
             else{

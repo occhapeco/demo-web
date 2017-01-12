@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en-us">
+ <!DOCTYPE html>
+<html lang="pt">
 <head>
 	<!--  App Title  -->
 	<title>Capture - Free Bootstrap App Landing Page</title>

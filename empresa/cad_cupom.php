@@ -39,13 +39,15 @@
             if(isset($_POST[$type[$i]->id]))
                 $types[] = $type[$i]->id;
 
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+
         $arquivo = $_FILES['wizard-picture'];
         $extension = explode(".",$arquivo["name"]);
         $max = count($extension);
-        $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[$max-1];
+        $arquivo["name"] = 'cupom'.$insert.'.'.$extension[$max-1];
         move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
 
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],$arquivo['name'],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $insert = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$arquivo['name'],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else

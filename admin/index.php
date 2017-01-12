@@ -69,8 +69,6 @@
         require_once("topnav.php");
         $json_dados = $service->call('admin.select_cupons_avaliaveis',array());
         $cupom = json_decode($json_dados);
-        if(count($cupom) == 0)
-            echo "<br><br><br><br><br><h2 class='text-center'>Sem novas requisições.</h2>";
         for($i=0;$i<count($cupom);$i++)
         {
             $str_tipos = "";
@@ -156,6 +154,8 @@
 	<?php 
       	$json_dados = $service->call('admin.select_empresas',array(-1));
         $empresa = json_decode($json_dados);
+        if(count($cupom) == 0 && count($empresa) == 0)
+            echo "<br><br><br><br><br><h2 class='text-center'>Sem novas requisições.</h2>";
         for($i=0;$i<count($empresa);$i++)
         {
 			$json = $service->call('empresa.select_enderecos', array($empresa[$i]->id));

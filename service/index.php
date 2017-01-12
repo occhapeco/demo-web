@@ -556,7 +556,12 @@
 			$query = $conexao->query("SELECT usuario_has_cupom.id,usuario.nome,usuario.celular,usuario_has_cupom.preco_cupom,usuario_has_cupom.estado FROM usuario_has_cupom INNER JOIN usuario ON(usuario.id = usuario_has_cupom.usuario_id) WHERE usuario_has_cupom.cupom_id = $cupum_id");
 			$dados = array();
 			while($row = $query->fetch_assoc())
+			{
+				$celular = $row["celular"];
+				$celular[strlen($celular)-1] = "X";
+				$row["celular"] = $celular;
 				$dados[] = $row;
+			}
 			$conexao->close();
 			return json_encode($dados);
 		}
