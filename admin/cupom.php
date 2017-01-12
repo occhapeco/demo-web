@@ -105,7 +105,7 @@
                             <div class="footer status">
                                 <hr />
                                     <div class="pull-right" >
-                                        <form action="cupom.php" method="get" style="margin-left:150px;margin-top:15">
+                                        <form action="detalhes.php" method="get" style="margin-left:150px;margin-top:15">
                                             <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                             <button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
                                         </form>
