@@ -129,7 +129,7 @@
 			$query = $conexao->query("INSERT INTO tipo VALUES(NULL,'$nome')");
 			$id = 0;
 			if($query)
-		    	$conexao->insert_id;
+		    	$id = $conexao->insert_id;
 			$conexao->close();
 			return $id;
 		}
