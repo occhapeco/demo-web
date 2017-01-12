@@ -36,6 +36,42 @@
 		}
 	}
 
+	function validar_cpf($cpf)
+	{
+		$d1 = 0;
+		$d2 = 0;
+  		$cpf = preg_replace("/[^0-9]/", "", $cpf);
+	  	$ignore_list = array(
+		    '00000000000',
+		    '01234567890',
+		    '11111111111',
+		    '22222222222',
+		    '33333333333',
+		    '44444444444',
+		    '55555555555',
+		    '66666666666',
+		    '77777777777',
+		    '88888888888',
+		    '99999999999'
+	  	);
+  		if(strlen($cpf) != 11 || in_array($cpf, $ignore_list))
+      		return false;
+  		else
+  		{
+    		for($i = 0; $i < 9; $i++)
+      			$d1 += $cpf[$i] * (10 - $i);
+    
+	    	$r1 = $d1 % 11;
+	    	$d1 = ($r1 > 1) ? (11 - $r1) : 0;
+	    	for($i = 0; $i < 9; $i++)
+	      		$d2 += $cpf[$i] * (11 - $i);
+	    
+	    	$r2 = ($d2 + ($d1 * 2)) % 11;
+	    	$d2 = ($r2 > 1) ? (11 - $r2) : 0;
+	    	return (substr($cpf, -2) == $d1 . $d2) ? true : false;
+  		}
+	}
+
 	function validar_cnpj($cnpj)
 	{
 		$cnpj = preg_replace('![^0-9]+!','',$cnpj);
@@ -333,7 +369,8 @@
 		function insert($nome_usuario,$email,$senha,$razao_social,$nome_fantasia,$cnpj,$celular,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
 		{
 			if(!validar_cnpj($cnpj))
-				return 0;
+				if(!validar_cpf($cnpj))
+					return 0;
 			$nome_usuario = preg_replace('![*#/\"´`]+!','',$nome_usuario);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
 			$senha = md5(sha1($senha));
@@ -752,7 +789,7 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT id FROM usuario_has_cupom WHERE usuario_id = $usuario_id AND cupom_id = $cupom_id");
-			$resultado = false;
+			$resultado = 0;
 			if($query->num_rows == 0)
 			{
 				$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
@@ -763,7 +800,7 @@
 					$row = $query->fetch_assoc();
 					$data = date("Y-m-d H:i:s");
 					$query = $conexao->query("INSERT INTO usuario_has_cupom VALUES(NULL,$cupom_id,$usuario_id,0,".$row["preco_normal"].",".$row["preco_cupom"].",'".$row["prazo"]."',".$row["pagamento"].",".$row["delivery"].",'$data',NULL,NULL,NULL,NULL)");
-					$resultado = true;
+					$resultado = 1;
 				}
 			}
 			$conexao->close();
@@ -808,7 +845,7 @@
 	$server->register('usuario.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login do usuário.');
 	$server->register('usuario.select_cupons', array('usuario_id' => 'xsd:integer','cidade' => 'xsd:integer','delivery' => 'xsd:integer','pagamento' => 'xsd:integer','tipo_id' => 'xsd:string','num' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar cupons com filtros e limite de 5. ');
 	$server->register('usuario.select_detalhes_cupom', array('cupom_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar detalhes de um cupom. ');
-	$server->register('usuario.pegar_cupom', array('usuario_id' => 'xsd:integer','cupom_id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Pegar cupom, baixa automaticamente');
+	$server->register('usuario.pegar_cupom', array('usuario_id' => 'xsd:integer','cupom_id' => 'xsd:integer'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Pegar cupom, baixa automaticamente');
 	$server->register('usuario.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um usuario.');
 	$server->register('usuario.select_historico', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
 	$server->register('usuario.avaliar', array('id' => 'xsd:integer','produto' => 'xsd:integer','atendimento' => 'xsd:integer','ambiente' => 'xsd:integer','comentarios' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
