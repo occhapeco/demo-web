@@ -4,17 +4,10 @@
 
     $page = basename(__FILE__, '.php');
 
-    if(isset($_POST["recusar"]))
-    {
-        $bool = $service->call('admin.recusar_cupom', array($_POST["cupom_id"]));
-        header("location: index.php");
-    }
-    if(isset($_POST["aprovar"]))
-    {
-        $bool = $service->call('admin.aprovar_cupom', array($_POST["cupom_id"]));
-        header("location: index.php");
-    }
-
+    if(isset($_POST["bloquear"]))
+        $bool = $service->call('admin.bloquear_empresa', array($_POST["empresa_id"],$_POST["dias"]));
+    if(isset($_POST["desbloquear"]))
+        $bool = $service->call('admin.desbloquear_empresa', array($_POST["empresa_id"]));
 ?>
 <html lang="pt">
 <head>
@@ -75,7 +68,11 @@
                 <div class="content">
                     <div class="row">
                             <div class="col-xs-12">
-                                <h3 class="text-center" style="margin-top: -5px;color:#252422"><?php echo $empresa[$i]->razao_social; ?></h3>
+                                <h3 class="text-center" style="margin-top: -5px;color:#252422"><?php 
+                                    echo $empresa[$i]->razao_social; 
+                                    if($empresa[$i]->dias_bloqueio > 0)
+                                        echo " - bloqueada por ".$empresa[$i]->dias_bloqueio." dias";
+                                ?></h3>
                             </div>
                             <div class="col-xs-12">
                                 <label>CNPJ/CPF:</label><label style="color:#252422"><?php echo $empresa[$i]->cnpj; ?></label>
@@ -88,14 +85,22 @@
                 </div>
                 <div class="footer status">
                     <hr style="padding-top:10px;">
-                        <center>
-                            <label>
-                                <form action="#" method="post">
-                                    <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
-                                    <button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px"><i class="ti-lock"></i> Bloquear</button>
-                                </form>
-                            </label>
-                        </center>
+                    <center>
+                        <label>
+                            <?php if($empresa[$i]->dias_bloqueio == 0) {?>
+                            <form action="#" method="post">
+                                <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
+                                <input name="dias" type="number" class="form-control" style="width: 180px;margin-bottom: 5px;" placeholder="Dias de bloqueio" aria-required="true" aria-invalid="false" required>
+                                <button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px"><i class="ti-lock"></i> Bloquear</button>
+                            </form>
+                            <?php } else {?>
+                            <form action="#" method="post">
+                                <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
+                                <button class=" btn btn-primary btn-danger" name="desbloquear" style="font-size: 16px"><i class="ti-unlock"></i> Desbloquear</button>
+                            </form>
+                            <?php } ?>
+                        </label>
+                    </center>
                 </div>
                 </div>
             </div>
