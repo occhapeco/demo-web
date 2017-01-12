@@ -346,7 +346,7 @@
 			return $query;
 		}
 
-		function bloquear_empresa($id)
+		function desbloquear_empresa($id)
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');

@@ -5,9 +5,15 @@
     $page = basename(__FILE__, '.php');
 
     if(isset($_POST["bloquear"]))
+    {
         $bool = $service->call('admin.bloquear_empresa', array($_POST["empresa_id"],$_POST["dias"]));
+        header("location: empresa.php");
+    }
     if(isset($_POST["desbloquear"]))
+    {
         $bool = $service->call('admin.desbloquear_empresa', array($_POST["empresa_id"]));
+        header("location: empresa.php");
+    }
 ?>
 <html lang="pt">
 <head>
@@ -96,7 +102,7 @@
                             <?php } else {?>
                             <form action="#" method="post">
                                 <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
-                                <button class=" btn btn-primary btn-danger" name="desbloquear" style="font-size: 16px"><i class="ti-unlock"></i> Desbloquear</button>
+                                <button class=" btn btn-primary btn-info" name="desbloquear" style="font-size: 16px"><i class="ti-unlock"></i> Desbloquear</button>
                             </form>
                             <?php } ?>
                         </label>
