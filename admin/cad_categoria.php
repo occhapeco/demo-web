@@ -120,7 +120,7 @@
                                             ?>
                                             <tr>
                                                 <td><?php echo $categoria[$i]->nome; ?></td>
-                                                <td><form action="#" method="get" style="margin-left:250px;"><input type="hidden" name="categoria_id" id="categoria_id" <?php echo "value='".$categoria[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="excluir" style="font-size: 14px"><i class="ti-trash"></i></button></form></td>
+                                                <td><form action="#" method="get"><input type="hidden" name="categoria_id" id="categoria_id" <?php echo "value='".$categoria[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="excluir" style="font-size: 14px"><i class="ti-trash"></i></button></form></td>
                                             </tr>
                                             <?php
                                                 }
