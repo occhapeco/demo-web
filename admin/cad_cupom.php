@@ -49,20 +49,14 @@
 
         if($_POST["imagem"] == "upload")
         {
-           $servidor = 'ftp.noxgames.com.br';
-            $caminho_absoluto = '/public_html/clube/imgs/';
-
-            $con_id = ftp_connect($servidor) or die( 'Não conectou em: '.$servidor );
-            ftp_login($con_id,'noxgames','nox321batata');
-            ftp_pasv($con_id, true);
-
             $arquivo = $_FILES['wizard-picture'];
             $extension = explode(".",$arquivo["name"]);
-            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[1];
+            $max = count($extension);
+            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[$max-1];
 
-            ftp_delete($con_id,$caminho_absoluto.'cupom'.$_POST["edit"].'.png');
-            ftp_delete($con_id,$caminho_absoluto.'cupom'.$_POST["edit"].'.jpg');
-            ftp_put($con_id,$caminho_absoluto.$arquivo['name'], $arquivo['tmp_name'],FTP_BINARY);
+            unlink($_SERVER['DOCUMENT_ROOT'].'clube/imgs/cupom'.$_POST["edit"].'.png');
+            unlink($_SERVER['DOCUMENT_ROOT'].'clube/imgs/cupom'.$_POST["edit"].'.jpg');
+            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'clube/imgs/'.$arquivo["name"]);
             $imagem = $arquivo["name"];
         }
 
