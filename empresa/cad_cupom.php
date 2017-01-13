@@ -51,7 +51,7 @@
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
-            header("location: meus_cupons.php?aprovar=0");
+            header("location: index.php?aprovar=0");
     }
 
     if(isset($_GET["editar"]))
@@ -112,7 +112,7 @@
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
-            header("location: meus_cupons.php?aprovar=0");
+            header("location: index.php?aprovar=0");
     }
 ?>
 <!doctype html>
@@ -218,7 +218,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Prazo <small>(obrigatório)</small></label>
-                                                    <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
+                                                    <input name="prazo" id="prazo" type="date" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">

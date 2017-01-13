@@ -9,13 +9,13 @@
 
             <ul class="nav">
             <?php
-                if($page == "index")
+                if($page == "meus_cupons")
                 {
             ?>
                 <li class="active">
                     <a href="#">
-                        <i class="ti-panel"></i>
-                        <p>Estatísticas</p>
+                        <i class="ti-layers-alt"></i>
+                        <p>Meus cupons</p>
                     </a>
                 </li>
             <?php
@@ -24,13 +24,13 @@
                 {
             ?>
                 <li>
-                    <a href="index.php">
-                        <i class="ti-panel"></i>
-                        <p>Estatísticas</p>
+                    <a href="meus_cupons.php">
+                        <i class="ti-layers-alt"></i>
+                        <p>Meus cupons</p>
                     </a>
                 </li>
-            <?php
-                }
+			<?php
+				}
                 if($page == "cad_cupom")
                 {
             ?>
@@ -52,28 +52,7 @@
                     </a>
                 </li>
             <?php
-                }
-                if($page == "meus_cupons")
-                {
-            ?>
-                <li class="active">
-                    <a href="#">
-                        <i class="ti-layers-alt"></i>
-                        <p>Meus cupons</p>
-                    </a>
-                </li>
-            <?php
-                }
-                else
-                {
-            ?>
-                <li>
-                    <a href="meus_cupons.php">
-                        <i class="ti-layers-alt"></i>
-                        <p>Meus cupons</p>
-                    </a>
-                </li>
-            <?php } 
+                } 
                 if($page == "cad_endereco")
                 {
             ?>

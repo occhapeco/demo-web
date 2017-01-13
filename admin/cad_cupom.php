@@ -188,7 +188,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label>Prazo <small>(obrigatório)</small></label>
-                                                    <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
+                                                    <input name="prazo" id="prazo" type="date" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
