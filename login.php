@@ -7,7 +7,6 @@
 	if (isset($_POST["concluir"]))
 	{
 		$json = $service->call('empresa.login', array($_POST["email"],$_POST["senha"]));
-		echo "<br><br>";
 		var_dump($json);
 		$empresa = json_decode($json);
 		if(!$json)
@@ -26,7 +25,7 @@
 				header("location: admin/");
 			}
 		}
-		elseif($empresa->estado == 0 && $empresa->dias_bloqueio == 0)
+		elseif($empresa->estado == 0)
 		{
 			session_start();
 			$_SESSION["id"] = $empresa->id;
@@ -35,7 +34,7 @@
 		}
 		elseif($empresa->estado == -1)
 			header("location: aprovacao.php?id=".$empresa->id);
-		elseif($empresa->dias_bloqueio > 0)
+		elseif($empresa->estado == -2)
 			header("location: bloqueio.php?id=".$empresa->id);
 	}	
 ?>

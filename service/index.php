@@ -230,6 +230,8 @@
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
+			if($estado == 0)
+				$estado = $estado." OR estado = -2";
 			$query = $conexao->query("SELECT * FROM empresa WHERE estado = $estado");
 			$dados = array();
 			while($row = $query->fetch_assoc())
@@ -337,11 +339,11 @@
 			return $query;
 		}
 
-		function bloquear_empresa($id,$dias)
+		function bloquear_empresa($id)
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE empresa SET dias_bloqueio = $dias WHERE id = $id");
+			$query = $conexao->query("UPDATE empresa SET estado = -2 WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
@@ -350,7 +352,7 @@
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE empresa SET dias_bloqueio = 0 WHERE id = $id");
+			$query = $conexao->query("UPDATE empresa SET estado = 0 WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
@@ -370,7 +372,7 @@
 	$server->register('admin.recusar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa um cupom.');
 	$server->register('admin.aprovar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Aprova uma empresa.');
 	$server->register('admin.recusar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa uma empresa.');
-	$server->register('admin.bloquear_empresa', array('id' => 'xsd:integer','dias' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Bloqueia uma empresa por um número de dias.');
+	$server->register('admin.bloquear_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Bloqueia uma empresa por um número de dias.');
 	$server->register('admin.desbloquear_empresa', array('id' => 'xsd:integer','dias' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desloqueia uma empresa.');
 
 

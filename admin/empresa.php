@@ -6,7 +6,7 @@
 
     if(isset($_POST["bloquear"]))
     {
-        $bool = $service->call('admin.bloquear_empresa', array($_POST["empresa_id"],$_POST["dias"]));
+        $bool = $service->call('admin.bloquear_empresa', array($_POST["empresa_id"]));
         header("location: empresa.php");
     }
     if(isset($_POST["desbloquear"]))
@@ -54,68 +54,74 @@
 	<?php 
         require_once("sidenav.php");
         require_once("topnav.php");
-        $json_dados = $service->call('admin.select_empresas',array(0));
-        $empresa = json_decode($json_dados);
-        for($i=0;$i<count($empresa);$i++)
-        {
-			$json = $service->call('empresa.select_enderecos', array($empresa[$i]->id));
-            $endereco = json_decode($json);
-            $enderecos = "";
-            for($j=0;$j<count($endereco);$j++)
-            {
-                if($j > 0)
-                    $enderecos .= " / ";
-                $enderecos .= $endereco[$j]->bairro.", ".$endereco[$j]->rua.", ".$endereco[$j]->num.", ".$endereco[$j]->complemento.", ".$endereco[$j]->cep;
-            }
     ?>
     <div class="content">
         <div class="col-lg-12">
             <div class="card">
-                <div class="content">
-                    <div class="row">
-                            <div class="col-xs-12">
-                                <h3 class="text-center" style="margin-top: -5px;color:#252422"><?php 
-                                    echo $empresa[$i]->razao_social; 
-                                    if($empresa[$i]->dias_bloqueio > 0)
-                                        echo " - bloqueada por ".$empresa[$i]->dias_bloqueio." dias";
-                                ?></h3>
-                            </div>
-                            <div class="col-xs-12">
-                                <label>CNPJ/CPF:</label><label style="color:#252422"><?php echo $empresa[$i]->cnpj; ?></label>
-                                <label>Telefone:</label><label style="color:#252422"><?php echo $empresa[$i]->celular; ?></label>
-                            </div>
-                            <div class="col-xs-12">
-                                <label>Endereços:</label><label style="color:#252422"><?php echo $enderecos; ?></label>
-                            </div>
-                    </div>
-                </div>
-                <div class="footer status">
-                    <hr style="padding-top:10px;">
-                    <center>
-                        <label>
-                            <?php if($empresa[$i]->dias_bloqueio == 0) {?>
-                            <form action="#" method="post">
-                                <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
-                                <input name="dias" type="number" class="form-control" style="width: 180px;margin-bottom: 5px;" placeholder="Dias de bloqueio" aria-required="true" aria-invalid="false" required>
-                                <button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px"><i class="ti-lock"></i> Bloquear</button>
-                            </form>
-                            <?php } else {?>
-                            <form action="#" method="post">
-                                <input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
-                                <button class=" btn btn-primary btn-info" name="desbloquear" style="font-size: 16px"><i class="ti-unlock"></i> Desbloquear</button>
-                            </form>
-                            <?php } ?>
-                        </label>
-                    </center>
-                </div>
-                </div>
+				<div class="content table-responsive table-full-width">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>CNPJ/CPF</th>
+								<th>Telefone</th>
+								<th>Endereços</th>
+								<th>Ação</th>
+							</tr>
+							<tbody>
+								<?php
+									$json_dados = $service->call('admin.select_empresas',array(0));
+									$empresa = json_decode($json_dados);
+									for($i=0;$i<count($empresa);$i++)
+									{
+										$json = $service->call('empresa.select_enderecos', array($empresa[$i]->id));
+										$endereco = json_decode($json);
+										$enderecos = "";
+										for($j=0;$j<count($endereco);$j++)
+										{
+											if($j > 0)
+												$enderecos .= " / ";
+											$enderecos .= $endereco[$j]->bairro.", ".$endereco[$j]->rua.", ".$endereco[$j]->num.", ".$endereco[$j]->complemento.", ".$endereco[$j]->cep;
+										}
+								?>
+								<tr>
+									<td><?php echo $empresa[$i]->cnpj; ?></td>
+									<td><?php echo $empresa[$i]->celular; ?></td>
+									<td><?php echo $enderecos; ?></td>
+								<?php
+									if($empresa[$i]->estado == 0) 
+									{
+								?>
+									<td>
+										<form action="#" method="post">
+											<input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
+											<button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px"><i class="ti-lock"></i> Bloquear</button>
+										</form>
+									</td>
+								<?php
+									}
+									else
+									{
+								?>
+									<td>
+										<form action="#" method="post">
+											<input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
+											<button class=" btn btn-primary btn-info" name="desbloquear" style="font-size: 16px"><i class="ti-lock"></i> Desbloquear</button>
+										</form>
+									</td>
+								<?php
+									}
+								?>
+								</tr>
+								<?php
+									}
+								?>
+							</tbody>
+						</thead>
+					</table>
+				</div>
             </div>
-        </div>
-    <?php
-        }
-    ?>
+		</div>
     </div>
-</body>
 
     <!--   Core JS Files   -->
     <script src="../assets/js/jquery-1.10.2.js" type="text/javascript"></script>
@@ -134,5 +140,7 @@
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="../assets/js/paper-dashboard.js"></script>
+	
+</body>
 
 </html>

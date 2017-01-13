@@ -129,8 +129,7 @@
                                     <tr>
                                         <th>Cidade</th>
 										<th>UF</th>
-                                        <th>Bloquear</th>
-										<th>Desbloquear</th>
+                                        <th>Ação</th>
                                     </tr>
                                     <tbody>
                                         <?php
@@ -146,26 +145,13 @@
 											if($cidade[$i]->estado == 0) 
 											{
 										?>
-												<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-warning" name="bloq_cidade" style="font-size: 14px"><i class="ti-lock"></i></button></form></td>
+												<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-primary btn-warning" name="bloq_cidade" style="font-size: 14px"><i class="ti-lock"></i> Bloquear</button></form></td>
                                         <?php
 											}
 											else
 											{
 										?>
-												<td>-</td>
-										<?php
-											}
-											if($cidade[$i]->estado == -1)
-											{
-										?>
-												<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-simple btn-info" name="desbloquear" style="font-size: 14px"><i class="ti-unlock"></i></button></form></td>
-										
-										<?php
-											}
-											else
-											{
-										?>
-												<td>-</td>
+												<td><form action="#" method="post"><input type="hidden" name="cidade_id" id="cidade_id" <?php echo "value='".$cidade[$i]->id."'"; ?>><button type="submit" class="btn btn-primary btn-info" name="desbloquear" style="font-size: 14px"><i class="ti-unlock"></i> Desbloquear</button></form></td>
 										<?php
 											}
 										?>

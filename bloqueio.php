@@ -58,11 +58,11 @@
 				            </div>
 
 							<div class="wizard-header text-center">
-	                        	<h2 class="wizard-title"><?php echo $empresa->nome_usuario.", você está bloqueado por ".$empresa->dias_bloqueio." dias!"; ?></h2>
+	                        	<h2 class="wizard-title"><?php echo $empresa->nome_usuario.", você está bloqueado!"; ?></h2>
 	                    	</div>
 
 							<div class="wizard-header text-center">
-	                        	<h3 class="wizard-title">Esse bloqueio pode ter ocorrido devido a atrasos de pagamentos ou por motivos éticos. Assim que esse período de bloqueio chegar ao fim, você poderá utilizar novamente a ferramenta.</h3>
+	                        	<h3 class="wizard-title">Esse bloqueio pode ter ocorrido devido a atrasos de pagamentos ou por motivos éticos. Para saber mais, entre em contato pelo email contato@clubedeofertas.net.</h3>
 	                    	</div>
 
 	                    	<div class="wizard-header text-center">
