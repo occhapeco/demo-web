@@ -666,6 +666,23 @@
 			return $query;
 		}
 
+		function select_tarifa($empresa_id)
+		{
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT cupom.id,cupom.titulo FROM usuario_has_cupom INNER JOIN cupom ON(cupom.id=usuario_has_cupom.cupom_id) WHERE cupom.empresa_id = $empresa_id AND (usuario_has_cupom.estado = 1 OR usuario_has_cupom.estado = 2) AND MONTH(usuario_has_cupom.data_resgate) = ".date("m")." AND YEAR(usuario_has_cupom.data_resgate) = ".date("Y"));
+			$dados = array();
+			while($row = $query->fetch_assoc())
+			{
+				$sub_query = $conexao->query("SELECT SUM(preco_cupom) AS total FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND (estado = 1 OR estado = 2) AND MONTH(data_resgate) = ".date("m")." AND YEAR(data_resgate) = ".date("Y"));
+				$sub_row = $sub_query->fetch_assoc();
+				$row["total"] = $sub_row["total"];
+				$dados[] = $row;
+			}
+			$conexao->close();
+			return json_encode($dados);
+		}
+
 	}
 
 	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
@@ -687,6 +704,7 @@
 	$server->register('empresa.select_notificacoes', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar todas as notificações.');
 	$server->register('empresa.select_nao_visualizadas', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Retorna numéro de notificações não visualizadas.');
 	$server->register('empresa.desativar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa um cupom.');
+	$server->register('empresa.select_tarifa', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecina o total a ser pago no mês por cupons.');
 
 	class usuario
 	{
