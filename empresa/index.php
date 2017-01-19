@@ -167,6 +167,7 @@
 
     <!--  Notifications Plugin    -->
     <script src="../assets/js/bootstrap-notify.js"></script>
+	
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="../assets/js/paper-dashboard.js"></script>

@@ -59,7 +59,7 @@
                 <li class="active">
                     <a href="#">
                         <i class="ti-star"></i>
-                        <p>Categorias de cupom</p>
+                        <p>Categorias</p>
                     </a>
                 </li>
 			<?php
@@ -70,7 +70,7 @@
                 <li>
                     <a href="cad_categoria.php">
                         <i class="ti-star"></i>
-                        <p>Categorias de cupom</p>
+                        <p>Categorias</p>
                     </a>
                 </li>
             <?php

@@ -130,7 +130,10 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="about">
                                         <div class="row">
-                                        <?php
+										<div class="col-sm-12">
+											<label style="margin-left:10px; margin-top:5px">Selecione a cidade</label>
+                                        </div>
+										<?php
                                             $json = $service->call("select_cidades",array());
                                             $cidade = json_decode($json);
                                             for($i=0;$i<count($cidade);$i++)

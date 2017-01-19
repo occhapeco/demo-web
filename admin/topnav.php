@@ -1,3 +1,6 @@
+<?php
+    $num = $service->call('empresa.select_nao_visualizadas', array($_SESSION["id"]));
+?>
     <div class="main-panel">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -18,10 +21,10 @@
                         elseif($page == "cad_cidade")
                         {
                     ?>
-                        <p class="navbar-brand">Cidades</p>
+                        <p class="navbar-brand">Cadastro de cidades</p>
                     <?php
                         }
-                        elseif($page == "cad_categoria")
+						elseif($page == "cad_categoria")
                         {
                     ?>
                         <p class="navbar-brand">Categoria de cupom</p>
@@ -39,13 +42,19 @@
                         <p class="navbar-brand">Cupons</p>
                     <?php
                         }
-						elseif($page == "detalhes")
+                        elseif($page == "detalhes")
                         {
                     ?>
-                        <p class="navbar-brand">Detalhes do Cupom</p>
+                        <p class="navbar-brand">Detalhes do cupom</p>
                     <?php
                         }
                     ?>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                       
+                    </ul>
+
                 </div>
             </div>
         </nav>
