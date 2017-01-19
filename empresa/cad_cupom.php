@@ -253,6 +253,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
+										<label>Selecione o endereço desta oferta</label>
                                         <?php
                                             $json = $service->call("empresa.select_enderecos",array($_SESSION["id"]));
                                             $endereco = json_decode($json);
@@ -287,6 +288,7 @@
                                     </div>
                                     <div class="tab-pane" id="account">
                                         <div class="row">
+											<label>Escolha as opções que se aplicam a esta oferta</label>
                                             <div class="col-sm-4">
                                                 <label class="choice <?php if($delivery == 1) echo "active"; ?>" data-toggle="wizard-checkbox">
                                                     <input type="checkbox" name="delivery" <?php if($delivery == 1) echo "checked"; ?>>

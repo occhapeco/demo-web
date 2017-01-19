@@ -95,7 +95,7 @@
 		                    	<center>
 									<div class="logo" style="margin-top:20px">
 						                <a href="index.php" class="simple-text">
-						                    <img src="imgs/logo/escudo_corel.png" height="77px" width="350px">
+						                    <img src="imgs/logo/escudo_corel.png" height="77px" width="350px" class="img-responsive">
 						                </a>
 						            </div>
 								</center>
@@ -118,12 +118,12 @@
 									<div class="col-sm-1"></div>
 									<div class="col-sm-12 text-center"><a href="cad_empresa.php">Não possui cadastro? Clique aqui!</a></div>
 								</div>
-		                        <div class="wizard-footer">
-		                            <div class="pull-right">
-		                                <input type='submit' class='btn btn-finish btn-fill btn-warning btn-wd' name='concluir' value='Concluir' />
-		                            </div>
-		                            <div class="clearfix"></div>
-		                        </div>
+								<center>
+									<div class="wizard-footer">
+										<input type='submit' class='btn btn-finish btn-fill btn-warning btn-wd' name='concluir' value='Concluir' />
+										<div class="clearfix"></div>
+									</div>
+								</center>
 		                    </form>
 		                </div>
 		            </div> <!-- wizard container -->
