@@ -172,7 +172,6 @@
 
 		function login($email,$senha)
 		{
-			return "SELECT * FROM admin WHERE email = '$email' AND senha = '$senha'";
 			$senha = md5(sha1($senha));
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
