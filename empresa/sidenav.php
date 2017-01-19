@@ -9,7 +9,7 @@
 
             <ul class="nav">
             <?php
-                if($page == "meus_cupons")
+                if($page == "index")
                 {
             ?>
                 <li class="active">
@@ -24,7 +24,7 @@
                 {
             ?>
                 <li>
-                    <a href="meus_cupons.php">
+                    <a href="index.php">
                         <i class="ti-layers-alt"></i>
                         <p>Meus cupons</p>
                     </a>

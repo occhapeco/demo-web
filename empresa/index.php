@@ -131,7 +131,7 @@
                                         <?php if($estado == "Inativo") { ?>
                                             <form action="cad_cupom.php" method="get" style=" margin-left:250px; margin-top:-52">
                                                 <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                                <button type="submit" class=" btn btn-primary btn-info" name="editar" style="font-size:14px"><i class="ti-reload"></i> Reativar</button>
+                                                <button type="submit" class=" btn btn-primary btn-info" name="editar" style="font-size:14px"><i class="ti-reload"></i> Reutilizar</button>
                                             </form>
                                         <?php } ?>
                                         <?php if($estado == "Ativo") { ?>
