@@ -21,6 +21,7 @@ CREATE TABLE empresa (
   nome_fantasia VARCHAR(20) NULL,
   cnpj VARCHAR(18) NOT NULL UNIQUE KEY,
   celular VARCHAR(14) NOT NULL,
+  descricao TEXT NOT NULL,
   data_cadastro DATE NOT NULL,
   dias_bloqueio INTEGER UNSIGNED NOT NULL,
   estado INTEGER(1) NOT NULL
