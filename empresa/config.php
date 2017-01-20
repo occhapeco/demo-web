@@ -132,7 +132,7 @@
 										<div class="col-sm-12">
 											<div class="form-group">
 												<label>Descrição <small>(obrigatório)</small></label>
-												<textarea class="form-control border-input" name="descricao" id="descricao" value="<?php echo $descricao; ?>" required></textarea>
+												<textarea class="form-control border-input" name="descricao" id="descricao" required><?php echo $descricao; ?></textarea>
 											</div>
 										</div>
                                     </div>
