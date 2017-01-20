@@ -5,7 +5,7 @@
 
 	if (isset($_POST["rua"]))
 	{
-		$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
+		$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["descricao"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
 		if($insert == 0)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ inválido!</b> Digite novamente.</span></div>';
 		elseif($insert == -1)
@@ -145,6 +145,12 @@
 												<div class="form-group">
 													<label>Digite a senha novamente <small>(obrigatório)</small></label>
 													<input name="senha1" id="senha1" type="password" class="form-control" placeholder="Digite novamente sua senha" maxlength="12" required>
+												</div>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group">
+													<label>Descrição <small>(obrigatório)</small></label>
+													<textarea class="form-control" name="descricao" id="descricao" placeholder="Insira aqui uma breve descrição da sua empresa, produtos e serviços prestados."  required></textarea>
 												</div>
 											</div>
 										</div>
@@ -318,7 +324,6 @@
 		jQuery(function($){
 		   $("#celular").mask("(99)99999-9999");
 		   $("#telefone").mask("(99)99999-9999");
-		   $("#cnpj").mask("99.999.999/9999-99");
 		   $("#cep").mask("99.999-999");
 		});
 

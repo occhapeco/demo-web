@@ -62,6 +62,7 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
+								<th>Razão Social</th>
 								<th>CNPJ/CPF</th>
 								<th>Telefone</th>
 								<th>Endereços</th>
@@ -84,6 +85,7 @@
 										}
 								?>
 								<tr>
+									<td><?php echo $empresa[$i]->razao_social; ?></td>
 									<td><?php echo $empresa[$i]->cnpj; ?></td>
 									<td><?php echo $empresa[$i]->celular; ?></td>
 									<td><?php echo $enderecos; ?></td>

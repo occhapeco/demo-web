@@ -185,6 +185,9 @@
                             <div class="col-xs-12">
                                 <label>CNPJ/CPF:</label><label style="color:#252422"><?php echo $empresa[$i]->cnpj; ?></label>
                             </div>
+							<div class="col-xs-12">
+                                <label>Descrição:</label><label style="color:#252422"><?php echo $empresa[$i]->descricao; ?></label>
+                            </div>
                             <div class="col-xs-12">
                                 <label>Telefone:</label><label style="color:#252422"><?php echo $empresa[$i]->celular; ?></label>
                             </div>

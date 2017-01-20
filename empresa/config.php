@@ -12,11 +12,12 @@
     $razao_social = $perfil->razao_social;	
     $nome_fantasia = $perfil->nome_fantasia;
     $celular = $perfil->celular;
+	$descricao = $perfil->descricao;
 
     //Post enviado desta página para confirmar a edição
     if(isset($_POST["editar_perfil"]))
     {
-       if ($update = $service->call('empresa.update_perfil', array($_SESSION["id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"])))
+       if ($update = $service->call('empresa.update_perfil', array($_SESSION["id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"],$_POST["descricao"])))
        {
    	        $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Perfil alterado com sucesso!</b></span></div>';
        }
@@ -128,6 +129,12 @@
                                                 </div>
                                             </div>
                                         </div>
+										<div class="col-sm-12">
+											<div class="form-group">
+												<label>Descrição <small>(obrigatório)</small></label>
+												<textarea class="form-control border-input" name="descricao" id="descricao" value="<?php echo $descricao; ?>" required></textarea>
+											</div>
+										</div>
                                     </div>
 
                                     <div class="pull-right">
