@@ -15,12 +15,12 @@
 		if($_POST["classe"] == "admin")
 		{
 			$admin = new admin();
-			echo $admin->login($_POST["email"],$_POST["senha"])
+			echo $admin->login($_POST["email"],$_POST["senha"]);
 		}
 		elseif($_POST["classe"] == "empresa")
 		{
 			$empresa = new empresa();
-			echo $empresa->login($_POST["email"],$_POST["senha"])
+			echo $empresa->login($_POST["email"],$_POST["senha"]);
 		}
 	}
 
@@ -34,6 +34,28 @@
 				if(isset($_POST["classe"]))
 					$classe = $_POST["classe"];
 			}
+		if($metodo == null)
+		{
+			$query = $conexao->query("SELECT * FROM admin");
+			while($row = $query->fetch_assoc())
+				if(sha1($row["senha"].$row["email"].$row["id"]) == $_POST["token"])
+				{
+					$metodo = $_POST["metodo"];
+					if(isset($_POST["classe"]))
+						$classe = $_POST["classe"];
+				}
+		}
+		if($metodo == null)
+		{
+			$query = $conexao->query("SELECT * FROM usuario");
+			while($row = $query->fetch_assoc())
+				if(sha1($row["senha"].$row["email"].$row["id"]) == $_POST["token"])
+				{
+					$metodo = $_POST["metodo"];
+					if(isset($_POST["classe"]))
+						$classe = $_POST["classe"];
+				}
+		}
 	}
 
 
@@ -102,7 +124,7 @@
 		$usuario = new usuario();
 		
 		if($metodo == "select_cupons")
-			echo $admin->select_cupons($_POST["usuario_id"],$_POST["cidade"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);
+			echo $usuario->select_cupons($_POST["usuario_id"],$_POST["cidade_id"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);
 	}
 	else
 	{
