@@ -74,6 +74,25 @@
         $operacao = '<input type="hidden" name="edit" value="'.$cupom_id.'">';
     }
 
+    if(isset($_GET["reutilizar"]))
+    {
+        $cupom_id = $_GET["cupom_id"];
+        $json = $service->call('empresa.select_cupom', array($cupom_id));
+        $cupom = json_decode($json);
+        $endereco_id = $cupom->endereco_id;
+        $imagem = $cupom->imagem;
+        $titulo = $cupom->titulo;
+        $regras = $cupom->regras;
+        $descricao = $cupom->descricao;
+        $preco_normal = $cupom->preco_normal;
+        $preco_cupom = $cupom->preco_cupom;
+        $prazo = $cupom->prazo;
+        $quantidade = $cupom->quantidade;
+        $pagamento = $cupom->pagamento;
+        $delivery = $cupom->delivery;
+        $type = $cupom->tipo;
+    }
+
     if(isset($_POST["edit"]))
     {
         $imagem = $_POST["imagem"];
