@@ -39,33 +39,10 @@
 
 	if(isset($_POST["esqueci_senha"]))
 	{
-		function geraSenha($tamanho = 8, $maiusculas = true, $numeros = true, $simbolos = false)
-		{
-			$lmin = 'abcdefghijklmnopqrstuvwxyz';
-			$lmai = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			$num = '1234567890';
-			$simb = '!@#$%*-';
-			$retorno = '';
-			$caracteres = '';
-			$caracteres .= $lmin;
-			if ($maiusculas) $caracteres .= $lmai;
-			if ($numeros) $caracteres .= $num;
-			if ($simbolos) $caracteres .= $simb;
-			$len = strlen($caracteres);
-			for ($n = 1; $n <= $tamanho; $n++) 
-			{
-				$rand = mt_rand(1, $len);
-				$retorno .= $caracteres[$rand-1];
-			}
-		return $retorno;
-		}
-		$senha_temp = geraSenha(6, false, true);
-		
-		$headers = "MIME-Version: 1.1\r\n";
-		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
-		$headers .= "From: no-reply@clubeofertas.com\r\n";
-		$headers .= "Return-Path: no-reply@clubeofertas.com\r\n";
-		$envio = mail($_POST["email2"],"Clube de Ofertas - Alteração de senha","Sua nova senha é: ".$senha_temp.". Ressaltamos a importância de alterá-la o mais breve possível<br><br>Atenciosamente, equipe Clube de Ofertas.",$headers);
+		if($service->call('redefinir_senha', array($_POST["email2"])))
+			$alert = '<div class="alert alert-info" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Enviamos um email para a redefinição da sua senha!</b></span></div>';
+		else
+			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Não encontramos seu email em nosso sistema!</b></span></div>';
 	}
 ?>
 <!doctype html>
@@ -161,9 +138,9 @@
 							</form><br>
 							<div class="col-sm-1"></div>
 							<div class="col-sm-12">
-								<div class="col-sm-6 text-center"><a href="cad_empresa.php">Não possui cadastro? Clique aqui!</a></div>
-								<div class="col-sm-6 text-center"><a data-toggle="modal" data-target="#myModal">Esqueceu sua senha?</a></div>
-							</div><br><br>
+								<div class="col-sm-12 text-center"><a href="cad_empresa.php">Não possui cadastro? Clique aqui!</a></div><br><br>
+								<div class="col-sm-12 text-center"><a data-toggle="modal" href="#myModal">Esqueceu sua senha?</a></div>
+							</div><br><br><br><br>
 		                    
 		                </div>
 		            </div> <!-- wizard container -->
@@ -178,25 +155,24 @@
     <div class="modal-dialog">
     
       <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header" style="background-color:#F3BB45;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Esqueceu sua senha?</h4>
-        </div>
-        <div class="modal-body">
-          <p>Informe o seu email no campo a baixo, para que uma senha temporária lhe seja enviada. Ressaltamos a importância de alterar a senha no primeiro acesso, através da aba de "configurações", para a sua segurança.</p>
-		  <div class="form-group">
-			 <label>Email</label>
-			 <input type="email" class="form-control" name="email2" id="email2" placeholder="Informe seu email aqui" required>
-		  </div>
-		</div>
-        <div class="modal-footer">
-		  <form action="#" method="post">
-			<input type='submit' class='btn btn-finish btn-fill btn-info btn-wd' name='esqueci_senha' value='Enviar' />
-		  </form>
-        </div>
-      </div>
-      
+		<form action="#" method="post">
+	      <div class="modal-content">
+	        <div class="modal-header" style="background-color:#F3BB45;">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Esqueceu sua senha?</h4>
+	        </div>
+	        <div class="modal-body">
+	          <p>Informe o seu email no campo a baixo e lhe enviaremos um email para a redefinição de sua senha.</p>
+			  <div class="form-group">
+				 <input type="email" class="form-control" name="email2" id="email2" placeholder="Informe seu email aqui" required>
+			  </div>
+			</div>
+	        <div class="modal-footer">
+				<input type='submit' class='btn btn-finish btn-fill btn-info btn-wd' name='esqueci_senha' value='Enviar' />
+	        </div>
+	      </div>
+		</form>
+
     </div>
   </div>
 

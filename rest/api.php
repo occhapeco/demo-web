@@ -103,6 +103,9 @@
 		if($metodo == "update_senha")
 			echo $usuario->update_senha($_POST["id"],$_POST["senha_antiga"],$_POST["senha_nova"]);
 
+		if($metodo == "refefinir_senha")
+			echo $usuario->refefinir_senha($_POST["id"],$_POST["senha"]);
+
 		if($metodo == "select_cupons")
 			echo $usuario->select_cupons($_POST["usuario_id"],$_POST["cidade_id"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);
 
@@ -253,6 +256,42 @@
 		return json_encode($dados);
 	}
 
+	function esqueci_senha($email)
+	{
+		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+		$query = $conexao->query('SET CHARACTER SET utf8');
+		$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email'");
+		$token = "";
+		$resultado = false;
+		if($query->num_rows == 1)
+		{
+			$row = $query->fetch_assoc();
+			$token = sha1($row["senha"].$row["email"].$row["id"]);
+		}
+		else
+		{
+			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email'");
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$token = sha1($row["senha"].$row["email"].$row["id"]);
+			}
+		}
+		if($token != "")
+		{
+			$resultado = true;
+			$nome = "";
+			if(isset($row["nome_usuario"]))
+				$nome = $row["nome_usuario"];
+			else
+				$nome = $row["nome"];
+
+			mandar_email($row["email"],"Redefinição de senha.","Caro ".$nome.", <br>foi requisitado a redefinição de sua senha no Clube de Ofertas. Para tal, clique <a href='http://clubedeofertas.net/redefinir_senha.php?token=$token'>aqui</a>.");
+		}
+
+		$conexao->close();
+		return $resultado;
+	}
 
 	class admin
 	{
@@ -594,6 +633,16 @@
 			return $query;
 		}
 
+		function redefinir_senha($id,$senha_nova)
+		{
+			$senha_nova = md5(sha1($senha_nova));
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE empresa SET senha = '$senha_nova' WHERE id = $id");
+			$conexao->close();
+			return $query;
+		}
+
 		function update_endereco($id,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
 		{
 			$rua = preg_replace('![*#/\"´`]+!','',$rua);
@@ -852,6 +901,16 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
+			$conexao->close();
+			return $query;
+		}
+
+		function redefinir_senha($id,$senha_nova)
+		{
+			$senha_nova = md5(sha1($senha_nova));
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}

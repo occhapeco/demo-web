@@ -142,6 +142,45 @@
 
 	$server->register('select_tipos', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Select de cidades cadastradas para abrangência.');
 
+	function redefinir_senha($email)
+	{
+		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+		$query = $conexao->query('SET CHARACTER SET utf8');
+		$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email'");
+		$token = "";
+		$resultado = false;
+		if($query->num_rows == 1)
+		{
+			$row = $query->fetch_assoc();
+			$token = sha1($row["senha"].$row["email"].$row["id"]);
+		}
+		else
+		{
+			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email'");
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$token = sha1($row["senha"].$row["email"].$row["id"]);
+			}
+		}
+		if($token != "")
+		{
+			$resultado = true;
+			$nome = "";
+			if(isset($row["nome_usuario"]))
+				$nome = $row["nome_usuario"];
+			else
+				$nome = $row["nome"];
+
+			mandar_email($row["email"],"Redefinição de senha.","Caro ".$nome.", <br>foi requisitado a redefinição de sua senha no Clube de Ofertas. Para tal, clique <a href='http://clubedeofertas.net/redefinir_senha.php?token=$token'>aqui</a>.");
+		}
+
+		$conexao->close();
+		return $resultado;
+	}
+
+	$server->register('redefinir_senha', array('email' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Gera token e envia email de redefinição de senha.');
+
 	class admin
 	{
 		function insert_cidade($cidade,$uf)
@@ -358,6 +397,7 @@
 			$conexao->close();
 			return $query;
 		}
+
 	}
 
 	$server->register('admin.insert_cidade', array('cidade' => 'xsd:string','uf' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra uma nova cidade.');
@@ -376,7 +416,6 @@
 	$server->register('admin.recusar_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Recusa uma empresa.');
 	$server->register('admin.bloquear_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Bloqueia uma empresa por um número de dias.');
 	$server->register('admin.desbloquear_empresa', array('id' => 'xsd:integer','dias' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desloqueia uma empresa.');
-
 
 	class empresa
 	{
@@ -480,6 +519,16 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE empresa SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
+			$conexao->close();
+			return $query;
+		}
+
+		function redefinir_senha($id,$senha_nova)
+		{
+			$senha_nova = md5(sha1($senha_nova));
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE empresa SET senha = '$senha_nova' WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
@@ -687,6 +736,22 @@
 			return json_encode($dados);
 		}
 
+		function verificar_token($token)
+		{
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT * FROM empresa");
+			$id = 0;
+			while($row = $query->fetch_assoc())
+				if(sha1($row["senha"].$row["email"].$row["id"]) == $token)
+				{
+					$id = $row["id"];
+					break;
+				}
+			$conexao->close();
+			return $id;
+		}
+
 	}
 
 	$server->register('empresa.insert', array('nome_usuario' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','cnpj' => 'xsd:string','celular' => 'xsd:string','descricao' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de empresa e endereço inicial.');
@@ -694,6 +759,7 @@
 	$server->register('empresa.insert_cupom', array('empresa_id' => 'xsd:integer','endereco_id' => 'xsd:integer','imagem' => 'xsd:string','titulo' => 'xsd:string','regras' => 'xsd:string','descricao' => 'xsd:string','preco_normal' => 'xsd:double','preco_cupom' => 'xsd:double','prazo' => 'xsd:string','quantidade' => 'xsd:integer','pagamento' => 'xsd:integer','delivery' => 'xsd:integer','tipos' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Cadastro de cupom.');
 	$server->register('empresa.update_perfil', array('id' => 'xsd:integer','nome_usuario' => 'xsd:string','razao_social' => 'xsd:string','nome_fantasia' => 'xsd:string','celular' => 'xsd:string','descricao' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar perfil de empresa.');
 	$server->register('empresa.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha da empresa.');
+	$server->register('empresa.redefinir_senha', array('id' => 'xsd:integer','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Redefinir senha da empresa.');
 	$server->register('empresa.update_endereco', array('id' => 'xsd:string','rua' => 'xsd:string','num' => 'xsd:integer','complemento' => 'xsd:string','cep' => 'xsd:string','bairro' => 'xsd:string','cidade_id' => 'xsd:integer','latitude' => 'xsd:string','longitude' => 'xsd:string','telefone' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Alterar dados de um endereço.');
 	$server->register('empresa.update_cupom', array('cupom_id' => 'xsd:integer','endereco_id' => 'xsd:integer','imagem' => 'xsd:string','titulo' => 'xsd:string','regras' => 'xsd:string','descricao' => 'xsd:string','preco_normal' => 'xsd:double','preco_cupom' => 'xsd:double','prazo' => 'xsd:string','quantidade' => 'xsd:integer','pagamento' => 'xsd:integer','delivery' => 'xsd:integer','tipos' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Alterar dados de um cupom.');
 	$server->register('empresa.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login da empresa.');
@@ -709,6 +775,7 @@
 	$server->register('empresa.select_nao_visualizadas', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Retorna numéro de notificações não visualizadas.');
 	$server->register('empresa.desativar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa um cupom.');
 	$server->register('empresa.select_tarifa', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecina o total a ser pago no mês por cupons.');
+	$server->register('empresa.verificar_token', array('token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Verifica token de acesso.');
 
 	class usuario
 	{
@@ -748,6 +815,16 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
+			$conexao->close();
+			return $query;
+		}
+
+		function redefinir_senha($id,$senha_nova)
+		{
+			$senha_nova = md5(sha1($senha_nova));
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
@@ -870,11 +947,29 @@
 			$conexao->close();
 			return $query;
 		}
+
+		function verificar_token($token)
+		{
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT * FROM usuario");
+			$id = 0;
+			while($row = $query->fetch_assoc())
+				if(sha1($row["senha"].$row["email"].$row["id"]) == $token)
+				{
+					$id = $row["id"];
+					break;
+				}
+			$conexao->close();
+			return $id;
+		}
+
 	}
 
 	$server->register('usuario.insert', array('nome' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string','token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de usuário.');
 	$server->register('usuario.update_perfil', array('id' => 'xsd:integer','nome' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar perfil do usuário.');
 	$server->register('usuario.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha do usuário.');
+	$server->register('usuario.redefinir_senha', array('id' => 'xsd:integer','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Redefinir senha do usuario.');
 	$server->register('usuario.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login do usuário.');
 	$server->register('usuario.select_cupons', array('usuario_id' => 'xsd:integer','cidade' => 'xsd:integer','delivery' => 'xsd:integer','pagamento' => 'xsd:integer','tipo_id' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar cupons com filtros e limite de 5. ');
 	$server->register('usuario.select_detalhes_cupom', array('cupom_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecionar detalhes de um cupom. ');
@@ -882,6 +977,7 @@
 	$server->register('usuario.select_perfil', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona dados de um usuario.');
 	$server->register('usuario.select_historico', array('id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
 	$server->register('usuario.avaliar', array('id' => 'xsd:integer','produto' => 'xsd:integer','atendimento' => 'xsd:integer','ambiente' => 'xsd:integer','comentarios' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
+	$server->register('usuario.verificar_token', array('token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Verifica token de acesso.');
 
 	
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
