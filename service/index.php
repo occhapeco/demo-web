@@ -8,11 +8,14 @@
 
 	function mandar_email($email,$assunto,$msg)
 	{
-		$headers = "MIME-Version: 1.1\r\n";
-		$headers .= "Content-type: text/html; charset=UTF-8\r\n";
-		$headers .= "From: no-reply@clubeofertas.com\r\n";
-		$headers .= "Return-Path: no-reply@clubeofertas.com\r\n";
-		$envio = mail($email,"Clube de Ofertas - ".$assunto,$msg."<br><br>Atenciosamente, equipe Clube de Ofertas.",$headers);
+		$email_sender = "no-reply@clubedeofertas.net";
+
+		$headers = "MIME-Version: 1.1\n";
+		$headers .= "Content-type: text/html; charset=UTF-8\n";
+		$headers .= "From: Clube de Ofertas <$email_sender>\n";
+		$headers .= "Return-Path: $email_sender\n";
+		$headers .= "X-Priority: 1\n";
+		$envio = mail($email,"Clube de Ofertas - ".$assunto,"<p>".$msg."</p><br><br><h3>Atenciosamente, equipe Clube de Ofertas.</h3>",$headers,"-r".$email_sender);
 		if(!envio)
 			return false;
 		else

@@ -113,7 +113,7 @@
                             <div class="footer status">
                                 <hr />
                                     <div class="pull-right" >
-                                        <form action="cupom.php" method="get" style="margin-left:150px;margin-top:15">
+                                        <form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
                                             <input type="hidden" name="id_cupom" id="id_cupom" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                             <button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
                                         </form>
@@ -121,7 +121,7 @@
                                          if($estado == "Enviado para aprovação")
                                          {
                                         ?>
-                                        <form action="cad_cupom.php" method="get" style="margin-left:250px;margin-top:-52">
+                                        <form action="cad_cupom.php" method="post" style="margin-left:250px;margin-top:-52">
                                             <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                             <button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button>
                                         </form>   
@@ -129,7 +129,7 @@
                                             }
                                         ?>
                                         <?php if($estado == "Inativo") { ?>
-                                            <form action="cad_cupom.php" method="get" style=" margin-left:250px; margin-top:-52">
+                                            <form action="cad_cupom.php" method="post" style=" margin-left:250px; margin-top:-52">
                                                 <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                                 <button type="submit" class=" btn btn-primary btn-info" name="reutilizar" style="font-size:14px"><i class="ti-reload"></i> Reutilizar</button>
                                             </form>

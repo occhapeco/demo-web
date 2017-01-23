@@ -100,9 +100,9 @@
             header("location: index.php?aprovar=0");
     }
 
-    if(isset($_GET["editar"]))
+    if(isset($_POST["editar"]))
     {
-        $cupom_id = $_GET["cupom_id"];
+        $cupom_id = $_POST["cupom_id"];
         $json = $service->call('empresa.select_cupom', array($cupom_id));
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
@@ -120,9 +120,9 @@
         $operacao = '<input type="hidden" name="edit" value="'.$cupom_id.'">';
     }
 
-    if(isset($_GET["reutilizar"]))
+    if(isset($_POST["reutilizar"]))
     {
-        $cupom_id = $_GET["cupom_id"];
+        $cupom_id = $_POST["cupom_id"];
         $json = $service->call('empresa.select_cupom', array($cupom_id));
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
@@ -233,7 +233,7 @@
                 <div class="row">
                     <div class="wizard-container">
                         <div class="card wizard-card" data-color="orange" id="wizardProfile">
-                            <form action="#" method="POST" enctype="multipart/form-data">
+                            <form action="#" method="POST" id="frm" enctype="multipart/form-data">
                                 <?php echo $operacao; ?>
                                 <div class="wizard-navigation">
                                     <div class="progress-with-circle">
@@ -269,52 +269,58 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="about">
                                         <div class="row">
-                                            <div class="col-sm-8">
-                                                <div class="form-group">
-                                                    <label>Título <small>(obrigatório)</small></label>
-                                                    <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" value="<?php echo $titulo; ?>" required autofocus><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-8">
+                                                    <div class="form-group">
+                                                        <label>Título <small>(obrigatório)</small></label>
+                                                        <input name="titulo" type="text" class="form-control" placeholder="Promoção de picanha..." aria-required="true" aria-invalid="false" value="<?php echo $titulo; ?>" required autofocus><label id="titulo-error" class="error" for="titulo" style="display: none;"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Número de cupons <small>(obrigatório)</small></label>
+                                                        <input name="quantidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false" value="<?php echo $quantidade; ?>" required><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Número de cupons <small>(obrigatório)</small></label>
-                                                    <input name="quantidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false" value="<?php echo $quantidade; ?>" required><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Prazo <small>(obrigatório)</small></label>
+                                                        <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>Valor de cardápio <small>(obrigatório)</small></label>
+                                                        <input name="preco_normal" id="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false" value="<?php echo $preco_normal; ?>" required><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>Valor promocional <small>(obrigatório)</small></label>
+                                                        <input name="preco_cupom" id="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false" value="<?php echo $preco_cupom; ?>" required><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group">
+                                                        <label>Desconto (%)</label>
+                                                        <input id="desconto" type="text" class="form-control" placeholder="35%" aria-required="true" aria-invalid="false" readonly>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label>Prazo <small>(obrigatório)</small></label>
-                                                    <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label>Descrição <small>(obrigatório)</small></label>
+                                                        <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false" required><?php echo $descricao; ?></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label>Valor de cardápio <small>(obrigatório)</small></label>
-                                                    <input name="preco_normal" id="preco_normal" type="number" class="form-control" placeholder="25,90" aria-required="true" aria-invalid="false" value="<?php echo $preco_normal; ?>" required><label id="preco_normal-error" class="error" for="preco_normal" style="display: none;"></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label>Valor promocional <small>(obrigatório)</small></label>
-                                                    <input name="preco_cupom" id="preco_cupom" type="number" class="form-control" placeholder="20,90" aria-required="true" aria-invalid="false" value="<?php echo $preco_cupom; ?>" required><label id="preco_cupom-error" class="error" for="preco_cupom" style="display: none;"></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="form-group">
-                                                    <label>Desconto (%)</label>
-                                                    <input id="desconto" type="text" class="form-control" placeholder="35%" aria-required="true" aria-invalid="false" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <label>Descrição <small>(obrigatório)</small></label>
-                                                    <textarea name="descricao" class="form-control" placeholder="Porção picanha ao molho de churrasco..." aria-required="true" aria-invalid="false" required><?php echo $descricao; ?></textarea><label id="descricao-error" class="error" for="descricao" style="display: none;"></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <label>Regras <small>(obrigatório)</small></label>
-                                                    <textarea name="regras" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false" required><?php echo $regras; ?></textarea><label id="regras-error" class="error" for="regras" style="display: none;"></label>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label>Regras <small>(obrigatório)</small></label>
+                                                        <textarea name="regras" class="form-control" placeholder="Para realmente usar o cupom, deve-se levar um amigo até o estabelecimento..." aria-required="true" aria-invalid="false" required><?php echo $regras; ?></textarea><label id="regras-error" class="error" for="regras" style="display: none;"></label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -499,7 +505,7 @@
     <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
     <script src="../assets/js/jquery.validate.js" type="text/javascript"></script>
     <script src="../assets/js/jquery.maskedinput.js" type="text/javascript"></script>
-    <script src="../assets/js/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../assets/js/jquery.validate.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
@@ -517,6 +523,26 @@
                 document.getElementById("desconto").value = desconto+"%";
             }
         },10);
+
+        jQuery.validator.addMethod("limite", function(value, element) {
+            var string = value.split(" ");
+            var hora = string[1].split(":");
+            var data = string[0].split("/");
+
+            var prazo = new Date(data[2],parseInt(data[1])-1,data[0],hora[0],hora[1])
+            var agora = new Date();
+
+            var dia = 24*60*60*1000;
+            var dias = (prazo.getTime() - agora.getTime())/(dia);
+            return dias < 3 && dias > 0;
+        }, "Máximo de 3 dias!");
+
+        $('#frm').validate({
+            rules : {
+                prazo : { limite: true }
+            }
+        });
+
 
     </script>
 

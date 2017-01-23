@@ -4,10 +4,14 @@
 
     $page = basename(__FILE__, '.php');
 
-    $id_cupom = $_GET["id_cupom"];
+    if(isset($_POST["id_cupom"]))
+        $id_cupom = $_POST["id_cupom"];
+    else
+        header("location:index.php");
+
     $alert = "";
 
-    if(isset($_POST["finish"]))
+    if(isset($_POST["baixa"]))
     {
         $json = $service->call('empresa.select_usuarios', array($id_cupom));
         $usuario_has_cupom = json_decode($json);
@@ -130,10 +134,16 @@
                     </div>
                     <div class="footer status" style="padding-bottom:50px;">
                         <hr />
-                        
+                        <?php
+                            if($estado != "Inativo")
+                            {
+                        ?>
                             <div class="pull-right" style="margin-right:10px">
-                                <form action="cad_cupom.php" method="get" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$id_cupom."'"; ?>><button type="submit" class="btn btn-primary btn-warning" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button></form>
+                                <form action="cad_cupom.php" method="post" style="margin-left:250px;"><input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$id_cupom."'"; ?>><button type="submit" class="btn btn-primary btn-warning" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button></form>
                             </div>
+                        <?php
+                            }
+                        ?>
                     </div>
                     </div>
                 </div>
@@ -191,7 +201,7 @@
                                 </table>
                                 <label>Total: </label><label style="color:#252422">R$<?php echo $total; ?></label>
                                 <label>Total concluídos: </label><label style="color:#252422">R$<?php echo $total_concluidos; ?></label><br>
-                                <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="finish" value="Dar Baixa" style="display: inline-block;">
+                                <input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="baixa" value="Dar Baixa" style="display: inline-block;">
                             </form>
                         </div>          
                     </div>

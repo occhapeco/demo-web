@@ -25,9 +25,9 @@
     }
 
     //Post enviado de outra página para esta, onde serão carregados os dados e exibidos nos campos
-    if(isset($_GET["editar"]))
+    if(isset($_POST["editar"]))
     {
-        $id_end = $_GET["id_end"];
+        $id_end = $_POST["id_end"];
         $editar = $service->call('empresa.select_endereco', array($id_end));
         $endereco = json_decode($editar);
         $rua = $endereco->rua;
