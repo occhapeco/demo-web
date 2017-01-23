@@ -54,6 +54,52 @@
             header("location: index.php?aprovar=0");
     }
 
+    if(isset($_POST["reutilizar"]))
+    {
+        $delivery = 0;
+        if(isset($_POST["delivery"]))
+            $delivery = 1;
+
+        $pagamento = 0;
+        if(isset($_POST["debito"]))
+            $pagamento++;
+        if(isset($_POST["credito"]))
+            $pagamento += 2;
+
+        $types = array();
+        $json = $service->call("select_tipos",array());
+        $type = json_decode($json);
+        for($i=0;$i<count($type);$i++)
+            if(isset($_POST[$type[$i]->id]))
+                $types[] = $type[$i]->id;
+
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $imagem = $_POST["imagem"];
+        if($imagem == "upload")
+        {
+            $arquivo = $_FILES['wizard-picture'];
+            $extension = explode(".",$arquivo["name"]);
+            $max = count($extension);
+            $arquivo["name"] = 'cupom'.$insert.'.'.$extension[$max-1];
+            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
+            $imagem = $arquivo['name'];
+        }
+        else
+        {
+            $extension = explode(".",$imagem);
+            $max = count($extension);
+            $new = "cupom$insert.".$extension[$max-1];
+            copy($_SERVER['DOCUMENT_ROOT'].'imgs/'.$imagem,$_SERVER['DOCUMENT_ROOT'].'imgs/'.$new);
+            $imagem = $new;
+        }        
+
+        $insert = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        if($insert == 0)
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
+        else
+            header("location: index.php?aprovar=0");
+    }
+
     if(isset($_GET["editar"]))
     {
         $cupom_id = $_GET["cupom_id"];
@@ -91,6 +137,7 @@
         $pagamento = $cupom->pagamento;
         $delivery = $cupom->delivery;
         $type = $cupom->tipo;
+        $operacao = '<input type="hidden" name="reutilizar" value="'.$cupom_id.'">';
     }
 
     if(isset($_POST["edit"]))
