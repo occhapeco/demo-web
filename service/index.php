@@ -649,7 +649,7 @@
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM cupom WHERE cupom.empresa_id = $id");
+			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id ORDER BY estado DESC");
 			$dados = array();
 			$i = 0;
 			while($row = $query->fetch_assoc())
