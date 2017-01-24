@@ -54,6 +54,12 @@
                         <p class="navbar-brand">Central de notificações</p>
                     <?php
                         }
+					elseif($page == "financeiro")
+                        {
+                    ?>
+                        <p class="navbar-brand">Financeiro</p>
+                    <?php
+                        }
                     ?>
                 </div>
                 <div class="collapse navbar-collapse">

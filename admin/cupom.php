@@ -70,8 +70,12 @@
                 $json_dados = $service->call('admin.select_cupons', array());
                 $cupom = json_decode($json_dados);
                 $estado = "";
+				$nome_emp = "";
                 for($i = 0; $i<count($cupom); $i++)
                 {
+					$json_dados = $service->call('empresa.select_perfil',array($cupom[$i]->empresa_id));
+					$empresa = json_decode($json_dados);
+					$nome_emp = $empresa->razao_social;
                     if ($cupom[$i]->estado == -1)
                     {
                         $estado = "Enviado para aprovação";
@@ -97,7 +101,9 @@
                                 <div class="col-xs-7">
                                     <div class="numbers">
                                         <p><?php echo $cupom[$i]->titulo ?></p>
+										<p style="color: #aaa"><?php echo $nome_emp ?></p>
                                         <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
+										<p style="color: #aaa"><?php echo $cupom[$i]->prazo ?></p>
                                         <p style="color: #aaa"><?php echo $estado ?></p>
                                     </div>
                                 </div>

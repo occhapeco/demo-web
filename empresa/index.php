@@ -106,7 +106,8 @@
                                     <div class="numbers">
                                         <p><?php echo $cupom[$i]->titulo ?></p>
                                         <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
-                                        <p style="color: #aaa"><?php echo $estado ?></p>
+                                        <p style="color: #aaa"><?php echo $cupom[$i]->prazo ?></p>
+										<p style="color: #aaa"><?php echo $estado ?></p>
                                     </div>
                                 </div>
                             </div>
