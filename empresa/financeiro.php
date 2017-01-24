@@ -47,6 +47,7 @@
     ?>
 		<div class="content">
 			<div class="container ">
+				<div class="col-sm-11">
 					<div class="panel-group" id="faqAccordion">
 					
 						<?php
@@ -71,12 +72,12 @@
 								}
 						?>
 									<div class="panel panel-default">
-										<div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question0">
+										<div <?php if ($i==count($tarifa)-1) {?> class="panel-heading accordion-toggle question-toggle" aria-expanded="true" <?php } else { ?> class="panel-heading accordion-toggle question-toggle collapsed" aria-expanded="false" <?php } ?>  data-toggle="collapse" data-parent="#faqAccordion" data-target="#question0">
 											<h4 class="panel-title">
 												<a href="#" class="ing"><?php echo $tarifa[$i]->data; ?> - R$ <?php echo $total_venda; ?> - <?php echo $status; ?></a>
 											</h4>
 										</div>
-										<div id="question0" <?php if ($i<count($tarifa)-1) {?> class="panel-collapse" <?php } else { ?> class="panel-collapse collapsed" <?php } ?> style="height: 0px;">
+										<div id="question0" <?php if ($i==count($tarifa)-1) {?> class="panel-collapse collapse in" aria-expanded="true" <?php } else { ?> class="panel-collapse collapse" aria-expanded="false" <?php } ?>>
 											<div class="panel-body">
 												<div class="content table-responsive table-full-width">
 													<table class="table table-striped">
@@ -94,12 +95,14 @@
 																	for($j=0; $j<count($tarifa[$i]->cupom); $j++)
 																	{
 																?>
+																	<tr>
 																		<td><?php echo $tarifa[$i]->cupom[$j]->titulo; ?></td>
 																		<td><?php echo $tarifa[$i]->cupom[$j]->prazo; ?></td>
 																		<td><?php echo $tarifa[$i]->cupom[$j]->total_cupons; ?></td>
 																		<td><?php echo $tarifa[$i]->cupom[$j]->cupons; ?></td>
 																		<td>R$<?php echo $tarifa[$i]->cupom[$j]->total; ?></td>
 																		<td><?php echo $tarifa[$i]->cupom[$j]->comissao; ?></td>
+																	</tr>
 																<?php
 																	}
 																?>
@@ -115,6 +118,7 @@
 							?>
 					</div>
 					<!--/panel-group-->
+					</div>
 				</div>
         </div>
 </div>
