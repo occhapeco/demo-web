@@ -88,6 +88,8 @@
                     {
                         $estado = "Ativo";
                     }
+                    if($i%2 == 0)
+                        echo '<div class="col-lg-12">';
                  ?>
                 <div class="col-lg-6 col-sm-6">
                     <div class="card">
@@ -121,18 +123,13 @@
                                         ?>
                                         <form action="cad_cupom.php" method="get" style="margin-left:250px;margin-top:-52">
                                             <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                            <button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button>
+                                            <button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar e aprovar</button>
                                         </form>   
                                         <?php
                                             }
+                                            if($estado == "Ativo") 
+                                            { 
                                         ?>
-                                        <?php if($estado == "Inativo") { ?>
-                                            <form action="cad_cupom.php" method="get" style=" margin-left:250px; margin-top:-52">
-                                                <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
-                                                <button type="submit" class=" btn btn-primary btn-info" name="editar" style="font-size:14px"><i class="ti-reload"></i> Reativar</button>
-                                            </form>
-                                        <?php } ?>
-                                        <?php if($estado == "Ativo") { ?>
                                             <form action="#" method="post" style=" margin-left:250px; margin-top:-52">
                                                 <input type="hidden" name="cupom_id" id="cupom_id" <?php echo "value='".$cupom[$i]->id."'"; ?>>
                                                 <button type="submit" class=" btn btn-primary btn-danger" name="cancelar" style="font-size:14px"><i class="ti-close"></i> Desativar</button>
@@ -145,6 +142,8 @@
                     </div>
                 </div>
                 <?php
+                    if($i%2 != 0)
+                        echo '</div>';
                   }
                 ?>            
         </div>
