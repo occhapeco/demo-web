@@ -54,7 +54,7 @@
             header("location: index.php?aprovar=0");
     }
 
-    if(isset($_POST["reutilizar"]))
+    if(isset($_POST["reutilizar_cad"]))
     {
         $delivery = 0;
         if(isset($_POST["delivery"]))
@@ -132,12 +132,11 @@
         $descricao = $cupom->descricao;
         $preco_normal = $cupom->preco_normal;
         $preco_cupom = $cupom->preco_cupom;
-        $prazo = $cupom->prazo;
         $quantidade = $cupom->quantidade;
         $pagamento = $cupom->pagamento;
         $delivery = $cupom->delivery;
         $type = $cupom->tipo;
-        $operacao = '<input type="hidden" name="reutilizar" value="'.$cupom_id.'">';
+        $operacao = '<input type="hidden" name="reutilizar_cad" value="'.$cupom_id.'">';
     }
 
     if(isset($_POST["edit"]))
@@ -287,7 +286,7 @@
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Prazo <small>(obrigatório)</small></label>
-                                                        <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo; ?>" required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
+                                                        <input name="prazo" id="prazo" type="text" class="form-control" placeholder="02/06/2017 20:00" aria-required="true" aria-invalid="false" value="<?php echo $prazo.'"'; if($prazo != "") echo "readonly"; ?> required><label id="prazo-error" class="error" for="prazo" style="display: none;"></label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
@@ -325,7 +324,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-										<label>Selecione o endereço desta oferta</label>
+                                        <div class="col-sm-12  text-center"><label>Selecione o endereço desta oferta</label></div>
                                         <?php
                                             $json = $service->call("empresa.select_enderecos",array($_SESSION["id"]));
                                             $endereco = json_decode($json);
@@ -360,7 +359,7 @@
                                     </div>
                                     <div class="tab-pane" id="account">
                                         <div class="row">
-											<label>Escolha as opções que se aplicam a esta oferta</label>
+                                            <div class="col-sm-12 text-center"><label>Escolha as opções que se aplicam a esta oferta</label></div>
                                             <div class="col-sm-4">
                                                 <label class="choice <?php if($delivery == 1) echo "active"; ?>" data-toggle="wizard-checkbox">
                                                     <input type="checkbox" name="delivery" <?php if($delivery == 1) echo "checked"; ?>>
@@ -390,6 +389,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-sm-12  text-center"><label>Selecione as categorias que se aplicam nesta oferta</label></div>
                                         <?php
                                             $json = $service->call("select_tipos",array());
                                             $types = json_decode($json);

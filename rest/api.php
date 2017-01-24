@@ -525,6 +525,19 @@
 			$conexao->close();
 			return $resultado;
 		}
+
+		function dar_baixa_tarifa($empresa_id,$data)
+		{
+			$data = preg_replace('![*#/\"´`]+!','',$data);
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,$empresa_id,'$data')");
+			$id = 0;
+			if($query)
+		    	$id = $conexao->insert_id;
+			$conexao->close();
+			return $id;
+		}
 	}
 
 	class empresa
@@ -751,6 +764,7 @@
 			while($row = $query->fetch_assoc())
 			{
 				$dados[$i] = $row;
+				$dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
 				$sub_query = $conexao->query("SELECT tipo.nome,tipo.id FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
 				$dados[$i]["tipos"] = array();
 				while($row = $sub_query->fetch_assoc())
@@ -833,14 +847,50 @@
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.id,cupom.titulo FROM usuario_has_cupom INNER JOIN cupom ON(cupom.id=usuario_has_cupom.cupom_id) WHERE cupom.empresa_id = $empresa_id AND (usuario_has_cupom.estado = 1 OR usuario_has_cupom.estado = 2) AND MONTH(usuario_has_cupom.data_resgate) = ".date("m")." AND YEAR(usuario_has_cupom.data_resgate) = ".date("Y"));
+			$query = $conexao->query("SELECT data_cadastro FROM empresa WHERE id = $empresa_id");
+			$row = $query->fetch_assoc();
+			$date = explode("-",$row["data_cadastro"]);
+			$date1 = new DateTime($date[0]."-".$date[1]);
+			$date2 = date("Y-m");
 			$dados = array();
-			while($row = $query->fetch_assoc())
+			$i = 0;
+			while($date1->format("Y-m") <= $date2)
 			{
-				$sub_query = $conexao->query("SELECT SUM(preco_cupom) AS total FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND (estado = 1 OR estado = 2) AND MONTH(data_resgate) = ".date("m")." AND YEAR(data_resgate) = ".date("Y"));
-				$sub_row = $sub_query->fetch_assoc();
-				$row["total"] = $sub_row["total"];
-				$dados[] = $row;
+				$nome = "";
+				switch($date1->format("m")) 
+				{
+			        case "01":    $nome = "Janeiro";     break;
+			        case "02":    $nome = "Fevereiro";   break;
+			        case "03":    $nome = "Março";       break;
+			        case "04":    $nome = "Abril";       break;
+			        case "05":    $nome = "Maio";        break;
+			        case "06":    $nome = "Junho";       break;
+			        case "07":    $nome = "Julho";       break;
+			        case "08":    $nome = "Agosto";      break;
+			        case "09":    $nome = "Setembro";    break;
+			        case "10":    $nome = "Outubro";     break;
+			        case "11":    $nome = "Novembro";    break;
+			        case "12":    $nome = "Dezembro";    break; 
+				}
+				$nome .= "/".$date1->format("Y");
+				$dados[$i]["data"] = $nome;
+				$dados[$i]["estado"] = 0;
+				$query = $conexao->query("SELECT * FROM tarifa WHERE empresa_id = $empresa_id AND data = '".$date1->format("Y-m-00")."'");
+				if($query->num_rows > 0)
+					$dados[$i]["estado"] = 1;
+
+				$query = $conexao->query("SELECT cupom.id,cupom.titulo FROM usuario_has_cupom INNER JOIN cupom ON(cupom.id=usuario_has_cupom.cupom_id) WHERE cupom.empresa_id = $empresa_id AND (usuario_has_cupom.estado = 1 OR usuario_has_cupom.estado = 2) AND MONTH(usuario_has_cupom.data_resgate) = ".$date1->format("m")." AND YEAR(usuario_has_cupom.data_resgate) = ".$date1->format("Y"));
+				while($row = $query->fetch_assoc())
+				{
+					$sub_query = $conexao->query("SELECT SUM(preco_cupom) AS total,COUNT(id) AS cupons FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND (estado = 1 OR estado = 2) AND MONTH(data_resgate) = ".date("m")." AND YEAR(data_resgate) = ".date("Y"));
+					$sub_row = $sub_query->fetch_assoc();
+					$row["total"] = $sub_row["total"];
+					$row["cupons"] = $sub_row["cupons"];
+					$dados[$i]["cupom"] = $row;
+				}
+
+				$i++;
+				$date1->modify("+1 month");
 			}
 			$conexao->close();
 			return json_encode($dados);
