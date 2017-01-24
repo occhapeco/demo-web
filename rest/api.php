@@ -879,14 +879,24 @@
 				if($query->num_rows > 0)
 					$dados[$i]["estado"] = 1;
 
-				$query = $conexao->query("SELECT cupom.id,cupom.titulo FROM usuario_has_cupom INNER JOIN cupom ON(cupom.id=usuario_has_cupom.cupom_id) WHERE cupom.empresa_id = $empresa_id AND (usuario_has_cupom.estado = 1 OR usuario_has_cupom.estado = 2) AND MONTH(usuario_has_cupom.data_resgate) = ".$date1->format("m")." AND YEAR(usuario_has_cupom.data_resgate) = ".$date1->format("Y"));
+				$query = $conexao->query("SELECT id,titulo,prazo FROM cupom WHERE empresa_id = $empresa_id AND MONTH(prazo) = ".$date1->format("m")." AND YEAR(prazo) = ".$date1->format("Y"));
+				$j = 0;
 				while($row = $query->fetch_assoc())
 				{
-					$sub_query = $conexao->query("SELECT SUM(preco_cupom) AS total,COUNT(id) AS cupons FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND (estado = 1 OR estado = 2) AND MONTH(data_resgate) = ".date("m")." AND YEAR(data_resgate) = ".date("Y"));
+					$sub_query = $conexao->query("SELECT SUM(preco_cupom) AS total,COUNT(id) AS cupons FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND (estado = 1 OR estado = 2)");
 					$sub_row = $sub_query->fetch_assoc();
-					$row["total"] = $sub_row["total"];
-					$row["cupons"] = $sub_row["cupons"];
-					$dados[$i]["cupom"] = $row;
+					if($sub_row["cupons"] > 0)
+					{
+						$dados[$i]["cupom"][$j] = $row;
+						$dados[$i]["cupom"][$j]["prazo"] = converter_data($dados[$i]["cupom"][$j]["prazo"],false);
+						$dados[$i]["cupom"][$j]["total"] = $sub_row["total"];
+						$dados[$i]["cupom"][$j]["comissao"] = $sub_row["total"]*0.06;
+						$dados[$i]["cupom"][$j]["cupons"] = $sub_row["cupons"];
+						$sub_query = $conexao->query("SELECT COUNT(id) AS cupons FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND estado = 0");
+						$sub_row = $sub_query->fetch_assoc();
+						$dados[$i]["cupom"][$j]["total_cupons"] = $sub_row["cupons"];
+						$j++;
+					}
 				}
 
 				$i++;
