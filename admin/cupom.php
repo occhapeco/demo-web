@@ -71,8 +71,12 @@
                 $cupom = json_decode($json_dados);
                 $estado = "";
 				$nome_emp = "";
+				$desconto = "";
                 for($i = 0; $i<count($cupom); $i++)
                 {
+					$preco_cupom = $cupom[$i]->preco_cupom;
+					$preco_normal = $cupom[$i]->preco_normal;
+					$desconto = (($preco_normal - $preco_cupom)*100)/$preco_normal;
 					$json_dados = $service->call('empresa.select_perfil',array($cupom[$i]->empresa_id));
 					$empresa = json_decode($json_dados);
 					$nome_emp = $empresa->razao_social;
@@ -95,12 +99,15 @@
                     <div class="card">
                         <div class="content">
                             <div class="row">
-                                <div class="col-xs-5">
+								<div class="col-xs-12">
+									<b><p style="color:red; font-size:18px"><?php echo round($desconto) ?>% Off</p></b>
+								</div>
+                                <div class="col-xs-4">
                                     <div class="icon-big icon-warning text-center">
-                                        <img src="../imgs/<?php echo $cupom[$i]->imagem; ?>" width="100px" class="img-responsive">
+                                        <img src="../imgs/<?php echo $cupom[$i]->imagem; ?>" width="130px" class="img-responsive">
                                     </div>
                                 </div>
-                                <div class="col-xs-7">
+                                <div class="col-xs-8">
                                     <div class="numbers">
                                         <p><?php echo $cupom[$i]->titulo ?></p>
 										<p style="color: #aaa"><?php echo $nome_emp ?></p>
