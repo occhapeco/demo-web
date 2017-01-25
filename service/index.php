@@ -250,7 +250,7 @@
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.estado,cupom.id,cupom.imagem,cupom.empresa_id,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,empresa.nome_fantasia,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN empresa ON(cupom.empresa_id = empresa.id) ORDER BY cupom.estado DESC");
+			$query = $conexao->query("SELECT cupom.estado,cupom.id,cupom.imagem,cupom.empresa_id,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.data_cadastro,empresa.nome_fantasia,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN empresa ON(cupom.empresa_id = empresa.id) ORDER BY cupom.estado DESC");
 			$dados = array();
 			$i = 0;
 			while($row = $query->fetch_assoc())
@@ -261,6 +261,7 @@
 				while($row = $sub_query->fetch_assoc())
 					$dados[$i]["tipo"][] = $row;
 			    $dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
+			    $dados[$i]["data_cadastro"] = converter_data($dados[$i]["data_cadastro"],false);
 			    $i++;
 			}
 			$conexao->close();
@@ -634,7 +635,7 @@
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT cupom.imagem,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.estado,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE cupom.id = $id");
+			$query = $conexao->query("SELECT cupom.imagem,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.estado,cupom.data_cadastro,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) WHERE cupom.id = $id");
 			$dados = $query->fetch_assoc();
 			$query = $conexao->query("SELECT * FROM tipo INNER JOIN cupom_has_tipo ON(tipo.id = cupom_has_tipo.tipo_id) WHERE cupom_has_tipo.cupom_id = $id");
 			$dados["tipo"] = array();
@@ -642,6 +643,7 @@
 				$dados["tipo"][] = $row;
 			$conexao->close();
 		    $dados["prazo"] = converter_data($dados["prazo"],false);
+			$dados["data_cadastro"] = converter_data($dados["data_cadastro"],false);
 			return json_encode($dados);
 		}
 
@@ -656,6 +658,7 @@
 			{
 				$dados[$i] = $row;
 				$dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
+				$dados[$i]["data_cadastro"] = converter_data($dados[$i]["data_cadastro"],false);
 				$sub_query = $conexao->query("SELECT tipo.nome,tipo.id FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
 				$dados[$i]["tipos"] = array();
 				while($row = $sub_query->fetch_assoc())
@@ -770,7 +773,7 @@
 				if($query->num_rows > 0)
 					$dados[$i]["estado"] = 1;
 
-				$query = $conexao->query("SELECT id,titulo,prazo,data_cadastro FROM cupom WHERE empresa_id = $empresa_id AND MONTH(prazo) = ".$date1->format("m")." AND YEAR(prazo) = ".$date1->format("Y"));
+				$query = $conexao->query("SELECT id,titulo,prazo,data_cadastro,preco_normal,preco_cupom FROM cupom WHERE empresa_id = $empresa_id AND MONTH(prazo) = ".$date1->format("m")." AND YEAR(prazo) = ".$date1->format("Y"));
 				$j = 0;
 				while($row = $query->fetch_assoc())
 				{
