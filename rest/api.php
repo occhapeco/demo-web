@@ -607,7 +607,7 @@
 
 		    $conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,'$imagem','$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$pagamento,$delivery,-1)");
+		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,'$imagem','$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$pagamento,$delivery,-1,'".date("Y-m-d H:i")."')");
 		    $cupom_id = 0;
 		    if($query)
 		    {
@@ -879,7 +879,7 @@
 				if($query->num_rows > 0)
 					$dados[$i]["estado"] = 1;
 
-				$query = $conexao->query("SELECT id,titulo,prazo FROM cupom WHERE empresa_id = $empresa_id AND MONTH(prazo) = ".$date1->format("m")." AND YEAR(prazo) = ".$date1->format("Y"));
+				$query = $conexao->query("SELECT id,titulo,prazo,data_cadastro FROM cupom WHERE empresa_id = $empresa_id AND MONTH(prazo) = ".$date1->format("m")." AND YEAR(prazo) = ".$date1->format("Y"));
 				$j = 0;
 				while($row = $query->fetch_assoc())
 				{
@@ -889,6 +889,7 @@
 					{
 						$dados[$i]["cupom"][$j] = $row;
 						$dados[$i]["cupom"][$j]["prazo"] = converter_data($dados[$i]["cupom"][$j]["prazo"],false);
+						$dados[$i]["cupom"][$j]["data_cadastro"] = converter_data($dados[$i]["cupom"][$j]["data_cadastro"],false);
 						$dados[$i]["cupom"][$j]["total"] = $sub_row["total"];
 						$dados[$i]["cupom"][$j]["comissao"] = $sub_row["total"]*0.06;
 						$dados[$i]["cupom"][$j]["cupons"] = $sub_row["cupons"];
