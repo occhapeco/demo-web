@@ -29,7 +29,7 @@
 <head>
 	<meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" sizes="96x76" href="imgs/logo/escudo_clube.png">
+    <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>Clube de Ofertas</title>
@@ -71,6 +71,7 @@
             $json_dados = $service->call('empresa.select_cupons', array($_SESSION["id"]));
             $cupom = json_decode($json_dados);
             $estado = "";
+			$desconto = "";
             if(count($cupom) == 0)
             {
             ?>
@@ -80,6 +81,9 @@
             else{
                for($i = 0; $i<count($cupom); $i++)
                 {
+					$preco_cupom = $cupom[$i]->preco_cupom;
+					$preco_normal = $cupom[$i]->preco_normal;
+					$desconto = (($preco_normal - $preco_cupom)*100)/$preco_normal;
                      if ($cupom[$i]->estado == -1)
                     {
                         $estado = "Enviado para aprovação";
@@ -99,16 +103,19 @@
                     <div class="card">
                         <div class="content">
                             <div class="row">
-                                <div class="col-xs-5">
+								<div class="col-xs-12">
+									<b><p style="color:red; font-size:18px"><?php echo round($desconto) ?>% Off</p></b>
+								</div>
+                                <div class="col-xs-4">
                                     <div class="icon-big icon-warning text-center">
-                                        <img src="../imgs/<?php echo $cupom[$i]->imagem; ?>" width="100px" class="img-responsive">
+                                        <img src="../imgs/<?php echo $cupom[$i]->imagem; ?>" width="130px" class="img-responsive">
                                     </div>
                                 </div>
-                                <div class="col-xs-7">
+                                <div class="col-xs-8">
                                     <div class="numbers">
                                         <p><?php echo $cupom[$i]->titulo ?></p>
                                         <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
-                                        <p style="color: #aaa"><?php echo $cupom[$i]->prazo ?></p>
+                                        <p style="color: #aaa">Válido de <?php echo $cupom[$i]->data_cadastro ?> até <?php echo $cupom[$i]->prazo ?></p>
 										<p style="color: #aaa"><?php echo $estado ?></p>
                                     </div>
                                 </div>
@@ -144,7 +151,7 @@
                                             </form>
                                         <?php } ?>
                                     </div>
-                                    <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div><br> <s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
+                                    <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div><s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
                             </div>
                         </div>
                     </div>

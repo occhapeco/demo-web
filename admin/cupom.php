@@ -28,7 +28,7 @@
 <html lang="pt">
 <head>
 	<meta charset="utf-8" />
-    <link rel="icon" type="image/png" sizes="96x76" href="imgs/logo/escudo_clube.png">
+    <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>Clube de Ofertas</title>
@@ -105,8 +105,8 @@
                                         <p><?php echo $cupom[$i]->titulo ?></p>
 										<p style="color: #aaa"><?php echo $nome_emp ?></p>
                                         <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
-										<p style="color: #aaa"><?php echo $cupom[$i]->prazo ?></p>
-                                        <p style="color: #aaa"><?php echo $estado ?></p>
+										<p style="color: #aaa">Válido de <?php echo $cupom[$i]->data_cadastro ?> até <?php echo $cupom[$i]->prazo ?></p>
+										<p style="color: #aaa"><?php echo $estado ?></p>
                                     </div>
                                 </div>
                             </div>

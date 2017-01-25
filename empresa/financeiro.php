@@ -8,7 +8,7 @@
 <html lang="pt">
 <head>
 	<meta charset="utf-8" />
-    <link rel="icon" type="image/png" sizes="96x76" href="imgs/logo/escudo_clube.png">
+    <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>Clube de Ofertas</title>
@@ -54,6 +54,8 @@
 							$json_dados = $service->call('empresa.select_tarifa', array($_SESSION["id"]));
 							$tarifa = json_decode($json_dados);
 							$total_venda = "";
+							$total_comissao = "";
+							$total_liquido = "";
 							for($i = 0; $i<count($tarifa); $i++)
 							{
 								$status = "";
@@ -96,19 +98,26 @@
 																	{
 																?>
 																	<tr>
-																		<td><?php echo $tarifa[$i]->cupom[$j]->titulo; ?></td>
-																		<td><?php echo $tarifa[$i]->cupom[$j]->prazo; ?></td>
-																		<td><?php echo $tarifa[$i]->cupom[$j]->total_cupons; ?></td>
-																		<td><?php echo $tarifa[$i]->cupom[$j]->cupons; ?></td>
-																		<td>R$<?php echo $tarifa[$i]->cupom[$j]->total; ?></td>
-																		<td><?php echo $tarifa[$i]->cupom[$j]->comissao; ?></td>
+																		<td><?php echo $tarifa[$i]->cupom[$j]->titulo; ?>. De R$<?php echo $tarifa[$i]->cupom[$j]->preco_normal; ?> por R$ <?php echo $tarifa[$i]->cupom[$j]->preco_cupom; ?> </td>
+																		<td><?php echo $tarifa[$i]->cupom[$j]->data_cadastro; ?> até <?php echo $tarifa[$i]->cupom[$j]->prazo; ?></td>
+																		<td><center><?php echo $tarifa[$i]->cupom[$j]->total_cupons; ?></center></td>
+																		<td><center><?php echo $tarifa[$i]->cupom[$j]->cupons; ?></center></td>
+																		<td>R$ <?php echo $tarifa[$i]->cupom[$j]->total; ?></td>
+																		<td>R$ <?php echo $tarifa[$i]->cupom[$j]->comissao; ?></td>
 																	</tr>
 																<?php
+																		$total_comissao += $tarifa[$i]->cupom[$j]->comissao;
+																		$total_liquido = $total_venda - $total_comissao;
 																	}
 																?>
 															</tbody>
 														</thead>
 													</table>
+													<div class="pull-right" style="margin-right:10px">
+														<label style="font-size:16px">Total do mês: </label><label style="color:#252422; font-size:18px;">R$ <?php echo $total_venda; ?></label>
+														<label style="font-size:16px">Total de comissão: </label><label style="color:#252422; font-size:18px;">R$ <?php echo $total_comissao; ?></label>
+														<label style="font-size:16px">Total líquido: </label><label style="color:#252422; font-size:18px;">R$ <?php echo $total_liquido; ?></label>
+													</div>
 												</div> 
 											</div>
 										</div>

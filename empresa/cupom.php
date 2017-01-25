@@ -31,7 +31,7 @@
 <head>
 	<meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" sizes="96x76" href="imgs/logo/escudo_clube.png">
+    <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>Clube de Ofertas</title>
@@ -118,11 +118,15 @@
                                     <label>Endereço:</label><label style="color:#252422"><?php echo $cupom->bairro.", ".$cupom->rua.", ".$cupom->num.", ".$cupom->complemento.", ".$cupom->cep;?></label>
                                 </div>
                                 <div class="col-xs-12">
-                                    <label>Prazo:</label><label style="color:#252422"><?php echo $cupom->prazo; ?></label>
-                                    <label>Valor:</label><label style="color:#252422">R$<?php echo $cupom->preco_cupom; ?></label>
-                                    <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom->quantidade; ?></label>
+									<label>Data de inicio:</label><label style="color:#252422"><?php echo $cupom->data_cadastro; ?></label>
+                                    <label>Data final:</label><label style="color:#252422"><?php echo $cupom->prazo; ?></label>
+								</div>
+								<div class="col-xs-12">
+                                    <label>Valor de cardápio:</label><label style="color:#252422">R$ <?php echo $cupom->preco_normal; ?></label>
+									<label>Valor de oferta:</label><label style="color:#252422">R$ <?php echo $cupom->preco_cupom; ?></label>
                                 </div>
                                 <div class="col-xs-12">
+                                    <label>Quantidade:</label><label style="color:#252422"><?php echo $cupom->quantidade; ?></label>
                                     <label>Tipos:</label><label style="color:#252422"><?php echo $str_tipos; ?></label>
                                     <label>Estado:</label><label style="color:#252422"><?php echo $estado; ?></label>
                                 </div>
