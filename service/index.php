@@ -454,7 +454,7 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			for($i=0;$i<count($empresas);$i++)
-				$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,".$empresas[$i]->id.",'".$empresas[$i]->data."')");
+				$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,".$empresas->empresa[$i]->id.",'".$empresas->data."')");
 			$conexao->close();
 			return $query;
 		}
