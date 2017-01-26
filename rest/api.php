@@ -938,25 +938,18 @@
 				if($query->num_rows > 0)
 					$dados[$i]["estado"] = 1;
 
-				$query = $conexao->query("SELECT id,titulo,prazo,data_cadastro,preco_normal,preco_cupom FROM cupom WHERE empresa_id = $empresa_id AND MONTH(prazo) = ".$date1->format("m")." AND YEAR(prazo) = ".$date1->format("Y"));
+				$query = $conexao->query("SELECT cupom.id,cupom.titulo,cupom.prazo,cupom.data_cadastro,cupom.preco_normal,cupom.preco_cupom,SUM(usuario_has_cupom.preco_cupom) AS total,COUNT(usuario_has_cupom.id) AS cupons FROM usuario_has_cupom INNER JOIN cupom ON (cupom.id = usuario_has_cupom.cupom_id) WHERE cupom.empresa_id = $empresa_id AND MONTH(cupom.prazo) = ".$date1->format("m")." AND YEAR(cupom.prazo) = ".$date1->format("Y")." AND (usuario_has_cupom.estado = 1 OR usuario_has_cupom.estado = 2) GROUP BY cupom.id");
 				$j = 0;
 				while($row = $query->fetch_assoc())
 				{
-					$sub_query = $conexao->query("SELECT SUM(preco_cupom) AS total,COUNT(id) AS cupons FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND (estado = 1 OR estado = 2)");
+					$dados[$i]["cupom"][$j] = $row;
+					$dados[$i]["cupom"][$j]["prazo"] = converter_data($dados[$i]["cupom"][$j]["prazo"],false);
+					$dados[$i]["cupom"][$j]["data_cadastro"] = converter_data($dados[$i]["cupom"][$j]["data_cadastro"],false);
+					$dados[$i]["cupom"][$j]["comissao"] = $dados[$i]["cupom"][$j]["total"]*0.06;
+					$sub_query = $conexao->query("SELECT COUNT(id) AS cupons FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]);
 					$sub_row = $sub_query->fetch_assoc();
-					if($sub_row["cupons"] > 0)
-					{
-						$dados[$i]["cupom"][$j] = $row;
-						$dados[$i]["cupom"][$j]["prazo"] = converter_data($dados[$i]["cupom"][$j]["prazo"],false);
-						$dados[$i]["cupom"][$j]["data_cadastro"] = converter_data($dados[$i]["cupom"][$j]["data_cadastro"],false);
-						$dados[$i]["cupom"][$j]["total"] = $sub_row["total"];
-						$dados[$i]["cupom"][$j]["comissao"] = $sub_row["total"]*0.06;
-						$dados[$i]["cupom"][$j]["cupons"] = $sub_row["cupons"];
-						$sub_query = $conexao->query("SELECT COUNT(id) AS cupons FROM usuario_has_cupom WHERE cupom_id = ".$row["id"]." AND estado = 0");
-						$sub_row = $sub_query->fetch_assoc();
-						$dados[$i]["cupom"][$j]["total_cupons"] = $sub_row["cupons"];
-						$j++;
-					}
+					$dados[$i]["cupom"][$j]["total_cupons"] = $sub_row["cupons"];
+					$j++;
 				}
 
 				$i++;
