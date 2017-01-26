@@ -103,17 +103,17 @@
                     <div class="card">
                         <div class="content">
                             <div class="row">
-								<div class="col-md-12">
+								<div class="col-sm-12">
 									<b><p style="color:red; font-size:18px"><?php echo round($desconto) ?>% Off</p></b>
 								</div>
-                                <div class="col-md-4">
+                                <div class="col-sm-4">
                                     <div class="icon-big icon-warning text-center">
                                         <img src="../imgs/<?php echo $cupom[$i]->imagem; ?>" width="130px" class="img-responsive">
                                     </div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-sm-8">
                                     <div class="numbers">
-                                        <p><?php echo $cupom[$i]->titulo ?></p>
+                                        <p style="font-size:18px;"><?php echo $cupom[$i]->titulo ?></p>
                                         <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
                                         <p style="color: #aaa">Válido de <?php echo $cupom[$i]->data_cadastro ?> até <?php echo $cupom[$i]->prazo ?></p>
 										<p style="color: #aaa"><?php echo $estado ?></p>

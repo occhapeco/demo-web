@@ -65,11 +65,28 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
+						<?php
+							if($num > 0)
+							{
+						?>
+                              <a href="notificacoes.php">
+                                    <i class="ti-bell" style="color:#F5A217"></i>
+                                    <p class="notification" style="color:#F5A217"><?php echo $num ?></p>
+                                    <p style="color:#F5A217">Notificações</p>
+                              </a>
+						<?php
+							}
+							else
+							{
+						?>
                               <a href="notificacoes.php">
                                     <i class="ti-bell"></i>
-                                    <p class="notification"><?php $num ?></p>
+                                    <p class="notification"><?php echo $num ?></p>
                                     <p>Notificações</p>
                               </a>
+						<?php
+							}	
+						?>
                         </li>
                         <li>
                             <a href="config.php">

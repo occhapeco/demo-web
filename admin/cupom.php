@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="numbers">
-                                        <p><?php echo $cupom[$i]->titulo ?></p>
+                                        <p style="font-size:18px;"><?php echo $cupom[$i]->titulo ?></p>
 										<p style="color: #aaa"><?php echo $nome_emp ?></p>
                                         <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
 										<p style="color: #aaa">Válido de <?php echo $cupom[$i]->data_cadastro ?> até <?php echo $cupom[$i]->prazo ?></p>

@@ -169,10 +169,10 @@
 														</table>
 													</form>
 													<div class="text-center" style="margin-right:10px">
-														<label style="font-size:16px;">Total comissão: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_comissao; ?></label>
-														<label style="font-size:16px;">Total já recebido: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_recebida , 2, '.', ''); ?></label>
-														<label style="font-size:16px;">Total a receber: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_areceber , 2, '.', ''); ?></label>
-														<label style="font-size:16px;">Total de vendas: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_venda; ?></label>
+														<label style="font-size:16px; color:#17A3B0;">Total comissão: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_comissao; ?></label>
+														<label style="font-size:16px; color:#17A3B0;">Total já recebido: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_recebida , 2, '.', ''); ?></label>
+														<label style="font-size:16px; color:#17A3B0;">Total a receber: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_areceber , 2, '.', ''); ?></label>
+														<label style="font-size:16px; color:#17A3B0;">Total de vendas: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_venda; ?></label>
 													</div>
 												</div> 
 											</div>

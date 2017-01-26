@@ -87,7 +87,7 @@
 															<tr>
 																<th>Oferta</th>
 																<th>Prazo</th>
-																<th>Cupons</th>
+																<th>Total de Cupons</th>
 																<th>Cupons Vend.</th>
 																<th>Total Vendas</th>
 																<th>Comissão</th>
@@ -114,9 +114,9 @@
 														</thead>
 													</table>
 													<div class="text-center" style="margin-right:10px">
-														<label style="font-size:16px">Total do mês: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_venda; ?></label>
-														<label style="font-size:16px">Total comissão: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_comissao; ?></label>
-														<label style="font-size:16px">Total líquido: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_liquido; ?></label>
+														<label style="font-size:16px; color:#17A3B0">Total do mês: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_venda; ?></label>
+														<label style="font-size:16px; color:#17A3B0">Total comissão: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_comissao; ?></label>
+														<label style="font-size:16px; color:#17A3B0">Total líquido: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_liquido; ?></label>
 													</div>
 												</div> 
 											</div>

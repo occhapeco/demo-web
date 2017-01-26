@@ -95,7 +95,7 @@
                     $str_tipos .= $cupom->tipo[$i]->nome;
                 }
              ?>
-            <div class="col-lg-12">
+            <div class="col-sm-12">
                 <div class="card">
                     <div class="content">
                         <div class="row">
