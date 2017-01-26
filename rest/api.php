@@ -583,7 +583,7 @@
 
 		function dar_baixa_tarifa($empresas)
 		{
-			$empresas = json_decode($empresas)
+			$empresas = json_decode($empresas);
 			$data = preg_replace('![*#/\"´`]+!','',$data);
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
