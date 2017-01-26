@@ -83,6 +83,12 @@
 
 		if($metodo == "desbloquear_empresa")
 			echo $admin->desbloquear_empresa($_POST["id"]);
+
+		if($metodo == "select_tarifa")
+			echo $admin->select_tarifa();
+
+		if($metodo == "dar_baixa_tarifa")
+			echo $admin->dar_baixa_tarifa($_POST["id"],$_POST["data"]);
 	}
 	elseif($classe == "empresa")
 	{
@@ -527,17 +533,64 @@
 			return $resultado;
 		}
 
-		function dar_baixa_tarifa($empresa_id,$data)
+		function select_tarifa()
 		{
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT data_cadastro FROM empresa WHERE data_cadastro = (SELECT MIN(data_cadastro) FROM empresa)");
+			$row = $query->fetch_assoc();
+			$date = explode("-",$row["data_cadastro"]);
+			$date1 = new DateTime($date[0]."-".$date[1]);
+			$date2 = date("Y-m");
+			$dados = array();
+			$i = 0;
+			while($date1->format("Y-m") <= $date2)
+			{
+				$nome = "";
+				switch($date1->format("m")) 
+				{
+			        case "01":    $nome = "Janeiro";     break;
+			        case "02":    $nome = "Fevereiro";   break;
+			        case "03":    $nome = "Março";       break;
+			        case "04":    $nome = "Abril";       break;
+			        case "05":    $nome = "Maio";        break;
+			        case "06":    $nome = "Junho";       break;
+			        case "07":    $nome = "Julho";       break;
+			        case "08":    $nome = "Agosto";      break;
+			        case "09":    $nome = "Setembro";    break;
+			        case "10":    $nome = "Outubro";     break;
+			        case "11":    $nome = "Novembro";    break;
+			        case "12":    $nome = "Dezembro";    break; 
+				}
+				$nome .= "/".$date1->format("Y");
+				$dados[$i]["data"] = $nome;
+				$dados[$i]["data_baixa"] = $date1->format("Y-m-00");
+
+				$query = $conexao->query("SELECT empresa.id,empresa.celular,SUM(usuario_has_cupom.preco_cupom) AS valor,(SELECT COUNT(tarifa.id) FROM tarifa WHERE tarifa.empresa_id = empresa.id) AS estado FROM empresa INNER JOIN cupom ON (empresa.id = cupom.empresa_id) INNER JOIN usuario_has_cupom ON (cupom.id = usuario_has_cupom.cupom_id) WHERE (usuario_has_cupom.estado = 1 OR usuario_has_cupom.estado = 2) AND MONTH(cupom.prazo) = ".$date1->format("m")." AND YEAR(cupom.prazo) = ".$date1->format("Y")." GROUP BY empresa.id");
+				$j = 0;
+				while($row = $query->fetch_assoc())
+				{
+					$dados[$i]["empresa"][$j] = $row;
+					$dados[$i]["empresa"][$j]["comissao"] = $row["valor"] * 0.06;
+					$j++;
+				}
+				$i++;
+				$date1->modify("+1 month");
+			}
+			$conexao->close();
+			return json_encode($dados);
+		}
+
+		function dar_baixa_tarifa($empresas)
+		{
+			$empresas = json_decode($empresas)
 			$data = preg_replace('![*#/\"´`]+!','',$data);
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,$empresa_id,'$data')");
-			$id = 0;
-			if($query)
-		    	$id = $conexao->insert_id;
+			for($i=0;$i<count($empresas);$i++)
+				$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,".$empresas[$i]->id.",'".$empresas[$i]->data."')");
 			$conexao->close();
-			return $id;
+			return $query;
 		}
 	}
 
