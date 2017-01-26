@@ -3,16 +3,27 @@
     require_once("../conectar_service.php");
 
     $page = basename(__FILE__, '.php');
+    $alert = "";
 	
 	if(isset($_POST["baixa"]))
     {
-        $json = $service->call('empresa.select_usuarios', array($id_cupom));
-        $usuario_has_cupom = json_decode($json);
-        $usuarios = array();
-        for($i=0;$i<count($usuario_has_cupom);$i++)
-            if(isset($_POST[$usuario_has_cupom[$i]->id]))
-                $usuarios[] = $usuario_has_cupom[$i]->id;
-        $json = $service->call('empresa.dar_baixa', array(json_encode($usuarios)));
+        $json = $service->call('admin.select_tarifa', array());
+        $tarifa = json_decode($json);
+        $dados = array();
+        for($i=0;$i<count($tarifa);$i++)
+        	if(isset($_POST[$tarifa[$i]->data]))
+			{
+				$dados["data"] = $tarifa[$i]->data_baixa;
+				for($j=0;$j<count($tarifa[$i]->empresa);$j++)
+				{
+					if(isset($_POST[$tarifa[$i]->empresa[$j]->id]))
+						$dados["empresa"][] = $tarifa[$i]->empresa[$j]->id;
+				}
+				break;
+			}
+
+        $json = $service->call('admin.dar_baixa_tarifa', array(json_encode($dados)));
+
         if($json)
             $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
         else
@@ -58,12 +69,7 @@
 	<?php 
         require_once("sidenav.php");
         require_once("topnav.php");
-		
-		if(isset($_POST["baixa"]))
-		{
-			$json_dados = $service->call('admin.dar_baixa_tarifa', array());
-		}
-		
+        echo $alert;
     ?>
 		<div class="content">
 			<div class="container ">
@@ -73,10 +79,10 @@
 						<?php
 							$json_dados = $service->call('admin.select_tarifa', array());
 							$tarifa = json_decode($json_dados);
-							$total_venda = "";
-							$total_comissao = "";
-							$comissao_areceber = "";
-							$comissao_recebida = "";
+							$total_venda = 0;
+							$total_comissao = 0;
+							$comissao_areceber = 0;
+							$comissao_recebida = 0;
 							for($i = 0; $i<count($tarifa); $i++)
 							{
 								
@@ -100,7 +106,7 @@
 											<div class="panel-body">
 												<div class="content table-responsive table-full-width">
 													<form action="#" method="post">
-														<input type="hidden" name="<?php echo $tarifa[$i]->data; ?>">
+														<input type="hidden" name="<?php echo $tarifa[$i]->data; ?>" value="<?php echo $tarifa[$i]->data_baixa; ?>">
 														<input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="baixa" value="Dar Baixa" style="display: inline-block; margin-left:10px;">
 														<table class="table table-striped">
 															<thead>
@@ -132,8 +138,23 @@
 																			}
 																	?>
 																		<tr>
-																			<td><center><input type="checkbox" name="<?php echo $tarifa[$i]->empresa[$j]->id; ?>"></center></td>
-																			<td><?php echo $tarifa[$i]->cupom[$j]->data_cadastro; ?><?php echo $empresa->razao_social; ?></td>
+																			<td><center>
+																			<?php
+																				if($status == "A receber")
+																				{
+																			?>
+																			<input type="checkbox" name="<?php echo $tarifa[$i]->empresa[$j]->id; ?>"></center>
+																			<?php
+																				}
+																				else
+																				{
+																			?>
+																			<center>-</center>
+																			<?php
+																				}
+																			?>
+																			</td>
+																			<td><?php echo $empresa->razao_social; ?></td>
 																			<td><center><?php echo $tarifa[$i]->empresa[$j]->celular; ?></center></td>
 																			<td>R$ <?php echo number_format( $tarifa[$i]->empresa[$j]->valor , 2, '.', ''); ?></td>
 																			<td>R$ <?php echo number_format( $tarifa[$i]->empresa[$j]->comissao , 2, '.', ''); ?></td>
@@ -147,11 +168,11 @@
 															</thead>
 														</table>
 													</form>
-													<div class="pull-right" style="margin-right:10px">
-														<b><label style="font-size:16px; color:#17A3B0;">Total comissão: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_comissao; ?></label>
-														<label style="font-size:16px; color:#17A3B0;">Total já recebido: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_recebida , 2, '.', ''); ?></label>
-														<label style="font-size:16px; color:#17A3B0;">Total a receber: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_areceber , 2, '.', ''); ?></label>
-														<label style="font-size:16px; color:#17A3B0;">Total de vendas: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_venda; ?></label></b>
+													<div class="text-center" style="margin-right:10px">
+														<label style="font-size:16px;">Total comissão: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_comissao; ?></label>
+														<label style="font-size:16px;">Total já recebido: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_recebida , 2, '.', ''); ?></label>
+														<label style="font-size:16px;">Total a receber: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_areceber , 2, '.', ''); ?></label>
+														<label style="font-size:16px;">Total de vendas: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_venda; ?></label>
 													</div>
 												</div> 
 											</div>

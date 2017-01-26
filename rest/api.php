@@ -584,11 +584,14 @@
 		function dar_baixa_tarifa($empresas)
 		{
 			$empresas = json_decode($empresas);
-			$data = preg_replace('![*#/\"´`]+!','',$data);
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			for($i=0;$i<count($empresas);$i++)
-				$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,".$empresas->empresa[$i].",'".$empresas->data."')");
+			for($i=0;$i<count($empresas->empresa);$i++)
+			{
+				$sub_query = $conexao->query("SELECT id FROM tarifa WHERE empresa_id = ".$empresas->empresa[$i]." AND data = '".$empresas->data."'");
+				if($sub_query->num_rows == 0)
+					$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,".$empresas->empresa[$i].",'".$empresas->data."')");
+			}
 			$conexao->close();
 			return $query;
 		}

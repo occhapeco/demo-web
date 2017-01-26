@@ -450,11 +450,14 @@
 		function dar_baixa_tarifa($empresas)
 		{
 			$empresas = json_decode($empresas);
-			$data = preg_replace('![*#/\"´`]+!','',$data);
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			for($i=0;$i<count($empresas);$i++)
-				$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,".$empresas->empresa[$i]->id.",'".$empresas->data."')");
+			for($i=0;$i<count($empresas->empresa);$i++)
+			{
+				$sub_query = $conexao->query("SELECT id FROM tarifa WHERE empresa_id = ".$empresas->empresa[$i]." AND data = '".$empresas->data."'");
+				if($sub_query->num_rows == 0)
+					$query = $conexao->query("INSERT INTO tarifa VALUES(NULL,".$empresas->empresa[$i].",'".$empresas->data."')");
+			}
 			$conexao->close();
 			return $query;
 		}
@@ -478,7 +481,7 @@
 	$server->register('admin.bloquear_empresa', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Bloqueia uma empresa por um número de dias.');
 	$server->register('admin.desbloquear_empresa', array('id' => 'xsd:integer','dias' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desloqueia uma empresa.');
 	$server->register('admin.select_tarifa', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona as tarifas das empresas.');
-	$server->register('admin.dar_baixa_tarifa', array('empresa_id' => 'xsd:integer','data' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Dá baixa em uma tarifa de uma empresa.');
+	$server->register('admin.dar_baixa_tarifa', array('empresas' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Dá baixa em tarifas de empresas.');
 
 	class empresa
 	{
