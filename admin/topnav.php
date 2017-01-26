@@ -48,6 +48,12 @@
                         <p class="navbar-brand">Detalhes do cupom</p>
                     <?php
                         }
+						elseif($page == "financeiro")
+                        {
+                    ?>
+                        <p class="navbar-brand">Financeiro</p>
+                    <?php
+                        }
                     ?>
                 </div>
                 <div class="collapse navbar-collapse">

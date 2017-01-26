@@ -97,21 +97,21 @@
                         $estado = "Ativo";
                     }
                     if($i%2 == 0)
-                        echo '<div class="col-lg-12">';
+                        echo '<div class="col-md-12">';
                  ?>
-                <div class="col-lg-6 col-sm-6">
+                <div class="col-md-6 col-sm-6">
                     <div class="card">
                         <div class="content">
                             <div class="row">
-								<div class="col-xs-12">
+								<div class="col-md-12">
 									<b><p style="color:red; font-size:18px"><?php echo round($desconto) ?>% Off</p></b>
 								</div>
-                                <div class="col-xs-4">
+                                <div class="col-md-4">
                                     <div class="icon-big icon-warning text-center">
                                         <img src="../imgs/<?php echo $cupom[$i]->imagem; ?>" width="130px" class="img-responsive">
                                     </div>
                                 </div>
-                                <div class="col-xs-8">
+                                <div class="col-md-8">
                                     <div class="numbers">
                                         <p><?php echo $cupom[$i]->titulo ?></p>
                                         <p style="color: #aaa"><?php echo $cupom[$i]->descricao ?></p>
@@ -151,7 +151,7 @@
                                             </form>
                                         <?php } ?>
                                     </div>
-                                    <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div><s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
+                                    <div style="font-size: 20px;color: #007aff;">R$<?php echo $cupom[$i]->preco_cupom ?></div><br><s style="color:coral">R$<?php echo $cupom[$i]->preco_normal ?></s>
                             </div>
                         </div>
                     </div>

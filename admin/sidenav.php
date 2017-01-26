@@ -119,6 +119,28 @@
                 </li>
             <?php
                 }
+				if($page == "financeiro")
+                {
+            ?>
+                <li class="active">
+                    <a href="#">
+                        <i class="ti-money"></i>
+                        <p>Financeiro</p>
+                    </a>
+                </li>
+			<?php
+				}
+			else
+                {
+            ?>
+                <li>
+                    <a href="financeiro.php">
+                        <i class="ti-money"></i>
+                        <p>Financeiro</p>
+                    </a>
+                </li>
+            <?php
+                }
             ?>
                 <li>
                     <a href="../logout.php">

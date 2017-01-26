@@ -1,0 +1,188 @@
+<?php
+    require_once("permissao.php");
+    require_once("../conectar_service.php");
+
+    $page = basename(__FILE__, '.php');
+	
+	if(isset($_POST["baixa"]))
+    {
+        $json = $service->call('empresa.select_usuarios', array($id_cupom));
+        $usuario_has_cupom = json_decode($json);
+        $usuarios = array();
+        for($i=0;$i<count($usuario_has_cupom);$i++)
+            if(isset($_POST[$usuario_has_cupom[$i]->id]))
+                $usuarios[] = $usuario_has_cupom[$i]->id;
+        $json = $service->call('empresa.dar_baixa', array(json_encode($usuarios)));
+        if($json)
+            $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
+        else
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
+    }
+
+?>
+<html lang="pt">
+<head>
+	<meta charset="utf-8" />
+    <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Clube de Ofertas</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="../assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Paper Dashboard core CSS    -->
+    <link href="../assets/css/paper-dashboard.css" rel="stylesheet"/>
+
+    <!--  Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+    <link href="../assets/css/themify-icons.css" rel="stylesheet">
+
+    <style type="text/css">
+        label{
+            margin-right:5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+	<?php 
+        require_once("sidenav.php");
+        require_once("topnav.php");
+		
+		if(isset($_POST["baixa"]))
+		{
+			$json_dados = $service->call('admin.dar_baixa_tarifa', array());
+		}
+		
+    ?>
+		<div class="content">
+			<div class="container ">
+				<div class="col-sm-11">
+					<div class="panel-group" id="faqAccordion">
+					
+						<?php
+							$json_dados = $service->call('admin.select_tarifa', array());
+							$tarifa = json_decode($json_dados);
+							$total_venda = "";
+							$total_comissao = "";
+							$comissao_areceber = "";
+							$comissao_recebida = "";
+							for($i = 0; $i<count($tarifa); $i++)
+							{
+								
+								
+								for($j=0; $j<count($tarifa[$i]->empresa); $j++)
+								{
+									$total_comissao += $tarifa[$i]->empresa[$j]->comissao;	
+								}
+								
+														
+								$total_comissao = number_format( $total_comissao , 2, '.', '');
+																		
+						?>
+									<div class="panel panel-default">
+										<div <?php if ($i==count($tarifa)-1) {?> class="panel-heading accordion-toggle question-toggle" aria-expanded="true" <?php } else { ?> class="panel-heading accordion-toggle question-toggle collapsed" aria-expanded="false" <?php } ?>  data-toggle="collapse" data-parent="#faqAccordion" data-target="#question0">
+											<h4 class="panel-title">
+												<a href="#" class="ing"><?php echo $tarifa[$i]->data; ?> - R$ <?php echo $total_comissao; ?></a>
+											</h4>
+										</div>
+										<div id="question0" <?php if ($i==count($tarifa)-1) {?> class="panel-collapse collapse in" aria-expanded="true" <?php } else { ?> class="panel-collapse collapse" aria-expanded="false" <?php } ?>>
+											<div class="panel-body">
+												<div class="content table-responsive table-full-width">
+													<form action="#" method="post">
+														<input type="hidden" name="<?php echo $tarifa[$i]->data; ?>">
+														<input type="submit" class="btn btn-finish btn-fill btn-info btn-wd" name="baixa" value="Dar Baixa" style="display: inline-block; margin-left:10px;">
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																	<th><center>Marcar</center></th>
+																	<th>Empresa</th>
+																	<th><center>Telefone</center></th>
+																	<th>Total Vendas</th>
+																	<th>Comissão</th>
+																	<th>Situação</th>
+																</tr>
+																<tbody>
+																	<?php
+																		for($j=0; $j<count($tarifa[$i]->empresa); $j++)
+																		{
+																			$select = $service->call('empresa.select_perfil', array($tarifa[$i]->empresa[$j]->id));
+																			$empresa = json_decode($select);
+																			
+																			$status = "";
+																			if ($tarifa[$i]->empresa[$j]->estado == 1)
+																			{
+																				$status = "Pago";
+																				$comissao_recebida += $tarifa[$i]->empresa[$j]->comissao;
+																			}
+																			if ($tarifa[$i]->empresa[$j]->estado == 0)
+																			{
+																				$status = "A receber";
+																				$comissao_areceber += $tarifa[$i]->empresa[$j]->comissao;
+																			}
+																	?>
+																		<tr>
+																			<td><center><input type="checkbox" name="<?php echo $tarifa[$i]->empresa[$j]->id; ?>"></center></td>
+																			<td><?php echo $tarifa[$i]->cupom[$j]->data_cadastro; ?><?php echo $empresa->razao_social; ?></td>
+																			<td><center><?php echo $tarifa[$i]->empresa[$j]->celular; ?></center></td>
+																			<td>R$ <?php echo number_format( $tarifa[$i]->empresa[$j]->valor , 2, '.', ''); ?></td>
+																			<td>R$ <?php echo number_format( $tarifa[$i]->empresa[$j]->comissao , 2, '.', ''); ?></td>
+																			<td><p <?php if ($tarifa[$i]->empresa[$j]->estado == 0) {?> style="color:red" <?php } else {?> style="color:green" <?php } ?>><?php echo $status ?></p></td>
+																		</tr>
+																	<?php
+																			$total_venda += $tarifa[$i]->empresa[$j]->valor;
+																		}
+																	?>
+																</tbody>
+															</thead>
+														</table>
+													</form>
+													<div class="pull-right" style="margin-right:10px">
+														<b><label style="font-size:16px; color:#17A3B0;">Total comissão: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_comissao; ?></label>
+														<label style="font-size:16px; color:#17A3B0;">Total já recebido: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_recebida , 2, '.', ''); ?></label>
+														<label style="font-size:16px; color:#17A3B0;">Total a receber: </label><label style="color:#252422; font-size:16px;">R$<?php echo number_format( $comissao_areceber , 2, '.', ''); ?></label>
+														<label style="font-size:16px; color:#17A3B0;">Total de vendas: </label><label style="color:#252422; font-size:16px;">R$<?php echo $total_venda; ?></label></b>
+													</div>
+												</div> 
+											</div>
+										</div>
+									</div>
+							<?php
+							}
+							?>
+					</div>
+					<!--/panel-group-->
+					</div>
+				</div>
+        </div>
+</div>
+
+
+</body>
+
+    <!--   Core JS Files   -->
+    <script src="../assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+	<script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Checkbox, Radio & Switch Plugins -->
+
+	<!--  Charts Plugin -->
+	<script src="../assets/js/chartist.min.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="../assets/js/bootstrap-notify.js"></script>
+
+    <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
+	<script src="../assets/js/paper-dashboard.js"></script>
+
+</html>
