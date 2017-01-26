@@ -93,7 +93,7 @@
                         $estado = "Ativo";
                     }
                     if($i%2 == 0)
-                        echo '<div class="col-lg-12">';
+                        echo '<div class="col-sm-12">';
                  ?>
                 <div class="col-lg-6 col-sm-6">
                     <div class="card">
