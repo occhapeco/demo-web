@@ -81,7 +81,7 @@
 						?>
                               <a href="notificacoes.php">
                                     <i class="ti-bell"></i>
-                                    <p class="notification"></p>
+                                    <p class="notification"><?php echo $num; ?></p>
                                     <p>Notificações</p>
                               </a>
 						<?php

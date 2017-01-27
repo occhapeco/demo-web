@@ -1,6 +1,3 @@
-<?php
-    $num = $service->call('empresa.select_nao_visualizadas', array($_SESSION["id"]));
-?>
     <div class="main-panel">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
