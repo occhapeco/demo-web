@@ -752,7 +752,7 @@
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE notificacao SET visualizado = 1 WHERE empresa_id = $empresa_id");
+			$query = $conexao->query("UPDATE notificacao a JOIN cupom b ON(b.id=a.cupom_id) SET a.visualizado = 1 WHERE b.empresa_id = $empresa_id");
 			$conexao->close();
 			return $query;
 		}
