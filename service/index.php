@@ -504,7 +504,8 @@
 			$query = $conexao->query("SELECT token FROM usuario");
 			$tokens = array();
 			while($row = $query->fetch_assoc())
-				$tokens[] = $row["token"];
+				if($row["token"] != "")
+					$tokens[] = $row["token"];
 			if(count($tokens) > 0)
 				$resultado = json_decode(send_notification($tokens,$title,$body));
 			$conexao->close();
