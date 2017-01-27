@@ -967,6 +967,7 @@
 
 	class usuario
 	{
+		function insert($nome,$email,$senha,$celular,$genero,$nascimento)
 		{
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
