@@ -109,6 +109,9 @@
 		if($metodo == "update_senha")
 			echo $usuario->update_senha($_POST["id"],$_POST["senha_antiga"],$_POST["senha_nova"]);
 
+		if($metodo == "update_token")
+			echo $usuario->update_token($_POST["id"],$_POST["token"]);
+
 		if($metodo == "refefinir_senha")
 			echo $usuario->refefinir_senha($_POST["id"],$_POST["senha"]);
 
@@ -517,22 +520,6 @@
 			return $query;
 		}
 
-		function verificar_token($token)
-		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("SELECT * FROM admin");
-			$resultado = false;
-			while($row = $query->fetch_assoc())
-				if(sha1($row["senha"].$row["email"].$row["id"]) == $token)
-				{
-					$resultado = true;
-					break;
-				}
-			$conexao->close();
-			return $resultado;
-		}
-
 		function select_tarifa()
 		{
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
@@ -595,6 +582,7 @@
 			$conexao->close();
 			return $query;
 		}
+
 	}
 
 	class empresa
@@ -808,7 +796,7 @@
 				$dados["tipo"][] = $row;
 			$conexao->close();
 		    $dados["prazo"] = converter_data($dados["prazo"],false);
-			$dados[$i]["data_cadastro"] = converter_data($dados[$i]["data_cadastro"],false);
+			$dados["data_cadastro"] = converter_data($dados["data_cadastro"],false);
 			return json_encode($dados);
 		}
 
@@ -964,21 +952,21 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM empresa");
-			$resultado = false;
+			$id = 0;
 			while($row = $query->fetch_assoc())
 				if(sha1($row["senha"].$row["email"].$row["id"]) == $token)
 				{
-					$resultado = true;
+					$id = $row["id"];
 					break;
 				}
 			$conexao->close();
-			return $resultado;
+			return $id;
 		}
+
 	}
 
 	class usuario
 	{
-		function insert($nome,$email,$senha,$celular,$genero,$nascimento,$token)
 		{
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
@@ -987,7 +975,7 @@
 
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0,'$token')");
+			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0,'')");
 			$id = 0;
 			if($query)
 		    	return $conexao->insert_id;
@@ -1014,6 +1002,17 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
+			$conexao->close();
+			return $query;
+		}
+
+		function update_token($id,$token)
+		{
+			$senha_antiga = md5(sha1($senha_antiga));
+			$senha_nova = md5(sha1($senha_nova));
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("UPDATE usuario SET token = '$token' WHERE id = $id");
 			$conexao->close();
 			return $query;
 		}
@@ -1152,16 +1151,17 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM usuario");
-			$resultado = false;
+			$id = 0;
 			while($row = $query->fetch_assoc())
 				if(sha1($row["senha"].$row["email"].$row["id"]) == $token)
 				{
-					$resultado = true;
+					$id = $row["id"];
 					break;
 				}
 			$conexao->close();
-			return $resultado;
+			return $id;
 		}
+
 	}
 	
 	if($conexao != null)
