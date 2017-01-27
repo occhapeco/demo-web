@@ -89,6 +89,9 @@
 
 		if($metodo == "dar_baixa_tarifa")
 			echo $admin->dar_baixa_tarifa($_POST["id"],$_POST["data"]);
+
+		if($metodo == "notificar_usuarios")
+			echo $admin->dar_baixa_tarifa($_POST["title"],$_POST["body"]);
 	}
 	elseif($classe == "empresa")
 	{
@@ -139,6 +142,41 @@
 	}
 	
 
+	function send_notification($tokens,$title,$body)
+	{
+		$url = 'https://fcm.googleapis.com/fcm/send';
+	    $priority="high";
+	    $notification= array('title' => $title,'body' => $body);
+
+	    $fields = array(
+	         'registration_ids' => $tokens,
+	         'notification' => $notification
+
+	        );
+
+
+	    $headers = array(
+	        'Authorization:key= AAAAvKZuaiQ:APA91bFGzTkMCKQbmi9klRGWMEI2I90Mzxlu_XjbOB4Oc6vF8lihCKK5q79sQmXuWtsgLw5nweShSddJDavn2w4RQraPF_UWaqEKjvgRabM2BwnxGa6-E-piJSmwSnxzwnoLpH8S-e_Q9hWnctPGzAUiv7CrLNBjtA',
+	        'Content-Type: application/json'
+	        );
+
+	   $ch = curl_init();
+	   curl_setopt($ch, CURLOPT_URL, $url);
+	   curl_setopt($ch, CURLOPT_POST, true);
+	   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	   curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);  
+	   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+	   $result = curl_exec($ch);           
+	   echo curl_error($ch);
+	   if ($result === FALSE) {
+	       die('Curl failed: ' . curl_error($ch));
+	   }
+	   curl_close($ch);
+	   return $result;
+	}
+
 	function mandar_email($email,$assunto,$msg)
 	{
 		$email_sender = "no-reply@clubedeofertas.net";
@@ -148,7 +186,7 @@
 		$headers .= "From: Clube de Ofertas <$email_sender>\n";
 		$headers .= "Return-Path: $email_sender\n";
 		$headers .= "X-Priority: 1\n";
-		$envio = mail($email,"Clube de Ofertas - ".$assunto,"<p>".$msg."</p><br><br><h3>Atenciosamente, equipe Clube de Ofertas.</h3>",$headers,"-r".$email_sender);
+		$envio = mail($email,"Clube de Ofertas - ".$assunto,"<h4>".$msg."</h4><br><br><h3>Atenciosamente, equipe Clube de Ofertas.</h3>",$headers,"-r".$email_sender);
 		if(!envio)
 			return false;
 		else
@@ -583,6 +621,20 @@
 			return $query;
 		}
 
+		function notificar_usuarios($title,$body)
+		{
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT token FROM usuario");
+			$tokens = array();
+			while($row = $query->fetch_assoc())
+				$tokens[] = $row["token"];
+			if(count($tokens) > 0)
+				$resultado = json_decode(send_notification($tokens,$title,$body));
+			$conexao->close();
+			return $resultado->success;
+		}
+
 	}
 
 	class empresa
@@ -844,8 +896,26 @@
 			$usuarios = json_decode($usuarios);
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
+			$tokens = array();
+			$oferta = "Desconto gigante!";
 			for($i=0;$i<count($usuarios);$i++)
+			{
 				$query = $conexao->query("UPDATE usuario_has_cupom SET estado = 1 WHERE id = ".$usuarios[$i]);
+				if($query)
+				{
+					$query = $conexao->query("SELECT usuario.token FROM usuario INNER JOIN usuario_has_cupom ON (usuario.id = usuario_has_cupom.usuario_id) WHERE usuario_has_cupom.id = ".$usuarios[$i]." GROUP BY usuario_has_cupom.usuario_id");
+					$row = $query->fetch_assoc();
+					$tokens[] = $row["token"];
+				}
+				if($i == 0)
+				{
+					$query = $conexao->query("SELECT cupom.titulo FROM cupopm INNER JOIN usuario_has_cupom ON (cupom.id = usuario_has_cupom.cupom_id) WHERE usuario_has_cupom.id = ".$usuarios[$i]." GROUP BY usuario_has_cupom.cupom_id");
+					$row = $query->fetch_assoc();
+					$oferta = $row["titulo"];
+				}
+			}
+			if(count($tokens) > 0)
+				$message_status = send_notification($tokens,"Avalie sua compra!",$oferta);
 			$conexao->close();
 			return $query;
 		}
