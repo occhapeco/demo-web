@@ -141,6 +141,28 @@
                 </li>
             <?php
                 }
+                if($page == "notificar")
+                {
+            ?>
+                <li class="active">
+                    <a href="#">
+                        <i class="ti-announcement"></i>
+                        <p>Notificar usuários</p>
+                    </a>
+                </li>
+            <?php
+                }
+            else
+                {
+            ?>
+                <li>
+                    <a href="notificar.php">
+                        <i class="ti-announcement"></i>
+                        <p>Notificar usuários</p>
+                    </a>
+                </li>
+            <?php
+                }
             ?>
                 <li>
                     <a href="../logout.php">
