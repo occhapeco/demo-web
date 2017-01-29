@@ -4,7 +4,7 @@
 
     $page = basename(__FILE__, '.php');
 
-    $json_dados = $service->call('empresa.visulizar', array($_SESSION["id"]));
+    $json_dados = $service->call('empresa.visualizar', array($_SESSION["id"]));
 ?>
 <html lang="pt">
 <head>
