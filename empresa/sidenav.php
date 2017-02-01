@@ -3,7 +3,7 @@
     	<div class="sidebar-wrapper">
             <div class="logo">
                 <a href="index.php" class="simple-text">
-                    <img src="../imgs/logo/escudo_corel.png" height="45px" width="180px" class="img-responsive">
+                    <img src="../imgs/logo/escudo_corel.png" height="45px" width="230px" class="img-responsive">
                 </a>
             </div>
 
