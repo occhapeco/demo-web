@@ -32,7 +32,7 @@
 	<header>
 		<div class="container">
 			<div class="logo pull-left animated wow fadeInLeft">
-				<a href="#hero" class="app_link"> <img src="img/logo.png" height="45px" title=""></a>
+				<a href="#hero" class="app_link"> <img src="img/logo_escrita.png" height="45px" title=""></a>
 			</div>
 
 			
