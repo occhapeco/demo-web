@@ -1,40 +1,49 @@
 <?php
+	header('Access-Control-Allow-Origin: *');
+	error_reporting(E_ALL);
+	ini_set("display_errors",0);
+
 	$classe = null;
 	$metodo = null;
 	$admin = null;
 	$empresa = null;
 	$usuario = null;
 
-	if($_POST["metodo"] == "login")
-	{
-		if($_POST["classe"] == "admin")
-		{
-			$admin = new admin();
-			echo $admin->login($_POST["email"],$_POST["senha"]);
-		}
-		elseif($_POST["classe"] == "empresa")
-		{
-			$empresa = new empresa();
-			echo $empresa->login($_POST["email"],$_POST["senha"]);
-		}
-		elseif($_POST["classe"] == "usuario")
-		{
-			$usuario = new usuario();
-			echo $usuario->login($_POST["email"],$_POST["senha"]);
-		}
-	}
-
-	if(isset($_POST["token"]))
+	if(isset($_POST["access_token"]))
 	{
 		$admin = new admin();
 		$empresa = new empresa();
 		$usuario = new usuario();
-		if($admin->verificar_token($_POST["token"]) || $empresa->verificar_token($_POST["token"]) || $usuario->verificar_token($_POST["token"]))
+		if($admin->verificar_token($_POST["access_token"]) || $empresa->verificar_token($_POST["access_token"]) || $usuario->verificar_token($_POST["access_token"]))
 		{
 			$metodo = $_POST["metodo"];
 			if(isset($_POST["classe"]))
 				$classe = $_POST["classe"];
 		}
+	}
+	elseif($_POST["classe"] == "admin")
+	{
+		$admin = new admin();
+		if($_POST["metodo"] == "login")
+			echo $admin->login($_POST["email"],$_POST["senha"]);
+	}
+	elseif($_POST["classe"] == "empresa")
+	{
+		$empresa = new empresa();
+		if($_POST["metodo"] == "login")
+			echo $empresa->login($_POST["email"],$_POST["senha"]);
+	}
+	elseif($_POST["classe"] == "usuario")
+	{
+		$usuario = new usuario();
+		if($_POST["metodo"] == "login")
+			echo $usuario->login($_POST["email"],$_POST["senha"]);
+
+		if($_POST["metodo"] == "select_cupons")
+			echo $usuario->select_cupons($_POST["cidade_id"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);
+		
+		if($_POST["metodo"] == "insert")
+			echo $usuario->insert($_POST["nome"],$_POST["email"],$_POST["senha"],$_POST["celular"],$_POST["genero"],$_POST["nascimento"]);
 	}
 
 	if($classe == "admin")
@@ -103,9 +112,6 @@
 	}
 	elseif($classe == "usuario")
 	{
-		if($metodo == "insert")
-			echo $usuario->insert($_POST["nome"],$_POST["email"],$_POST["senha"],$_POST["celular"],$_POST["genero"],$_POST["nascimento"],$_POST["token_celular"]);
-		
 		if($metodo == "update_perfil")
 			echo $usuario->update_perfil($_POST["id"],$_POST["nome"],$_POST["celular"],$_POST["genero"],$_POST["nascimento"]);
 
@@ -119,13 +125,13 @@
 			echo $usuario->refefinir_senha($_POST["id"],$_POST["senha"]);
 
 		if($metodo == "select_cupons")
-			echo $usuario->select_cupons($_POST["usuario_id"],$_POST["cidade_id"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);
+			echo $usuario->select_cupons($_POST["cidade_id"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);
 
 		if($metodo == "select_detalhes_cupom")
 			echo $usuario->select_detalhes_cupom($_POST["cupom_id"]);
 
 		if($metodo == "pegar_cupom")
-			echo $usuario->pegar_cupom($_POST["usuario_id"],$_POST["cupom_id"]);
+			echo $usuario->pegar_cupom($_POST["id"],$_POST["cupom_id"]);
 
 		if($metodo == "select_perfil")
 			echo $usuario->select_perfil($_POST["id"]);
@@ -141,7 +147,6 @@
 
 	}
 	
-
 	function send_notification($tokens,$title,$body)
 	{
 		$url = 'https://fcm.googleapis.com/fcm/send';
@@ -273,6 +278,8 @@
 
 	function query($sql_query)
 	{
+		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+		$query = $conexao->query('SET CHARACTER SET utf8');
 		$query = $conexao->query($sql_query);
 		$dados = array();
 		while($row = $query->fetch_assoc())
@@ -281,9 +288,10 @@
 		return json_encode($dados);
 	}
 
-
 	function select_cidades()
 	{
+		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+		$query = $conexao->query('SET CHARACTER SET utf8');
 		$query = $conexao->query("SELECT * FROM cidade WHERE estado = 0");
 		$dados = array();
 		while($row = $query->fetch_assoc())
@@ -292,9 +300,10 @@
 		return json_encode($dados);
 	}
 
-
 	function select_tipos()
 	{
+		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+		$query = $conexao->query('SET CHARACTER SET utf8');
 		$query = $conexao->query("SELECT * FROM tipo");
 		$dados = array();
 		while($row = $query->fetch_assoc())
@@ -303,7 +312,7 @@
 		return json_encode($dados);
 	}
 
-	function esqueci_senha($email)
+	function redefinir_senha($email)
 	{
 		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 		$query = $conexao->query('SET CHARACTER SET utf8');
@@ -636,6 +645,22 @@
 			return $resultado->success;
 		}
 
+		function verificar_token($token)
+		{
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT * FROM admin");
+			$id = 0;
+			while($row = $query->fetch_assoc())
+				if(sha1($row["senha"].$row["email"].$row["id"]) == $token)
+				{
+					$id = $row["id"];
+					break;
+				}
+			$conexao->close();
+			return $id;
+		}
+
 	}
 
 	class empresa
@@ -916,7 +941,7 @@
 				}
 			}
 			if(count($tokens) > 0)
-				$message_status = send_notification($tokens,"Avalie sua compra!",$oferta);
+				$message_status = send_notification($tokens,"Avalie sua compra",$oferta);
 			$conexao->close();
 			return $query;
 		}
@@ -1073,9 +1098,16 @@
 			$senha_nova = md5(sha1($senha_nova));
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
+			$token = "error";
+			$query = $conexao->query("SELECT * FROM usuario WHERE id = $id AND senha = '$senha_antiga'");
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$token = sha1($row["senha"].$row["email"].$row["id"]);
+				$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id");
+			}
 			$conexao->close();
-			return $query;
+			return $token;
 		}
 
 		function update_token($id,$token)
@@ -1105,15 +1137,18 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'");
-			if($query->num_rows > 1 || $query->num_rows == 0)
-				return 0;
 			$dados = array();
-			$row = $query->fetch_assoc();
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$dados["id"] = $row["id"];
+				$dados["access_token"] = sha1($row["senha"].$row["email"].$row["id"]);
+			}
 			$conexao->close();
-			return $row["id"];
+			return json_encode($dados);
 		}
 
-		function select_cupons($usuario_id,$cidade,$delivery,$pagamento,$tipo_id)
+		function select_cupons($cidade,$delivery,$pagamento,$tipo_id)
 		{
 			$tipo_id = json_decode($tipo_id);
 			$str_tipo = "";
@@ -1155,11 +1190,14 @@
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT cupom.estado,cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,cupom.imagem,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE cupom.id = $cupom_id");
 			$dados = array();
-			$row = $query->fetch_assoc();
-			$dados["detalhes"] = $row;
-			$query = $conexao->query("SELECT tipo.nome FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
-			while($row = $query->fetch_assoc())
-				$dados["tipos"][] = $row;
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$dados["detalhes"] = $row;
+				$query = $conexao->query("SELECT tipo.nome FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
+				while($row = $query->fetch_assoc())
+					$dados["tipos"][] = $row;
+			}
 			$conexao->close();
 			return json_encode($dados);
 		}
