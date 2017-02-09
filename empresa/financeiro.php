@@ -73,12 +73,12 @@
 								}
 						?>
 									<div class="panel panel-default">
-										<div <?php if ($i==count($tarifa)-1) {?> class="panel-heading accordion-toggle question-toggle" aria-expanded="true" <?php } else { ?> class="panel-heading accordion-toggle question-toggle collapsed" aria-expanded="false" <?php } ?>  data-toggle="collapse" data-parent="#faqAccordion" data-target="#question0">
+										<div <?php if ($i==count($tarifa)-1) {?> class="panel-heading accordion-toggle question-toggle" aria-expanded="true" <?php } else { ?> class="panel-heading accordion-toggle question-toggle collapsed" aria-expanded="false" <?php } ?>  data-toggle="collapse" data-parent="#faqAccordion" data-target="#question<?php echo $i ?>">
 											<h4 class="panel-title">
 												<a href="#" class="ing"><?php echo $tarifa[$i]->data; ?> - R$ <?php echo $total_venda; ?> - <?php echo $status; ?></a>
 											</h4>
 										</div>
-										<div id="question0" <?php if ($i==count($tarifa)-1) {?> class="panel-collapse collapse in" aria-expanded="true" <?php } else { ?> class="panel-collapse collapse" aria-expanded="false" <?php } ?>>
+										<div id="question<?php echo $i ?>" <?php if ($i==count($tarifa)-1) {?> class="panel-collapse collapse in" aria-expanded="true" <?php } else { ?> class="panel-collapse collapse" aria-expanded="false" <?php } ?>>
 											<div class="panel-body">
 												<div class="content table-responsive table-full-width">
 													<table class="table table-striped">
