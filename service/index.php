@@ -504,7 +504,7 @@
 			$query = $conexao->query("SELECT token FROM usuario");
 			$tokens = array();
 			while($row = $query->fetch_assoc())
-				if($row["token"] != "")
+				if($row["token"] != " ")
 					$tokens[] = $row["token"];
 			if(count($tokens) > 0)
 				$resultado = json_decode(send_notification($tokens,$title,$body));
@@ -794,27 +794,31 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$tokens = array();
-			$oferta = "Desconto gigante!";
+			$oferta = "Valeu a pena?";
+			$result = true;
 			for($i=0;$i<count($usuarios);$i++)
 			{
 				$query = $conexao->query("UPDATE usuario_has_cupom SET estado = 1 WHERE id = ".$usuarios[$i]);
-				if($query)
+				$sub_query = $conexao->query("SELECT usuario.token FROM usuario INNER JOIN usuario_has_cupom ON (usuario.id = usuario_has_cupom.usuario_id) WHERE usuario_has_cupom.id = ".$usuarios[$i]." GROUP BY usuario_has_cupom.usuario_id");
+				if($sub_query->num_rows > 0)
 				{
-					$query = $conexao->query("SELECT usuario.token FROM usuario INNER JOIN usuario_has_cupom ON (usuario.id = usuario_has_cupom.usuario_id) WHERE usuario_has_cupom.id = ".$usuarios[$i]." GROUP BY usuario_has_cupom.usuario_id");
-					$row = $query->fetch_assoc();
+					$row = $sub_query->fetch_assoc();
 					$tokens[] = $row["token"];
 				}
 				if($i == 0)
 				{
-					$query = $conexao->query("SELECT cupom.titulo FROM cupopm INNER JOIN usuario_has_cupom ON (cupom.id = usuario_has_cupom.cupom_id) WHERE usuario_has_cupom.id = ".$usuarios[$i]." GROUP BY usuario_has_cupom.cupom_id");
-					$row = $query->fetch_assoc();
-					$oferta = $row["titulo"];
+					$sub_query = $conexao->query("SELECT cupom.titulo FROM cupom INNER JOIN usuario_has_cupom ON (cupom.id = usuario_has_cupom.cupom_id) WHERE usuario_has_cupom.id = ".$usuarios[$i]." GROUP BY usuario_has_cupom.cupom_id");
+					if($sub_query->num_rows > 0)
+					{
+						$row = $sub_query->fetch_assoc();
+						$oferta = $row["titulo"];
+					}
 				}
 			}
 			if(count($tokens) > 0)
-				$message_status = send_notification($tokens,"Avalie sua compra",$oferta);
+				$message_status = send_notification($tokens,"Avalie sua compra!",$oferta);
 			$conexao->close();
-			return $query;
+			return $result;
 		}
 
 		function visualizar($empresa_id)

@@ -156,7 +156,8 @@
                 <div class="card">
                     <div class="content">
                        <div class="content table-responsive table-full-width">
-                            <form method="POST" action="cupom.php?id_cupom=<?php echo $id_cupom; ?>">
+                            <form method="POST" action="#">
+                                <input type="hidden" name="id_cupom" value="<?php echo $id_cupom; ?>">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
@@ -187,7 +188,7 @@
                                                 {
                                                     $total_concluidos += $usuario[$i]->preco_cupom;
                                             ?>
-                                                <td> - </td>
+                                                <td> <?php echo $usuario[$i]->id; ?> </td>
                                             <?php
                                                 }
                                             ?>
