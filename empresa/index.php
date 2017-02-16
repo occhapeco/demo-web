@@ -65,6 +65,13 @@
     ?>
 
         <div class="content">
+            <div class="col-sm-12">
+                <label>Pesquisa</label>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1" style="background-color: #eee;border: 1px solid #ccc;border-radius: 4px;"><i class="ti-search"></i></span>
+                  <input id="filtro" type="text" class="form-control" placeholder="Busca Rápida. Digite o que procura!">
+                </div>
+            </div>
             <?php
             $json_dados = $service->call('empresa.select_cupons', array($_SESSION["id"]));
             $cupom = json_decode($json_dados);
@@ -94,10 +101,10 @@
                     {
                         $estado = "Ativo";
                     }
-                    if($i%2 == 0)
-                        echo '<div class="col-md-12">';
+                    //if($i%2 == 0)
+                        //echo '<div class="col-md-12">';
                  ?>
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-6 col-sm-6 bloco">
                     <div class="card">
                         <div class="content">
                             <div class="row">
@@ -155,8 +162,8 @@
                     </div>
                 </div>
                 <?php
-                    if($i%2 != 0)
-                        echo '</div>';
+                    //if($i%2 != 0)
+                        //echo '</div>';
                   }
                 }
                 ?>            
@@ -181,5 +188,26 @@
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="../assets/js/paper-dashboard.js"></script>
+
+    <script>
+        $(function(){ 
+
+          $("#filtro").keyup(function(){
+            var texto = $(this).val();
+            
+            $(".bloco").each(function(){
+              var resultado = $(this).text().toUpperCase().indexOf(' '+texto.toUpperCase());
+              
+              if(resultado < 0) {
+                $(this).fadeOut();
+              }else {
+                $(this).fadeIn();
+              }
+            }); 
+
+          });
+
+        });
+    </script>
 
 </html>
