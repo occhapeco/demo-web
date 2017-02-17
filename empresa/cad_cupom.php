@@ -41,11 +41,12 @@
 
         $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
 
+        $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
         $arquivo = $_FILES['wizard-picture'];
-        $extension = explode(".",$arquivo["name"]);
-        $max = count($extension);
-        $arquivo["name"] = 'cupom'.$insert.'.'.$extension[$max-1];
-        move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
+        $extension = pathinfo($arquivo["name"], PATHINFO_EXTENSION);
+        $arquivo["name"] = 'cupom'.$insert.'.'.$extension;
+        move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
+        img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
 
         $insert = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$arquivo['name'],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
         if($insert == 0)
@@ -75,21 +76,21 @@
 
         $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
         $imagem = $_POST["imagem"];
+        $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
         if($imagem == "upload")
         {
             $arquivo = $_FILES['wizard-picture'];
-            $extension = explode(".",$arquivo["name"]);
-            $max = count($extension);
-            $arquivo["name"] = 'cupom'.$insert.'.'.$extension[$max-1];
-            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
+            $extension = pathinfo($arquivo["name"], PATHINFO_EXTENSION);
+            $arquivo["name"] = 'cupom'.$insert.'.'.$extension;
+            move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
+            img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
             $imagem = $arquivo['name'];
         }
         else
         {
             $extension = explode(".",$imagem);
-            $max = count($extension);
-            $new = "cupom$insert.".$extension[$max-1];
-            copy($_SERVER['DOCUMENT_ROOT'].'imgs/'.$imagem,$_SERVER['DOCUMENT_ROOT'].'imgs/'.$new);
+            $new = "cupom$insert.".end($extension);
+            copy($caminho.$imagem,$caminho.$new);
             $imagem = $new;
         }        
 
@@ -142,18 +143,20 @@
     if(isset($_POST["edit"]))
     {
         $imagem = $_POST["imagem"];
+        $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
 
         if($_POST["imagem"] == "upload")
         {
             $arquivo = $_FILES['wizard-picture'];
-            $extension = explode(".",$arquivo["name"]);
-            $max = count($extension);
-            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[$max-1];
+            $extension = pathinfo($arquivo["name"], PATHINFO_EXTENSION);
+            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension;
 
-            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.png');
-            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.jpg');
-            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
-            $imagem = $arquivo["name"];
+            unlink($caminho.'cupom'.$_POST["edit"].'.png');
+            unlink($caminho.'cupom'.$_POST["edit"].'.jpg');
+
+            move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
+            img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
+            $imagem = $arquivo['name'];
         }
 
         $delivery = 0;

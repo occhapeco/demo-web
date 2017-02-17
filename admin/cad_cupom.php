@@ -46,18 +46,20 @@
     if(isset($_POST["edit"]))
     {
         $imagem = $_POST["imagem"];
+        $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
 
         if($_POST["imagem"] == "upload")
         {
             $arquivo = $_FILES['wizard-picture'];
-            $extension = explode(".",$arquivo["name"]);
-            $max = count($extension);
-            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension[$max-1];
+            $extension = pathinfo($arquivo["name"], PATHINFO_EXTENSION);
+            $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension;
 
-            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.png');
-            unlink($_SERVER['DOCUMENT_ROOT'].'imgs/cupom'.$_POST["edit"].'.jpg');
-            move_uploaded_file($arquivo['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'imgs/'.$arquivo["name"]);
-            $imagem = $arquivo["name"];
+            unlink($caminho.'cupom'.$_POST["edit"].'.png');
+            unlink($caminho.'cupom'.$_POST["edit"].'.jpg');
+
+            move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
+            img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
+            $imagem = $arquivo['name'];
         }
 
         $delivery = 0;
