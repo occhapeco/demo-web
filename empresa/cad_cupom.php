@@ -4,6 +4,28 @@
     $page = basename(__FILE__, '.php');
     require_once("../conectar_service.php");
 
+    function img_resize($target,$newcopy,$ext,$w=720,$h=480)
+    {
+        list($w_orig, $h_orig) = getimagesize($target);
+        $scale_ratio = $w_orig / $h_orig;
+        if (($w / $h) > $scale_ratio) {
+               $w = $h * $scale_ratio;
+        } else {
+               $h = $w / $scale_ratio;
+        }
+        $img = "";
+        $ext = strtolower($ext);
+        if($ext =="png"){ 
+            $img = imagecreatefrompng($target);
+        } else { 
+            $img = imagecreatefromjpeg($target);
+        }
+        $tci = imagecreatetruecolor($w, $h);
+        // imagecopyresampled(dst_img, src_img, dst_x, dst_y, src_x, src_y, dst_w, dst_h, src_w, src_h)
+        imagecopyresampled($tci, $img, 0, 0, 0, 0, $w, $h, $w_orig, $h_orig);
+        imagejpeg($tci, $newcopy, 80);
+    }
+
     $alert = "";
     
     $endereco_id = 0;
@@ -47,6 +69,7 @@
         $arquivo["name"] = 'cupom'.$insert.'.'.$extension;
         move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
         img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
+        chmod($caminho.$arquivo["name"],0777);
 
         $insert = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$arquivo['name'],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
         if($insert == 0)
@@ -84,6 +107,7 @@
             $arquivo["name"] = 'cupom'.$insert.'.'.$extension;
             move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
             img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
+            chmod($caminho.$arquivo["name"],0777);
             $imagem = $arquivo['name'];
         }
         else
@@ -91,6 +115,7 @@
             $extension = explode(".",$imagem);
             $new = "cupom$insert.".end($extension);
             copy($caminho.$imagem,$caminho.$new);
+            chmod($caminho.$new,0777);
             $imagem = $new;
         }        
 
@@ -151,11 +176,10 @@
             $extension = pathinfo($arquivo["name"], PATHINFO_EXTENSION);
             $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension;
 
-            unlink($caminho.'cupom'.$_POST["edit"].'.png');
-            unlink($caminho.'cupom'.$_POST["edit"].'.jpg');
-
+            unlink($caminho.'cupom'.$_POST["old_img"]);
             move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
             img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
+            chmod($caminho.$arquivo["name"],0777);
             $imagem = $arquivo['name'];
         }
 
@@ -431,6 +455,12 @@
                                                 <input type="file" id="wizard-picture" name="wizard-picture" accept="image/x-png,image/jpeg">
                                                 <label class="choice" data-toggle="wizard-radio"  onclick="$('#wizard-picture').click();">
                                                     <input type="radio" name="imagem" value="upload">
+                                                    <?php
+                                                        if($imagem != "")
+                                                        {
+                                                    ?>
+                                                    <input type="hidden" name="old_img" value="<?php echo $imagem; ?>">
+                                                    <?php } ?>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="" class="picture-src" id="wizardPicturePreview" title="">

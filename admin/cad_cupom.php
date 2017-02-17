@@ -1,6 +1,28 @@
 <?php
     require_once("permissao.php");
     
+    function img_resize($target,$newcopy,$ext,$w=720,$h=480)
+    {
+        list($w_orig, $h_orig) = getimagesize($target);
+        $scale_ratio = $w_orig / $h_orig;
+        if (($w / $h) > $scale_ratio) {
+               $w = $h * $scale_ratio;
+        } else {
+               $h = $w / $scale_ratio;
+        }
+        $img = "";
+        $ext = strtolower($ext);
+        if($ext =="png"){ 
+            $img = imagecreatefrompng($target);
+        } else { 
+            $img = imagecreatefromjpeg($target);
+        }
+        $tci = imagecreatetruecolor($w, $h);
+        // imagecopyresampled(dst_img, src_img, dst_x, dst_y, src_x, src_y, dst_w, dst_h, src_w, src_h)
+        imagecopyresampled($tci, $img, 0, 0, 0, 0, $w, $h, $w_orig, $h_orig);
+        imagejpeg($tci, $newcopy, 80);
+    }
+
     $page = basename(__FILE__, '.php');
     require_once("../conectar_service.php");
 
@@ -54,12 +76,11 @@
             $extension = pathinfo($arquivo["name"], PATHINFO_EXTENSION);
             $arquivo["name"] = 'cupom'.$_POST["edit"].'.'.$extension;
 
-            unlink($caminho.'cupom'.$_POST["edit"].'.png');
-            unlink($caminho.'cupom'.$_POST["edit"].'.jpg');
-
+            unlink($caminho.'cupom'.$_POST["old_img"]);
             move_uploaded_file($arquivo['tmp_name'],$caminho.$arquivo["name"]);
             img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
             $imagem = $arquivo['name'];
+            chmod($caminho.$arquivo["name"],0777);
         }
 
         $delivery = 0;
@@ -335,6 +356,12 @@
                                                 <input type="file" id="wizard-picture" name="wizard-picture" accept="image/x-png,image/jpeg">
                                                 <label class="choice" data-toggle="wizard-radio"  onclick="$('#wizard-picture').click();">
                                                     <input type="radio" name="imagem" value="upload">
+                                                    <?php
+                                                        if($imagem != "")
+                                                        {
+                                                    ?>
+                                                    <input type="hidden" name="old_img" value="<?php echo $imagem; ?>">
+                                                    <?php } ?>
                                                     <div class="card card-radios card-hover-effect">
                                                         <div class="picture">
                                                             <img src="" class="picture-src" id="wizardPicturePreview" title="">
