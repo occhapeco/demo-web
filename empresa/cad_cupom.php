@@ -396,30 +396,24 @@
                                             $types = json_decode($json);
                                             for($i=0;$i<count($types);$i++)
                                             {
-                                                $first = "checked";
-                                                $class_first = 'class="choice active"';
+                                                $check = "";
+                                                $class_check = 'class="choice"';
                                                 $selected = false;
                                                 if(count($type) > 0)
                                                 {
                                                     for($j=0;$j<count($type);$j++)
                                                         if($type[$j]->tipo_id == $types[$i]->id)
                                                         {
-                                                            $first = "";
-                                                            $class_first = 'class="choice"';
+                                                            $check = "checked";
+                                                            $class_check = 'class="choice active"';
                                                         }
                                                 }
-                                                elseif($i > 0)
-                                                {
-                                                    $first = "";
-                                                    $class_first = 'class="choice"';
-                                                }
-                                                
 
                                                 $str = "<p>".$types[$i]->nome."</p>";
                                         ?>
                                             <div class="col-sm-2">
-                                                <label <?php echo $class_first; ?> data-toggle="wizard-checkbox">
-                                                    <input type="checkbox" name="<?php echo $types[$i]->id; ?>" <?php echo $first; ?>>
+                                                <label <?php echo $class_check; ?> data-toggle="wizard-checkbox">
+                                                    <input type="checkbox" name="<?php echo $types[$i]->id; ?>" <?php echo $check; ?>>
                                                     <div class="card card-checkboxes card-hover-effect">
                                                         <?php echo $str; ?>
                                                     </div>
