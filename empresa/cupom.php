@@ -188,7 +188,7 @@
                                                 {
                                                     $total_concluidos += $usuario[$i]->preco_cupom;
                                             ?>
-                                                <td> <?php echo $usuario[$i]->id; ?> </td>
+                                                <td> - </td>
                                             <?php
                                                 }
                                             ?>
