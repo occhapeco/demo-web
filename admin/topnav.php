@@ -24,7 +24,7 @@
 						elseif($page == "cad_categoria")
                         {
                     ?>
-                        <p class="navbar-brand">Categoria de cupom</p>
+                        <p class="navbar-brand">Categoria de Ofertas</p>
                     <?php
                         }
                         elseif($page == "empresa")
@@ -36,13 +36,13 @@
                         elseif($page == "cupom")
                         {
                     ?>
-                        <p class="navbar-brand">Cupons</p>
+                        <p class="navbar-brand">Ofertas</p>
                     <?php
                         }
                         elseif($page == "detalhes")
                         {
                     ?>
-                        <p class="navbar-brand">Detalhes do cupom</p>
+                        <p class="navbar-brand">Detalhes da Oferta</p>
                     <?php
                         }
 						elseif($page == "financeiro")

@@ -85,7 +85,7 @@
                     <div class="row">
 						<div class="col-xs-12">
                             <div class="icon-big icon-warning text-center">
-                                <label><b>Novo cupom cadastrado!</b></label>
+                                <label><b>Nova oferta cadastrado!</b></label>
                             </div>
                         </div>
                         <div class="col-xs-3">

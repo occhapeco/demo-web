@@ -103,7 +103,7 @@
                 <li class="active">
                     <a href="#">
                         <i class="ti-bookmark-alt"></i>
-                        <p>Cupons</p>
+                        <p>Ofertas</p>
                     </a>
                 </li>
 			<?php
@@ -114,7 +114,7 @@
                 <li>
                     <a href="cupom.php">
                         <i class="ti-bookmark-alt"></i>
-                        <p>Cupons</p>
+                        <p>Ofertas</p>
                     </a>
                 </li>
             <?php

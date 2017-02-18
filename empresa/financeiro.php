@@ -86,8 +86,8 @@
 															<tr>
 																<th>Oferta</th>
 																<th>Prazo</th>
-																<th>Total de Cupons</th>
-																<th>Cupons Vend.</th>
+																<th>Total de Ofertas</th>
+																<th>Ofertas Vend.</th>
 																<th>Total Vendas</th>
 																<th>Comissão</th>
 															</tr>

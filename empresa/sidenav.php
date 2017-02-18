@@ -15,7 +15,7 @@
                 <li class="active">
                     <a href="#">
                         <i class="ti-layers-alt"></i>
-                        <p>Meus cupons</p>
+                        <p>Minhas Ofertas</p>
                     </a>
                 </li>
             <?php
@@ -26,7 +26,7 @@
                 <li>
                     <a href="index.php">
                         <i class="ti-layers-alt"></i>
-                        <p>Meus cupons</p>
+                        <p>Minhas Ofertas</p>
                     </a>
                 </li>
 			<?php
@@ -37,7 +37,7 @@
                 <li class="active">
                     <a href="#">
                         <i class="ti-bookmark-alt"></i>
-                        <p>Novo cupom</p>
+                        <p>Nova Oferta</p>
                     </a>
                 </li>
             <?php
@@ -48,7 +48,7 @@
                 <li>
                     <a href="cad_cupom.php">
                         <i class="ti-bookmark-alt"></i>
-                        <p>Novo cupom</p>
+                        <p>Nova Oferta</p>
                     </a>
                 </li>
             <?php

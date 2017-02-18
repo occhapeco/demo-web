@@ -302,7 +302,7 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
-                                                        <label>Número de cupons <small>(obrigatório)</small></label>
+                                                        <label>Número de ofertas <small>(obrigatório)</small></label>
                                                         <input name="quantidade" type="number" class="form-control" placeholder="50" aria-required="true" aria-invalid="false" value="<?php echo $quantidade; ?>" required><label id="quatidade-error" class="error" for="quatidade" style="display: none;"></label>
                                                     </div>
                                                 </div>

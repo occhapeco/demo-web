@@ -2,10 +2,14 @@
 	require_once("conectar_service.php");
 
 	$alert = "";
+	$telefone = "";
+	$celular = "";
 
 	if (isset($_POST["rua"]))
 	{
-		$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["descricao"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
+		$telefone = $_POST["ddd_telefone"].$_POST["telefone"];
+		$celular = $_POST["ddd_celular"].$_POST["celular"];
+		$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$celular,$_POST["descricao"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$telefone));
 		if($insert == 0)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ inválido!</b> Digite novamente.</span></div>';
 		elseif($insert == -1)
@@ -112,19 +116,27 @@
 											<div class="col-sm-6">
 												<div class="form-group">
 													<label>Razão Social/Nome <small>(obrigatório)</small></label>
-													<input type="text" class="form-control" name="razao_social" id="razao_social" placeholder="Digite a razão social" maxlength="20" required>
+													<input type="text" class="form-control" name="razao_social" id="razao_social" placeholder="Digite a razão social" maxlength="50" required>
 												</div>
 												<div class="form-group">
 													<label>Nome Fantasia <small></small></label>
-													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" maxlength="20">
+													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" maxlength="50">
 												</div>
 												<div class="form-group">
 													<label>CNPJ/CPF <small>(obrigatório)</small></label>
 													<input type="text" class="form-control" name="cnpj" id="cnpj" placeholder="Informe seu CNPJ" maxlength="18" required>
 												</div>
-												<div class="form-group">
-													<label>Telefone pessoal <small>(obrigatório)</small></label>
-													<input type="text" class="form-control" name="celular" id="celular" placeholder="Informe um telefone pessoal para contato" maxlength="14" required>
+												<div class="col-sm-3">
+													<div class="form-group">
+														<label>DDD</label>
+														<input type="text" class="form-control" name="ddd_celular" id="ddd_celular" maxlength="2" required>
+													</div>
+												</div>
+												<div class="col-sm-9">
+													<div class="form-group">
+														<label>Telefone pessoal <small>(obrigatório)</small></label>
+														<input type="text" class="form-control" name="celular" id="celular" placeholder="Informe um telefone pessoal para contato" maxlength="9" required>
+													</div>
 												</div>
 											</div>
 											<div class="col-sm-6">
@@ -219,11 +231,19 @@
 		                                            <input type="text" class="form-control" name="complemento" id="complemento" maxlength="20" placeholder="Próx. à escola">
 		                                        </div>
 		                                    </div>
-		                                    <div class="col-sm-6">
-		                                    	<div class="form-group">
-		                                            <label>Telefone do estabelecimento </label>
-		                                            <input type="text" class="form-control" name="telefone" id="telefone" maxlength="14" placeholder="Informe o telefone do estabelecimento">
-		                                        </div>
+		                                    <div class="col-sm-6">												
+												<div class="col-sm-3">
+													<div class="form-group">
+														<label>DDD</label>
+														<input type="text" class="form-control" name="ddd_telefone" id="ddd_telefone" maxlength="2" required>
+													</div>
+												</div>
+												<div class="col-sm-9">
+													<div class="form-group">
+														<label>Telefone do estabelecimento</label>
+														<input type="text" class="form-control" name="telefone" id="telefone" placeholder="Informe um telefone do estabelecimento" maxlength="11" required>
+													</div>
+												</div>
 		                                    </div>
 										</div>
 		                            </div>
@@ -320,8 +340,6 @@
 		});
 
 		jQuery(function($){
-		   $("#celular").mask("(99)99999-9999");
-		   $("#telefone").mask("(99)99999-9999");
 		   $("#cep").mask("99.999-999");
 		});
 

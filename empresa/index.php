@@ -80,7 +80,7 @@
             if(count($cupom) == 0)
             {
             ?>
-                <br><br><br><br><br><h2 class='text-center'>Você não possui cupons cadastrados. Para inserir um cupom <a href="cad_cupom.php">Clique aqui.</a></h^2>
+                <br><br><br><br><br><h2 class='text-center'>Você não possui ofertas cadastradas. Para inserir uma oferta <a href="cad_cupom.php">Clique aqui.</a></h^2>
             <?php
             }
             else{

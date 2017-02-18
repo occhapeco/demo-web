@@ -15,13 +15,13 @@
                         if($page == "index")
                         {
                     ?>
-                        <p class="navbar-brand">Meus cupons</p>
+                        <p class="navbar-brand">Minhas Ofertas</p>
                     <?php
                         }
                         elseif($page == "cad_cupom")
                         {
                     ?>
-                        <p class="navbar-brand">Cadastro de cupom</p>
+                        <p class="navbar-brand">Cadastro de ofertas</p>
                     <?php
                         }
 						elseif($page == "config")
@@ -45,7 +45,7 @@
                         elseif($page == "cupom")
                         {
                     ?>
-                        <p class="navbar-brand">Detalhes do cupom</p>
+                        <p class="navbar-brand">Detalhes da oferta</p>
                     <?php
                         }
                         elseif($page == "notificacoes")
