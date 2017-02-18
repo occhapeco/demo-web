@@ -504,7 +504,7 @@
 			$query = $conexao->query("SELECT token FROM usuario");
 			$tokens = array();
 			while($row = $query->fetch_assoc())
-				if($row["token"] != " ")
+				if($row["token"] != "")
 					$tokens[] = $row["token"];
 			if(count($tokens) > 0)
 				$resultado = json_decode(send_notification($tokens,$title,$body));
@@ -512,7 +512,24 @@
 			return $resultado->success;
 		}
 
+		function verificar_token($token)
+		{
+			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+			$query = $conexao->query('SET CHARACTER SET utf8');
+			$query = $conexao->query("SELECT * FROM admin");
+			$id = 0;
+			while($row = $query->fetch_assoc())
+				if(sha1($row["senha"].$row["email"].$row["id"]) == $token)
+				{
+					$id = $row["id"];
+					break;
+				}
+			$conexao->close();
+			return $id;
+		}
+
 	}
+
 
 	$server->register('admin.insert_cidade', array('cidade' => 'xsd:string','uf' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra uma nova cidade.');
 	$server->register('admin.insert_tipo', array('nome' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastra um novo tipo de cupom.');
@@ -533,6 +550,7 @@
 	$server->register('admin.select_tarifa', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona as tarifas das empresas.');
 	$server->register('admin.dar_baixa_tarifa', array('empresas' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Dá baixa em tarifas de empresas.');
 	$server->register('admin.notificar_usuarios', array('title' => 'xsd:string','body' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Envia uma notificação personalizada para todos os usuários.');
+	$server->register('admin.verificar_token', array('token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Verifica token do admin.');
 
 	class empresa
 	{
@@ -957,7 +975,7 @@
 	$server->register('empresa.select_nao_visualizadas', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Retorna numéro de notificações não visualizadas.');
 	$server->register('empresa.desativar_cupom', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa um cupom.');
 	$server->register('empresa.select_tarifa', array('empresa_id' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Selecina o total a ser pago no mês por cupons.');
-	$server->register('empresa.verificar_token', array('token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Verifica token de acesso.');
+	$server->register('empresa.verificar_token', array('token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Verifica token de acesso da empresa.');
 
 	class usuario
 	{
@@ -996,9 +1014,16 @@
 			$senha_nova = md5(sha1($senha_nova));
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
-			$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id AND senha = '$senha_antiga'");
+			$token = "error";
+			$query = $conexao->query("SELECT * FROM usuario WHERE id = $id AND senha = '$senha_antiga'");
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$token = sha1($row["senha"].$row["email"].$row["id"]);
+				$query = $conexao->query("UPDATE usuario SET senha = '$senha_nova' WHERE id = $id");
+			}
 			$conexao->close();
-			return $query;
+			return $token;
 		}
 
 		function update_token($id,$token)
@@ -1028,15 +1053,18 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'");
-			if($query->num_rows > 1 || $query->num_rows == 0)
-				return 0;
 			$dados = array();
-			$row = $query->fetch_assoc();
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$dados["id"] = $row["id"];
+				$dados["access_token"] = sha1($row["senha"].$row["email"].$row["id"]);
+			}
 			$conexao->close();
-			return $row["id"];
+			return json_encode($dados);
 		}
 
-		function select_cupons($usuario_id,$cidade,$delivery,$pagamento,$tipo_id)
+		function select_cupons($cidade,$delivery,$pagamento,$tipo_id)
 		{
 			$tipo_id = json_decode($tipo_id);
 			$str_tipo = "";
@@ -1078,11 +1106,14 @@
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("SELECT cupom.estado,cupom.regras,cupom.descricao,cupom.pagamento,cupom.delivery,cupom.imagem,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.telefone,endereco.latitude,endereco.longitude,empresa.nome_fantasia FROM cupom INNER JOIN endereco ON (endereco.id = cupom.endereco_id) INNER JOIN cidade ON(endereco.cidade_id = cidade.id) INNER JOIN empresa ON(empresa.id = cupom.empresa_id) WHERE cupom.id = $cupom_id");
 			$dados = array();
-			$row = $query->fetch_assoc();
-			$dados["detalhes"] = $row;
-			$query = $conexao->query("SELECT tipo.nome FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
-			while($row = $query->fetch_assoc())
-				$dados["tipos"][] = $row;
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$dados["detalhes"] = $row;
+				$query = $conexao->query("SELECT tipo.nome FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = $cupom_id");
+				while($row = $query->fetch_assoc())
+					$dados["tipos"][] = $row;
+			}
 			$conexao->close();
 			return json_encode($dados);
 		}
@@ -1161,7 +1192,7 @@
 
 	$server->register('usuario.insert', array('nome' => 'xsd:string','email' => 'xsd:string','senha' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Cadastro de usuário.');
 	$server->register('usuario.update_perfil', array('id' => 'xsd:integer','nome' => 'xsd:string','celular' => 'xsd:string','genero' => 'xsd:integer','nascimento' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar perfil do usuário.');
-	$server->register('usuario.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Alterar senha do usuário.');
+	$server->register('usuario.update_senha', array('id' => 'xsd:integer','senha_antiga' => 'xsd:string','senha_nova' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Alterar senha do usuário.');
 	$server->register('usuario.update_token', array('id' => 'xsd:integer','token' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Altera token do dispositivo do usuário.');
 	$server->register('usuario.redefinir_senha', array('id' => 'xsd:integer','senha_nova' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Redefinir senha do usuario.');
 	$server->register('usuario.login', array('email' => 'xsd:string','senha' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Realizar login do usuário.');
