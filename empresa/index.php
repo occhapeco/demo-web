@@ -3,9 +3,6 @@
     require_once("../conectar_service.php");
 
     $alert="";
-	$ativos=-1;
-	$inativos=-1;
-	$em_aprovacao=-1;
 
     $page = basename(__FILE__, '.php');
 
@@ -81,7 +78,7 @@
             <?php
             }
             else{
-               for($i = 0; $i<count($cupom); $i++)
+                for($i = 0; $i<count($cupom); $i++)
                 {
 					$preco_cupom = $cupom[$i]->preco_cupom;
 					$preco_normal = $cupom[$i]->preco_normal;
@@ -213,7 +210,7 @@
 					</div>';
 					}
                   }
-                }
+				}
                 ?>
 				<div class="col-sm-12">
 					<label>Pesquisa</label>
