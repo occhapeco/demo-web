@@ -3,9 +3,6 @@
     require_once("../conectar_service.php");
 
     $alert="";
-	$ativos=-1;
-	$inativos=-1;
-	$em_aprovacao=-1;
 
     $page = basename(__FILE__, '.php');
 
@@ -52,6 +49,7 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="../assets/css/themify-icons.css" rel="stylesheet">
+	
 
     <style type="text/css">
         label{
@@ -114,11 +112,11 @@
 									<hr />
 										<div class="pull-right" >
 											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
-												<input type="hidden" name="id_cupom" id="id_cupom" "value='.$cupom[$i]->id.'">
+												<input type="hidden" name="id_cupom" id="id_cupom" value='.$cupom[$i]->id.'>
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
 											<form action="cad_cupom.php" method="post" style="margin-left:250px;margin-top:-52">
-												<input type="hidden" name="cupom_id" id="cupom_id" "value='.$cupom[$i]->id.'">
+												<input type="hidden" name="cupom_id" id="cupom_id" value='.$cupom[$i]->id.'>
 												<button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button>
 											</form>
 											</div>
@@ -156,11 +154,11 @@
 									<hr />
 										<div class="pull-right" >
 											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
-												<input type="hidden" name="id_cupom" id="id_cupom" "value='.$cupom[$i]->id.'">
+												<input type="hidden" name="id_cupom" id="id_cupom" value='.$cupom[$i]->id.'>
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
 											<form action="cad_cupom.php" method="post" style=" margin-left:250px; margin-top:-52">
-												<input type="hidden" name="cupom_id" id="cupom_id" "value='.$cupom[$i]->id.'";>
+												<input type="hidden" name="cupom_id" id="cupom_id" value='.$cupom[$i]->id.'>
 												<button type="submit" class=" btn btn-primary btn-info" name="reutilizar" style="font-size:14px"><i class="ti-reload"></i> Reutilizar</button>
 											</form>
 											</div>
@@ -198,11 +196,11 @@
 									<hr />
 										<div class="pull-right" >
 											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
-												<input type="hidden" name="id_cupom" id="id_cupom" "value='.$cupom[$i]->id.'">
+												<input type="hidden" name="id_cupom" id="id_cupom" value='.$cupom[$i]->id.'>
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
 											<form action="#" method="post" style=" margin-left:250px; margin-top:-52">
-												<input type="hidden" name="cupom_id" id="cupom_id" "value='.$cupom[$i]->id.'";>
+												<input type="hidden" name="cupom_id" id="cupom_id" value='.$cupom[$i]->id.';>
 												<button type="submit" class=" btn btn-primary btn-danger" name="cancelar" style="font-size:14px"><i class="ti-close"></i> Desativar</button>
 											</form>
 											</div>
@@ -227,31 +225,23 @@
 				  <li><a data-toggle="pill" href="#menu1" style="color: #797979;">Inativos</a></li>
 				  <li><a data-toggle="pill" href="#menu2" style="color: #797979;">Em Aprovação</a></li>
 				</ul>
-				<div id="home" class="tab-pane fade in active">
+				<div class="tab-content">
+					<div id="home" class="tab-pane fade in active">
+						<?php
+							echo $ativos;
+						?>
+					</div>
+					<div id="menu1" class="tab-pane fade">
+						<?php
+							echo $inativos;
+						?>
+					</div>
+					<div id="menu2" class="tab-pane fade">
 					<?php
-					if($ativos != -1)
-					{
-						echo $ativos;
-					}
-					?>
-				</div>
-				<div id="menu1" class="tab-pane fade">
-					<?php
-					if($inativos != -1)
-					{
-						echo $inativos;
-					}
-					?>
-				</div>
-				<div id="menu2" class="tab-pane fade">
-				<?php
-					if($em_aprovacao != -1)
-					{
 						echo $em_aprovacao;
-					}
-				?>
+					?>
+					</div>
 				</div>
-                           
         </div>
 </div>
 

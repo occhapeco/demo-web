@@ -216,31 +216,23 @@
 				  <li><a data-toggle="pill" href="#menu1" style="color: #797979;">Inativos</a></li>
 				  <li><a data-toggle="pill" href="#menu2" style="color: #797979;">Em Aprovação</a></li>
 				</ul>
-				<div id="home" class="tab-pane fade in active">
+				<div class="tab-content">
+					<div id="home" class="tab-pane fade in active">
+						<?php
+							echo $ativos;
+						?>
+					</div>
+					<div id="menu1" class="tab-pane fade">
+						<?php
+							echo $inativos;
+						?>
+					</div>
+					<div id="menu2" class="tab-pane fade">
 					<?php
-					if($ativos != -1)
-					{
-						echo $ativos;
-					}
+							echo $em_aprovacao;
 					?>
-				</div>
-				<div id="menu1" class="tab-pane fade">
-					<?php
-					if($inativos != -1)
-					{
-						echo $inativos;
-					}
-					?>
-				</div>
-				<div id="menu2" class="tab-pane fade">
-				<?php
-					if($em_aprovacao != -1)
-					{
-						echo $em_aprovacao;
-					}
-				?>
-				</div>
-                         
+					</div>
+                </div>         
         </div>
 </div>
 
