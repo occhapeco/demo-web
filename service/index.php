@@ -990,6 +990,7 @@
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0,'')");
 			$dados = array();
+			$dados["id"] = 0;
 			if($query)
 			{
 				$dados["id"] = $conexao->insert_id;
