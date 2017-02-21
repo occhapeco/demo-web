@@ -50,6 +50,12 @@
 		if($_POST["metodo"] == "insert")
 			echo $usuario->insert($_POST["nome"],$_POST["email"],$_POST["senha"],$_POST["celular"],$_POST["genero"],$_POST["nascimento"]);
 	}
+	else
+	{
+		if($_POST["metodo"] == "redefinir_senha")
+			echo redefinir_senha($_POST["email"]);
+
+	}
 
 	if($classe == "admin")
 	{

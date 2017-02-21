@@ -8,7 +8,7 @@
 			$input = "<input type='hidden' name='empresa' value='$id'>";
 		else
 		{
-			$id = $service->call("empresa.verificar_token",array($_GET["token"]));
+			$id = $service->call("usuario.verificar_token",array($_GET["token"]));
 			if($id != 0)
 				$input = "<input type='hidden' name='usuario' value='$id'>";
 			else
