@@ -11,11 +11,14 @@
 			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
 			$query = $conexao->query('SET CHARACTER SET utf8');
 			$query = $conexao->query("INSERT INTO usuario VALUES(NULL,'$nome','$email','$senha','$celular',$genero,'$nascimento',0,'')");
-			$id = 0;
+			$dados = array();
 			if($query)
-		    	return $conexao->insert_id;
+			{
+				$dados["id"] = $conexao->insert_id;
+				$dados["access_token"] = sha1($senha.$email.$dados["id"]);
+			}
 			$conexao->close();
-			return $id;
+			return json_decode($dados);
 		}
 
 		function update_perfil($id,$nome,$celular,$genero,$nascimento)
