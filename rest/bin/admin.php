@@ -6,8 +6,7 @@
 			$cidade = preg_replace('![*#/\"´`]+!','',$cidade);
 			$uf = preg_replace('![*#/\"´`]+!','',$uf);
 
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("INSERT INTO cidade VALUES(NULL,'$cidade','$uf',0)");
 			$id = 0;
 			if($query)
@@ -20,8 +19,7 @@
 		{
 			$nome = preg_replace('![*#/\"´`]+!','',$nome);
 
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("INSERT INTO tipo VALUES(NULL,'$nome')");
 			$id = 0;
 			if($query)
@@ -33,8 +31,7 @@
 		function login($email,$senha)
 		{
 			$senha = md5(sha1($senha));
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT * FROM admin WHERE email = '$email' AND senha = '$senha'");
 			if($query->num_rows == 0)
 				return 0;
@@ -45,8 +42,7 @@
 
 		function select_cupons_avaliaveis()
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT cupom.id,cupom.imagem,cupom.empresa_id,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,empresa.nome_fantasia,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN empresa ON(cupom.empresa_id = empresa.id) WHERE cupom.estado = -1");
 			$dados = array();
 			$i = 0;
@@ -66,8 +62,7 @@
 
 		function select_cupons()
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT cupom.estado,cupom.id,cupom.imagem,cupom.empresa_id,cupom.titulo,cupom.regras,cupom.descricao,cupom.prazo,cupom.preco_normal,cupom.preco_cupom,cupom.quantidade,cupom.delivery,cupom.pagamento,cupom.endereco_id,cupom.data_cadastro,empresa.nome_fantasia,endereco.rua,endereco.num,endereco.complemento,endereco.cep,endereco.bairro,cidade.nome,cidade.uf,endereco.latitude,endereco.longitude,endereco.telefone FROM cupom INNER JOIN endereco ON(endereco.id = cupom.endereco_id) INNER JOIN cidade ON(cidade.id = endereco.cidade_id) INNER JOIN empresa ON(cupom.empresa_id = empresa.id) ORDER BY cupom.estado DESC");
 			$dados = array();
 			$i = 0;
@@ -88,8 +83,7 @@
 
 		function select_empresas($estado)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			if($estado == 0)
 				$estado = $estado." OR estado = -2";
 			$query = $conexao->query("SELECT * FROM empresa WHERE estado = $estado");
@@ -102,8 +96,7 @@
 
 		function select_cidades()
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT * FROM cidade");
 			$dados = array();
 			while($row = $query->fetch_assoc())
@@ -114,8 +107,7 @@
 
 		function desativar_cidade($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT cidade.id FROM cidade INNER JOIN endereco ON(endereco.cidade_id = cidade.id) INNER JOIN cupom ON(cupom.endereco_id = endereco.id) WHERE cidade.id = $id AND cupom.estado = 0");
 			$resultado = false;
 			if($query->num_rows == 0)
@@ -129,8 +121,7 @@
 
 		function ativar_cidade($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("UPDATE cidade SET estado = 0 WHERE id = $id");
 			$conexao->close();
 			return $query;
@@ -138,8 +129,7 @@
 
 		function delete_tipo($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT id FROM cupom_has_tipo WHERE tipo_id = $id");
 			$resultado = false;
 			if($query->num_rows == 0)
@@ -153,8 +143,7 @@
 
 		function aprovar_cupom($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("UPDATE cupom SET estado = 0 WHERE id = $id");
 			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,1,0)");
 			$conexao->close();
@@ -163,8 +152,7 @@
 
 		function recusar_cupom($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("UPDATE cupom SET estado = -2 WHERE id = $id");
 			$sub_query = $conexao->query("INSERT INTO notificacao VALUES(NULL,$id,0,0)");
 			$conexao->close();
@@ -173,8 +161,7 @@
 
 		function aprovar_empresa($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("UPDATE empresa SET estado = 0 WHERE id = $id");
 			if($query)
 			{
@@ -188,8 +175,7 @@
 
 		function recusar_empresa($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT email,nome_usuario FROM empresa WHERE id = $id");
 			$row = $query->fetch_assoc();
 			mandar_email($row["email"],"Cadastro recusado!","Caro ".$row["nome_usuario"].", <br>após analisarmos seus dados, o seu cadastro foi negado devido a algumas anormalidades em seus dados. Caso ainda queira participar do Clube de Ofertas, afetue seu cadastro novamente clicando <a href='http://clubedeofertas.net/cad_empresa.php'>aqui</a>.");
@@ -201,8 +187,7 @@
 
 		function bloquear_empresa($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("UPDATE empresa SET estado = -2 WHERE id = $id");
 			$conexao->close();
 			return $query;
@@ -210,8 +195,7 @@
 
 		function desbloquear_empresa($id)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("UPDATE empresa SET estado = 0 WHERE id = $id");
 			$conexao->close();
 			return $query;
@@ -219,8 +203,7 @@
 
 		function select_tarifa()
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT data_cadastro FROM empresa WHERE data_cadastro = (SELECT MIN(data_cadastro) FROM empresa)");
 			$row = $query->fetch_assoc();
 			$date = explode("-",$row["data_cadastro"]);
@@ -268,8 +251,7 @@
 		function dar_baixa_tarifa($empresas)
 		{
 			$empresas = json_decode($empresas);
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			for($i=0;$i<count($empresas->empresa);$i++)
 			{
 				$sub_query = $conexao->query("SELECT id FROM tarifa WHERE empresa_id = ".$empresas->empresa[$i]." AND data = '".$empresas->data."'");
@@ -282,8 +264,7 @@
 
 		function notificar_usuarios($title,$body)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT token FROM usuario");
 			$tokens = array();
 			while($row = $query->fetch_assoc())
@@ -297,8 +278,7 @@
 
 		function verificar_token($token)
 		{
-			$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-			$query = $conexao->query('SET CHARACTER SET utf8');
+			$conexao = conectar();
 			$query = $conexao->query("SELECT * FROM admin");
 			$id = 0;
 			while($row = $query->fetch_assoc())

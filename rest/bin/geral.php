@@ -1,4 +1,11 @@
 <?php
+	function conectar()
+	{
+		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
+		$query = $conexao->query('SET CHARACTER SET utf8');
+		return $conexao;
+	}
+
 	function send_notification($tokens,$title,$body)
 	{
 		$url = 'https://fcm.googleapis.com/fcm/send';
@@ -130,8 +137,7 @@
 
 	function query($sql_query)
 	{
-		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-		$query = $conexao->query('SET CHARACTER SET utf8');
+		$conexao = conectar();
 		$query = $conexao->query($sql_query);
 		$dados = array();
 		while($row = $query->fetch_assoc())
@@ -142,8 +148,7 @@
 
 	function select_cidades()
 	{
-		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-		$query = $conexao->query('SET CHARACTER SET utf8');
+		$conexao = conectar();
 		$query = $conexao->query("SELECT * FROM cidade WHERE estado = 0");
 		$dados = array();
 		while($row = $query->fetch_assoc())
@@ -154,8 +159,7 @@
 
 	function select_tipos()
 	{
-		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-		$query = $conexao->query('SET CHARACTER SET utf8');
+		$conexao = conectar();
 		$query = $conexao->query("SELECT * FROM tipo");
 		$dados = array();
 		while($row = $query->fetch_assoc())
@@ -166,8 +170,7 @@
 
 	function redefinir_senha($email)
 	{
-		$conexao = mysqli_connect("clubedofertas.mysql.dbaas.com.br","clubedofertas","Reiv567123@","clubedofertas");
-		$query = $conexao->query('SET CHARACTER SET utf8');
+		$conexao = conectar();
 		$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email'");
 		$token = "";
 		$resultado = false;
@@ -199,5 +202,28 @@
 
 		$conexao->close();
 		return $resultado;
+	}
+
+	function isset_email($email)
+	{
+		$result = false;
+		$conexao = conectar();
+		$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email'");
+		if($query->num_rows > 0)
+			$result = true;
+		else
+		{
+			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email'");
+			if($query->num_rows > 0)
+				$result = true;
+			else
+			{
+				$query = $conexao->query("SELECT * FROM admin WHERE email = '$email'");
+				if($query->num_rows > 0)
+					$result = true;
+			}
+		}
+		$conexao->close();
+		return $result;
 	}
 ?>
