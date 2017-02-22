@@ -4,7 +4,7 @@
 
     $page = basename(__FILE__, '.php');
 
-    $json_dados = $service->call('empresa.visualizar', array($_SESSION["id"]));
+    $json_dados = $service->call('empresa.visualizar', array($_SESSION["empresa_id"]));
 ?>
 <html lang="pt">
 <head>
@@ -50,7 +50,7 @@
 
         <div class="content">
          <?php
-            $json_dados = $service->call('empresa.select_notificacoes', array($_SESSION["id"]));
+            $json_dados = $service->call('empresa.select_notificacoes', array($_SESSION["empresa_id"]));
             $notificacoes = json_decode($json_dados);
             if(count($notificacoes) == 0)
             {

@@ -19,16 +19,14 @@
 			{
 				session_start();
 				$admin = json_decode($json);
-				$_SESSION["id"] = $admin->id;
-				$_SESSION["tipo"] = "admin";
+				$_SESSION["admin_id"] = $admin->id;
 				header("location: admin/");
 			}
 		}
 		elseif($empresa->estado == 0)
 		{
 			session_start();
-			$_SESSION["id"] = $empresa->id;
-			$_SESSION["tipo"] = "empresa";
+			$_SESSION["empresa_id"] = $empresa->id;
 			header("location: empresa/");
 		}
 		elseif($empresa->estado == -1)

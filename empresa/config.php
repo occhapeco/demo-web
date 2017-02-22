@@ -6,7 +6,7 @@
 
     $alert="";
 
-    $editar = $service->call('empresa.select_perfil', array($_SESSION["id"]));
+    $editar = $service->call('empresa.select_perfil', array($_SESSION["empresa_id"]));
     $perfil = json_decode($editar);
     $nome_usuario = $perfil->nome_usuario;
     $razao_social = $perfil->razao_social;	
@@ -17,7 +17,7 @@
     //Post enviado desta página para confirmar a edição
     if(isset($_POST["editar_perfil"]))
     {
-       if ($update = $service->call('empresa.update_perfil', array($_SESSION["id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"],$_POST["descricao"])))
+       if ($update = $service->call('empresa.update_perfil', array($_SESSION["empresa_id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"],$_POST["descricao"])))
        {
    	        $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Perfil alterado com sucesso!</b></span></div>';
        }
@@ -31,7 +31,7 @@
     {
     	if($_POST["nova_senha"] == $_POST["nova_senha1"])
     	{	
-	        if ($update = $service->call('empresa.update_senha', array($_SESSION["id"],$_POST["senha_atual"],$_POST["nova_senha"])))
+	        if ($update = $service->call('empresa.update_senha', array($_SESSION["empresa_id"],$_POST["senha_atual"],$_POST["nova_senha"])))
 	        {
 	            $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Senha alterada com sucesso!</b></span></div>';
 	        }

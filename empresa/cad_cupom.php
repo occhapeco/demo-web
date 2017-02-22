@@ -61,7 +61,7 @@
             if(isset($_POST[$type[$i]->id]))
                 $types[] = $type[$i]->id;
 
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["empresa_id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
 
         $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
         $arquivo = $_FILES['wizard-picture'];
@@ -97,7 +97,7 @@
             if(isset($_POST[$type[$i]->id]))
                 $types[] = $type[$i]->id;
 
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $insert = $service->call('empresa.insert_cupom',array($_SESSION["empresa_id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
         $imagem = $_POST["imagem"];
         $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
         if($imagem == "upload")
@@ -351,7 +351,7 @@
                                         <div class="row">
                                         <div class="col-sm-12  text-center"><label>Selecione o endereço desta oferta</label></div>
                                         <?php
-                                            $json = $service->call("empresa.select_enderecos",array($_SESSION["id"]));
+                                            $json = $service->call("empresa.select_enderecos",array($_SESSION["empresa_id"]));
                                             $endereco = json_decode($json);
                                             for($i=0;$i<count($endereco);$i++)
                                             {

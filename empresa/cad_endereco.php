@@ -17,7 +17,7 @@
 
     if(isset($_POST["cadastrar"]))
     {
-        $insert = $service->call('empresa.insert_endereco',array($_SESSION["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
+        $insert = $service->call('empresa.insert_endereco',array($_SESSION["empresa_id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
         if ($insert > 0)
             header("location: meus_enderecos.php");
         else

@@ -50,7 +50,7 @@
 					<div class="panel-group" id="faqAccordion">
 					
 						<?php
-							$json_dados = $service->call('empresa.select_tarifa', array($_SESSION["id"]));
+							$json_dados = $service->call('empresa.select_tarifa', array($_SESSION["empresa_id"]));
 							$tarifa = json_decode($json_dados);
 							$total_venda = "";
 							$total_comissao = "";

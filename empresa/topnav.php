@@ -1,5 +1,5 @@
 <?php
-    $num = $service->call('empresa.select_nao_visualizadas', array($_SESSION["id"]));
+    $num = $service->call('empresa.select_nao_visualizadas', array($_SESSION["empresa_id"]));
 ?>
     <div class="main-panel">
         <nav class="navbar navbar-default">

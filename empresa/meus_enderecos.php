@@ -48,7 +48,7 @@
 
         <div class="content">
          <?php
-            $json_dados = $service->call('empresa.select_enderecos', array($_SESSION["id"]));
+            $json_dados = $service->call('empresa.select_enderecos', array($_SESSION["empresa_id"]));
             $endereco = json_decode($json_dados);
             for($i = 0; $i<count($endereco); $i++)
             {

@@ -68,7 +68,7 @@
         <div class="content">
             
             <?php
-            $json_dados = $service->call('empresa.select_cupons', array($_SESSION["id"]));
+            $json_dados = $service->call('empresa.select_cupons', array($_SESSION["empresa_id"]));
             $cupom = json_decode($json_dados);
             $estado = "";
 			$desconto = "";
