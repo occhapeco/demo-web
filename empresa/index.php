@@ -55,6 +55,9 @@
         label{
             margin-right:5px;
         }
+        .tab-pane{
+            margin-top:20px;
+        }
     </style>
 </head>
 <body>
@@ -72,6 +75,9 @@
             $cupom = json_decode($json_dados);
             $estado = "";
 			$desconto = "";
+            $em_aprovacao = "";
+            $inativos = "";
+            $ativos = "";
             if(count($cupom) == 0)
             {
             ?>
@@ -84,7 +90,7 @@
 					$preco_cupom = $cupom[$i]->preco_cupom;
 					$preco_normal = $cupom[$i]->preco_normal;
 					$desconto = (($preco_normal - $preco_cupom)*100)/$preco_normal;
-                     if ($cupom[$i]->estado == -1)
+                    if ($cupom[$i]->estado == -1)
                     {
                         $estado = "Enviado para aprovação";
 						$em_aprovacao .= '<div class="col-md-6 col-sm-6 bloco">
@@ -228,17 +234,26 @@
 				<div class="tab-content">
 					<div id="home" class="tab-pane fade in active">
 						<?php
-							echo $ativos;
+                            if($ativos != "")
+                                echo $ativos;
+                            else
+                                echo "<br><br><h3 class='text-center'>Sem cupons ativos.</h3>";
 						?>
 					</div>
 					<div id="menu1" class="tab-pane fade">
 						<?php
-							echo $inativos;
+                            if($inativos != "")
+                                echo $inativos;
+                            else
+                                echo "<br><br><h3 class='text-center'>Sem cupons inativos.</h3>";
 						?>
 					</div>
 					<div id="menu2" class="tab-pane fade">
 					<?php
-						echo $em_aprovacao;
+                        if($em_aprovacao != "")
+                            echo $em_aprovacao;
+                        else
+                            echo "<br><br><h3 class='text-center'>Sem cupons para aprovação.</h3>";
 					?>
 					</div>
 				</div>

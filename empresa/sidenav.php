@@ -119,6 +119,19 @@
                 </li>
             <?php
                 }
+                if(isset($_SESSION["admin_id"]) && $_SESSION["admin_id"] > 0)
+                {
+            ?>
+                <li>
+                    <a href="../admin/empresa.php" style="color:red;">
+                        <i class="ti-arrow-left"></i>
+                        <p>Voltar para Admin</p>
+                    </a>
+                </li>
+            <?php
+                }
+                else
+                {
             ?>
                 <li>
                     <a href="../logout.php">
@@ -126,6 +139,10 @@
                         <p>Logout</p>
                     </a>
                 </li>
+            <?php
+                }
+            ?>
+
             </ul>
     	</div>
     </div>

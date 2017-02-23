@@ -12,7 +12,13 @@
                         <span class="icon-bar bar3"></span>
                     </button>
                     <?php 
-                        if($page == "index")
+                        if(isset($_SESSION["admin_id"]) && $_SESSION["admin_id"] > 0)
+                        {
+                    ?>
+                    <a href="../admin/empresa.php" class="btn btn-primary btn-danger" name="painel" style="margin-left:10px;font-size: 14px"><i class="ti-arrow-left"></i> Voltar Admin</a>
+                    <?php
+                        }
+                        elseif($page == "index")
                         {
                     ?>
                         <p class="navbar-brand">Minhas Ofertas</p>

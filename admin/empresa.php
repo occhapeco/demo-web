@@ -14,6 +14,11 @@
         $bool = $service->call('admin.desbloquear_empresa', array($_POST["empresa_id"]));
         header("location: empresa.php");
     }
+    if(isset($_POST["painel"]))
+    {
+    	$_SESSION["empresa_id"] = $_POST["empresa_id"];
+    	header("location: ../empresa");
+    }
 ?>
 <html lang="pt">
 <head>
@@ -64,8 +69,7 @@
 								<th>Razão Social</th>
 								<th>CNPJ/CPF</th>
 								<th>Telefone</th>
-								<th>Endereços</th>
-								<th>Ação</th>
+								<th>Opções</th>
 							</tr>
 							<tbody>
 								<?php
@@ -85,11 +89,10 @@
 								?>
 								<tr>
 									<td>
-										<a data-toggle="modal" href="#myModal" onclick = "passar_dados('<?php echo $empresa[$i]->razao_social?>','<?php echo $empresa[$i]->nome_fantasia?>','<?php echo $empresa[$i]->cnpj?>','<?php echo $empresa[$i]->email?>','<?php echo $empresa[$i]->celular?>','<?php echo $empresa[$i]->descricao?>','<?php echo $enderecos?>');" style="color:#66615B"><?php echo $empresa[$i]->razao_social; ?></a>
+										<a data-toggle="modal" href="#myModal" style="font-weight: bold;" onclick = "passar_dados('<?php echo $empresa[$i]->razao_social?>','<?php echo $empresa[$i]->nome_fantasia?>','<?php echo $empresa[$i]->cnpj?>','<?php echo $empresa[$i]->email?>','<?php echo $empresa[$i]->celular?>','<?php echo $empresa[$i]->descricao?>','<?php echo $enderecos?>');" style="color:#66615B"><?php echo $empresa[$i]->razao_social; ?></a>
 									</td>
 									<td><?php echo $empresa[$i]->cnpj; ?></td>
 									<td><?php echo $empresa[$i]->celular; ?></td>
-									<td><?php echo $enderecos; ?></td>
 								<?php
 									if($empresa[$i]->estado == 0) 
 									{
@@ -97,7 +100,11 @@
 									<td>
 										<form action="#" method="post">
 											<input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
-											<button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px"><i class="ti-lock"></i> Bloquear</button>
+											<button class=" btn btn-primary btn-info" name="painel" style="font-size: 16px"><i class="ti-new-window"></i> Acessar painel</button>
+										</form>
+										<form action="#" method="post" style="margin-left:180px;margin-top:-57px">
+											<input type="hidden" name="empresa_id" id="empresa_id" <?php echo "value='".$empresa[$i]->id."'"; ?>>
+											<button class=" btn btn-primary btn-danger" name="bloquear" style="font-size: 16px">&nbsp&nbsp&nbsp&nbsp&nbsp<i class="ti-lock"></i>&nbspBloquear&nbsp&nbsp&nbsp&nbsp&nbsp</button>
 										</form>
 									</td>
 								<?php
