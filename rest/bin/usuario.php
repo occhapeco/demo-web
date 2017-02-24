@@ -21,7 +21,7 @@
 				$dados["access_token"] = sha1($senha.$email.$dados["id"]);
 			}
 			$conexao->close();
-			return json_decode($dados);
+			return json_encode($dados);
 		}
 
 		function update_perfil($id,$nome,$celular,$genero,$nascimento)
