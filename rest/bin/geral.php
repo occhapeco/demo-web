@@ -208,21 +208,25 @@
 	{
 		$result = false;
 		$conexao = conectar();
+
 		$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email'");
-		if($query->num_rows > 0)
+		if($query && $query->num_rows > 0)
 			$result = true;
-		else
+		
+		if(!$result)
 		{
 			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email'");
-			if($query->num_rows > 0)
+			if($query && $query->num_rows > 0)
 				$result = true;
-			else
-			{
-				$query = $conexao->query("SELECT * FROM admin WHERE email = '$email'");
-				if($query->num_rows > 0)
-					$result = true;
-			}
 		}
+
+		if(!$result)
+		{
+			$query = $conexao->query("SELECT * FROM admin WHERE email = '$email'");
+			if($query && $query->num_rows > 0)
+				$result = true;
+		}
+		
 		$conexao->close();
 		return $result;
 	}

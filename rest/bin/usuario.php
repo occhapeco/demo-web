@@ -8,7 +8,7 @@
 			$celular = preg_replace('![*#/\"´`]+!','',$celular);
 			$senha = md5(sha1($senha));
 
-			if(isset_email($email));
+			if(isset_email($email))
 				return -1;
 
 			$conexao = conectar();
