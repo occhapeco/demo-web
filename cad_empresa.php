@@ -13,8 +13,10 @@
 		if($insert == 0)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ inválido!</b> Digite novamente.</span></div>';
 		elseif($insert == -1)
-			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email ou CNPJ já cadastrados!</b> Reveja seus dados.</span></div>';
+			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email já cadastrado!</b> Reveja seus dados.</span></div>';
 		elseif($insert == -2)
+			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ já cadastrado!</b> Reveja seus dados.</span></div>';
+		elseif($insert == -3)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
 		else
 			header("location: aprovacao.php?id=$insert");

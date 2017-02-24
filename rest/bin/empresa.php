@@ -22,7 +22,7 @@
 			$conexao = conectar();
 			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular','$descricao','$data_cadastro',0,-1)");
 			if(!$query)
-		    	return -1;
+		    	return -2;
 		    $empresa_id = $conexao->insert_id;
 		    $rua = preg_replace('![*#/\"´`]+!','',$rua);
 		    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
@@ -34,7 +34,7 @@
 		    if(!$query)
 		    {
 		    	$sub_query = $conexao->query("DELETE FROM empresa WHERE id = $empresa_id");
-		    	return -2;
+		    	return -3;
 		    }
 			$conexao->close();
 			mandar_email($email,"Solicitação de cadastro enviada.","Caro $nome_usuario, <br>sua solicitação de cadastro foi enviada com sucesso. Assim que um dos nossos administradores analisarem seus dados, retornaremos a resposta. Obrigado por escolher o Clube de Ofertas!");
