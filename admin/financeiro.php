@@ -78,23 +78,22 @@
 						<?php
 							$json_dados = $service->call('admin.select_tarifa', array());
 							$tarifa = json_decode($json_dados);
-							$total_venda = 0;
-							$total_comissao = 0;
-							$comissao_areceber = 0;
-							$comissao_recebida = 0;
 							for($i = 0; $i<count($tarifa); $i++)
 							{
-								
+								$total_venda = 0;
+								$total_comissao = 0;
+								$comissao_areceber = 0;
+								$comissao_recebida = 0;
 								
 								for($j=0; $j<count($tarifa[$i]->empresa); $j++)
 								{
-									$total_comissao += $tarifa[$i]->empresa[$j]->comissao;	
+									$total_venda += $tarifa[$i]->empresa[$j]->total_venda;
+									$total_comissao += $tarifa[$i]->empresa[$j]->comissao;
 								}
-								
-														
-								$total_comissao = number_format( $total_comissao , 2, '.', '');
-																		
-						?>
+
+								$total_venda = number_format($total_venda, 2, '.', '');
+								$total_comissao = number_format($total_comissao, 2, '.', '');	
+							?>
 									<div class="panel panel-default">
 										<div <?php if ($i==count($tarifa)-1) {?> class="panel-heading accordion-toggle question-toggle" aria-expanded="true" <?php } else { ?> class="panel-heading accordion-toggle question-toggle collapsed" aria-expanded="false" <?php } ?>  data-toggle="collapse" data-parent="#faqAccordion" data-target="#question<?php echo $i ?>">
 											<h4 class="panel-title">
