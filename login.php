@@ -81,7 +81,8 @@
 		}
 
 	</style>
-
+	
+	<link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
 </head>
 
 <body>
