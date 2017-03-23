@@ -105,6 +105,17 @@
 			return json_encode($dados);
 		}
 
+		function select_usuarios()
+		{
+			$conexao = conectar();
+			$query = $conexao->query("SELECT * FROM usuario");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
 		function desativar_cidade($id)
 		{
 			$conexao = conectar();

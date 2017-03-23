@@ -325,6 +325,17 @@
 			return json_encode($dados);
 		}
 
+		function select_usuarios()
+		{
+			$conexao = conectar();
+			$query = $conexao->query("SELECT * FROM usuario");
+			$dados = array();
+			while($row = $query->fetch_assoc())
+				$dados[] = $row;
+			$conexao->close();
+			return json_encode($dados);
+		}
+
 		function desativar_cidade($id)
 		{
 			$conexao = conectar();
@@ -521,6 +532,7 @@
 	$server->register('admin.select_cupons', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todos os cupons.');
 	$server->register('admin.select_empresas', array('estado' => 'xsd:integer'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona empresas de acordo com o estado informado.');
 	$server->register('admin.select_cidades', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todas as cidades.');
+	$server->register('admin.select_usuarios', array(), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona todos os usuários do app.');
 	$server->register('admin.desativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Desativa uma cidade.');
 	$server->register('admin.ativar_cidade', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Ativa uma cidade.');
 	$server->register('admin.delete_tipo', array('id' => 'xsd:integer'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Deleta um tipo de cupom.');
