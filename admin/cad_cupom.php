@@ -463,8 +463,8 @@
 
             var dia = 24*60*60*1000;
             var dias = (prazo.getTime() - agora.getTime())/(dia);
-            return dias < 3 && dias > 0;
-        }, "Máximo de 3 dias!");
+            return dias < 4 && dias > 0;
+        }, "Máximo de 4 dias!");
 
         $('#frm').validate({
             rules : {
