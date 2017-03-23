@@ -4,8 +4,7 @@
 
     $page = basename(__FILE__, '.php');
 
-    $id_cupom = $_GET["id_cupom"];
-    $alert = "";
+    $id_cupom = $_POST["id_cupom"];
 
 ?>
 <html lang="pt">
@@ -47,7 +46,6 @@
 	<?php 
         require_once("sidenav.php");
         require_once("topnav.php");
-        echo $alert;
     ?>
 
         <div class="content">
@@ -126,54 +124,52 @@
                 <div class="card">
                     <div class="content">
                        <div class="content table-responsive table-full-width">
-                            <form method="POST" action="cupom.php?id_cupom=<?php echo $id_cupom; ?>">
-                                <table class="table table-striped">
-                                    <thead>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Celular</th>
+                                        <th>Valor</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                    <tbody>
+                                        <?php
+                                            $select = $service->call('empresa.select_usuarios', array($id_cupom));
+                                            $usuario = json_decode($select);
+                                            $total_concluidos = 0;
+                                            $total = 0;
+                                            for($i = 0; $i<count($usuario); $i++)
+                                            {
+                                                $total += $usuario[$i]->preco_cupom;
+                                        ?>
                                         <tr>
-                                            <th>Nome</th>
-                                            <th>Celular</th>
-                                            <th>Valor</th>
-                                            <th>Estado</th>
+                                            <td><?php echo $usuario[$i]->nome; ?></td>
+                                            <td><?php echo $usuario[$i]->celular; ?></td>
+                                            <td>R$<?php echo $usuario[$i]->preco_cupom; ?></td>
+                                        <?php
+                                            if($usuario[$i]->estado == 0)
+                                            {
+                                        ?>
+                                            <td>Não concluído</td>
+                                        <?php
+                                            }
+                                            else
+                                            {
+                                                $total_concluidos += $usuario[$i]->preco_cupom;
+                                        ?>
+                                            <td>Concluído</td>
+                                        <?php
+                                            }
+                                        ?>
                                         </tr>
-                                        <tbody>
-                                            <?php
-                                                $select = $service->call('empresa.select_usuarios', array($id_cupom));
-                                                $usuario = json_decode($select);
-                                                $total_concluidos = 0;
-                                                $total = 0;
-                                                for($i = 0; $i<count($usuario); $i++)
-                                                {
-                                                    $total += $usuario[$i]->preco_cupom;
-                                            ?>
-                                            <tr>
-                                                <td><?php echo $usuario[$i]->nome; ?></td>
-                                                <td><?php echo $usuario[$i]->celular; ?></td>
-                                                <td>R$<?php echo $usuario[$i]->preco_cupom; ?></td>
-                                            <?php
-                                                if($usuario[$i]->estado == 0)
-                                                {
-                                            ?>
-                                                <td>Não concluído</td>
-                                            <?php
-                                                }
-                                                else
-                                                {
-                                                    $total_concluidos += $usuario[$i]->preco_cupom;
-                                            ?>
-                                                <td>Concluído</td>
-                                            <?php
-                                                }
-                                            ?>
-                                            </tr>
-                                            <?php
-                                                }
-                                            ?>
-                                        </tbody>
-                                    </thead>
-                                </table>
-                                <label>Total: </label><label style="color:#252422">R$<?php echo $total; ?></label>
-                                <label>Total concluídos: </label><label style="color:#252422">R$<?php echo $total_concluidos; ?></label>
-                            </form>
+                                        <?php
+                                            }
+                                        ?>
+                                    </tbody>
+                                </thead>
+                            </table>
+                            <label>Total: </label><label style="color:#252422">R$<?php echo $total; ?></label>
+                            <label>Total concluídos: </label><label style="color:#252422">R$<?php echo $total_concluidos; ?></label>
                         </div>          
                     </div>
                 </div>

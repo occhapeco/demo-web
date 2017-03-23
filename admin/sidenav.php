@@ -163,6 +163,28 @@
                 </li>
             <?php
                 }
+                if($page == "usuarios")
+                {
+            ?>
+                <li class="active">
+                    <a href="#">
+                        <i class="ti-user"></i>
+                        <p>Usuários</p>
+                    </a>
+                </li>
+            <?php
+                }
+            else
+                {
+            ?>
+                <li>
+                    <a href="usuarios.php">
+                        <i class="ti-user"></i>
+                        <p>Usuários</p>
+                    </a>
+                </li>
+            <?php
+                }
             ?>
                 <li>
                     <a href="../logout.php">

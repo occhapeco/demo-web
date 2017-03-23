@@ -2,7 +2,9 @@
     require_once("permissao.php");
     require_once("../conectar_service.php");
 
-    $alert="";
+    $ativos="";
+    $inativos="";
+    $em_aprovacao="";
 
     $page = basename(__FILE__, '.php');
 
@@ -100,6 +102,7 @@
 									<div class="col-sm-8">
 										<div class="numbers">
 											<p style="font-size:18px;">'. $cupom[$i]->titulo .'</p>
+											<p style="font-size:18px;">Empresa: '. $nome_emp .'</p>
 											<p style="color: #aaa">'. $cupom[$i]->descricao .'</p>
 											<p style="color: #aaa">Válido de '. $cupom[$i]->data_cadastro .' até '. $cupom[$i]->prazo .'</p>
 											<p style="color: #aaa">'. $estado .'</p>
@@ -109,12 +112,12 @@
 								<div class="footer status">
 									<hr />
 										<div class="pull-right" >
-											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
-												<input type="hidden" name="id_cupom" id="id_cupom" "value='.$cupom[$i]->id.'">
+											<form action="detalhes.php" method="post" style="margin-left:150px;margin-top:15">
+												<input type="hidden" name="id_cupom" id="id_cupom" value="'.$cupom[$i]->id.'">
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
 											<form action="cad_cupom.php" method="post" style="margin-left:250px;margin-top:-52">
-												<input type="hidden" name="cupom_id" id="cupom_id" "value='.$cupom[$i]->id.'">
+												<input type="hidden" name="cupom_id" id="cupom_id" value="'.$cupom[$i]->id.'">
 												<button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button>
 											</form>
 										</div>
@@ -142,6 +145,7 @@
 									<div class="col-sm-8">
 										<div class="numbers">
 											<p style="font-size:18px;">'. $cupom[$i]->titulo .'</p>
+											<p style="font-size:18px;">Empresa: '. $nome_emp .'</p>
 											<p style="color: #aaa">'. $cupom[$i]->descricao .'</p>
 											<p style="color: #aaa">Válido de '. $cupom[$i]->data_cadastro .' até '. $cupom[$i]->prazo .'</p>
 											<p style="color: #aaa">'. $estado .'</p>
@@ -151,8 +155,8 @@
 								<div class="footer status">
 									<hr />
 										<div class="pull-right" >
-											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
-												<input type="hidden" name="id_cupom" id="id_cupom" "value='.$cupom[$i]->id.'">
+											<form action="detalhes.php" method="post" style="margin-left:150px;margin-top:15">
+												<input type="hidden" name="id_cupom" id="id_cupom" value="'.$cupom[$i]->id.'">
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
 											</div>
@@ -180,6 +184,7 @@
 									<div class="col-sm-8">
 										<div class="numbers">
 											<p style="font-size:18px;">'. $cupom[$i]->titulo .'</p>
+											<p style="font-size:18px;">Empresa: '. $nome_emp .'</p>
 											<p style="color: #aaa">'. $cupom[$i]->descricao .'</p>
 											<p style="color: #aaa">Válido de '. $cupom[$i]->data_cadastro .' até '. $cupom[$i]->prazo .'</p>
 											<p style="color: #aaa">'. $estado .'</p>
@@ -188,13 +193,13 @@
 								</div>
 								<div class="footer status">
 									<hr />
-										<div class="pull-right" >
-											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
-												<input type="hidden" name="id_cupom" id="id_cupom" "value='.$cupom[$i]->id.'">
+										<div class="pull-right" style="width: 241px; display: inline-block;">
+											<form action="detalhes.php" method="post" style="margin-top:15; display: inline-block;">
+												<input type="hidden" name="id_cupom" id="id_cupom" value="'.$cupom[$i]->id.'">
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
-											<form action="#" method="post" style=" margin-left:250px; margin-top:-52">
-												<input type="hidden" name="cupom_id" id="cupom_id" "value='.$cupom[$i]->id.'";>
+											<form action="#" method="post" style=" margin-left:100px; margin-top:-81; display: inline-block;">
+												<input type="hidden" name="cupom_id" id="cupom_id" value="'.$cupom[$i]->id.'";>
 												<button type="submit" class=" btn btn-primary btn-danger" name="cancelar" style="font-size:14px"><i class="ti-close"></i> Desativar</button>
 											</form>
 											</div>

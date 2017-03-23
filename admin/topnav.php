@@ -56,6 +56,11 @@
                     ?>
                         <p class="navbar-brand">Notificar usuários</p>
                     <?php
+                        }elseif($page == "usuarios")
+                        {
+                    ?>
+                        <p class="navbar-brand">Usuários</p>
+                    <?php
                         }
                     ?>
                 </div>
