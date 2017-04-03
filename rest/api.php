@@ -200,8 +200,8 @@
 		if($metodo == "update_token")
 			echo $usuario->update_token($_POST["id"],$_POST["token"]);
 
-		if($metodo == "refefinir_senha")
-			echo $usuario->refefinir_senha($_POST["id"],$_POST["senha"]);
+		if($metodo == "redefinir_senha")
+			echo $usuario->redefinir_senha($_POST["id"],$_POST["senha"]);
 
 		if($metodo == "select_cupons")
 			echo $usuario->select_cupons($_POST["cidade_id"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);

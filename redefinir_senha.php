@@ -3,12 +3,18 @@
 	if(isset($_GET["token"]))
 	{
 		require_once("conectar_service.php");
-		$id = $service->call("empresa.verificar_token",array($_GET["token"]));
+		$data = array(
+	        'access_token' => $_GET["token"],
+			'classe' => 'empresa',
+	        'metodo' => 'verificar_token'
+		);
+		$id = call($data);
 		if($id != 0)
 			$input = "<input type='hidden' name='empresa' value='$id'>";
 		else
 		{
-			$id = $service->call("usuario.verificar_token",array($_GET["token"]));
+			$data['classe'] = 'usuario';
+			$id = call($data);
 			if($id != 0)
 				$input = "<input type='hidden' name='usuario' value='$id'>";
 			else
@@ -20,12 +26,26 @@
 
 	if(isset($_POST["empresa"]))
 	{
-		$id = $service->call("empresa.redefinir_senha",array($_POST["empresa"],$_POST["senha"]));
+		$data = array(
+	        'access_token' => $_GET["token"],
+			'classe' => 'empresa',
+	        'metodo' => 'redefinir_senha',
+	        'id' => $_POST["empresa"],
+	        'senha_nova' => $_POST["senha"]
+		);
+		$result = call($data);
 		header("location: login.php");
 	}
 	elseif(isset($_POST["usuario"]))
 	{
-		$id = $service->call("usuario.redefinir_senha",array($_POST["usuario"],$_POST["senha"]));
+		$data = array(
+	        'access_token' => $_GET["token"],
+			'classe' => 'usuario',
+	        'metodo' => 'redefinir_senha',
+	        'id' => $_POST["usuario"],
+	        'senha_nova' => $_POST["senha"]
+		);
+		$result = call($data);
 		header("location: login.php");
 	}
 ?>
