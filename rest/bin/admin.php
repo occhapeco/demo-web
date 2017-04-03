@@ -33,11 +33,15 @@
 			$senha = md5(sha1($senha));
 			$conexao = conectar();
 			$query = $conexao->query("SELECT * FROM admin WHERE email = '$email' AND senha = '$senha'");
-			if($query->num_rows == 0)
-				return 0;
-			$row = $query->fetch_assoc();
+			$dados = array();
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$dados["id"] = $row["id"];
+				$dados["access_token"] = sha1($row["senha"].$row["email"].$row["id"]);
+			}
 			$conexao->close();
-			return json_encode($row);
+			return json_encode($dados);
 		}
 
 		function select_cupons_avaliaveis()

@@ -9,17 +9,39 @@
 	{
 		$telefone = $_POST["ddd_telefone"].$_POST["telefone"];
 		$celular = $_POST["ddd_celular"].$_POST["celular"];
-		$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$celular,$_POST["descricao"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$telefone));
-		if($insert == 0)
+		$data = array(
+			'classe' => 'empresa',
+	        'metodo' => 'insert',
+	        'nome_usuario' => $_POST["nome_usuario"],
+	        'email' => $_POST["email"],
+	        'senha' => $_POST["senha"],
+	        'razao_social' => $_POST["razao_social"],
+	        'nome_fantasia' => $_POST["nome_fantasia"],
+	        'cnpj' => $_POST["cnpj"],
+	        'celular' => $celular,
+	        'descricao' => $_POST["descricao"],
+	        'rua' => $_POST["rua"],
+	        'num' => $_POST["num"],
+	        'complemento' => $_POST["complemento"],
+	        'cep' => $_POST["cep"],
+	        'bairro' => $_POST["bairro"],
+	        'cidade_id' => $_POST["cidade_id"],
+	        'latitude' => $_POST["latitude"],
+	        'longitude' => $_POST["longitude"],
+	        'telefone' => $telefone
+		);
+		$insert = call($data);
+		$empresa = json_decode($insert);
+		if($empresa == 0)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ ou CPF inválido!</b> Digite novamente.</span></div>';
-		elseif($insert == -1)
+		elseif($empresa == -1)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email já cadastrado!</b> Reveja seus dados.</span></div>';
-		elseif($insert == -2)
+		elseif($empresa == -2)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ já cadastrado!</b> Reveja seus dados.</span></div>';
-		elseif($insert == -3)
+		elseif($empresa == -3)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
 		else
-			header("location: aprovacao.php?id=$insert");
+			header("location: aprovacao.php?token=".$empresa->access_token);
 	}
 ?>
 <!doctype html>

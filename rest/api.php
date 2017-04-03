@@ -37,6 +37,9 @@
 		$empresa = new empresa();
 		if($_POST["metodo"] == "login")
 			echo $empresa->login($_POST["email"],$_POST["senha"]);
+
+		if($_POST["metodo"] == "insert")
+			echo $empresa->insert($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["descricao"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]);
 	}
 	elseif($_POST["classe"] == "usuario")
 	{
@@ -52,9 +55,17 @@
 	}
 	else
 	{
+		if($_POST["metodo"] == "query")
+			echo query($_POST["sql_query"]);
+
+		if($_POST["metodo"] == "select_cidades")
+			echo select_cidades();
+
+		if($_POST["metodo"] == "select_tipos")
+			echo select_tipos();
+
 		if($_POST["metodo"] == "redefinir_senha")
 			echo redefinir_senha($_POST["email"]);
-
 	}
 
 	if($classe == "admin")
@@ -112,14 +123,71 @@
 
 		if($metodo == "notificar_usuarios")
 			echo $admin->dar_baixa_tarifa($_POST["title"],$_POST["body"]);
+
+		if($metodo == "verificar_token")
+			echo $admin->verificar_token($_POST["access_token"]);
 	}
 	elseif($classe == "empresa")
 	{
-		if($metodo == "insert")
-			echo $admin->insert($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$_POST["celular"],$_POST["descricao"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]);
-
 		if($metodo == "insert_endereco")
-			echo $admin->insert_endereco($_POST["empresa_id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]);
+			echo $empresa->insert_endereco($_POST["empresa_id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]);
+
+		if($metodo == "insert_cupom")
+			echo $empresa->insert_cupom($_POST["empresa_id"],$_POST["endereco_id"],$_POST["imagem"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$_POST["pagamento"],$_POST["delivery"],$_POST["tipos"]);
+
+		if($metodo == "update_perfil")
+			echo $empresa->update_perfil($_POST["id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"],$_POST["descricao"]);
+
+		if($metodo == "update_senha")
+			echo $empresa->update_senha($_POST["id"],$_POST["senha_antiga"],$_POST["senha_nova"]);
+
+		if($metodo == "redefinir_senha")
+			echo $empresa->redefinir_senha($_POST["id"],$_POST["senha_nova"]);
+
+		if($metodo == "update_endereco")
+			echo $empresa->update_endereco($_POST["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]);
+
+		if($metodo == "update_cupom")
+			echo $empresa->update_cupom($_POST["cupom_id"],$_POST["endereco_id"],$_POST["imagem"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$_POST["pagamento"],$_POST["delivery"],$_POST["tipos"]);
+
+		if($metodo == "select_perfil")
+			echo $empresa->select_perfil($_POST["id"]);
+
+		if($metodo == "select_endereco")
+			echo $empresa->select_endereco($_POST["id"]);
+
+		if($metodo == "select_enderecos")
+			echo $empresa->select_enderecos($_POST["empresa_id"]);
+
+		if($metodo == "select_cupom")
+			echo $empresa->select_cupom($_POST["id"]);
+
+		if($metodo == "select_cupons")
+			echo $empresa->select_cupons($_POST["id"]);
+
+		if($metodo == "select_usuarios")
+			echo $empresa->select_usuarios($_POST["cupum_id"]);
+
+		if($metodo == "dar_baixa")
+			echo $empresa->dar_baixa($_POST["usuarios"]);
+
+		if($metodo == "visualizar")
+			echo $empresa->visualizar($_POST["empresa_id"]);
+
+		if($metodo == "select_notificacoes")
+			echo $empresa->select_notificacoes($_POST["empresa_id"]);
+
+		if($metodo == "select_nao_visualizadas")
+			echo $empresa->select_nao_visualizadas($_POST["empresa_id"]);
+
+		if($metodo == "desativar_cupom")
+			echo $empresa->desativar_cupom($_POST["id"]);
+
+		if($metodo == "select_tarifa")
+			echo $empresa->select_tarifa($_POST["empresa_id"]);
+
+		if($metodo == "verificar_token")
+			echo $empresa->verificar_token($_POST["access_token"]);
 	}
 	elseif($classe == "usuario")
 	{
@@ -152,10 +220,9 @@
 
 		if($metodo == "avaliar")
 			echo $usuario->avaliar($_POST["id"],$_POST["produto"],$_POST["atendimento"],$_POST["ambiente"],$_POST["comentarios"]);
-	}
-	else
-	{
 
+		if($metodo == "verificar_token")
+			echo $usuario->verificar_token($_POST["access_token"]);
 	}
 	
 ?>

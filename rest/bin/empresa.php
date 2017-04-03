@@ -3,9 +3,9 @@
 	{
 		function insert($nome_usuario,$email,$senha,$razao_social,$nome_fantasia,$cnpj,$celular,$descricao,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
 		{
-			if(!validar_cnpj($cnpj))
-				if(!validar_cpf($cnpj))
-					return 0;
+			//if(!validar_cnpj($cnpj))
+				//if(!validar_cpf($cnpj))
+					//return 0;
 			$nome_usuario = preg_replace('![*#/\"´`]+!','',$nome_usuario);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
 			$senha = md5(sha1($senha));
@@ -16,13 +16,16 @@
 			$descricao = preg_replace('![*#/\"´`]+!','',$descricao);
 			$data_cadastro = date("Y-m-d");
 
-			if(isset_email($email));
+			if(isset_email($email))
 				return -1;
 
 			$conexao = conectar();
 			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular','$descricao','$data_cadastro',0,-1)");
 			if(!$query)
 		    	return -2;
+		    $dados = array();
+		    $dados["id"] = $conexao->insert_id;
+			$dados["access_token"] = sha1($senha.$email.$dados["id"]);
 		    $empresa_id = $conexao->insert_id;
 		    $rua = preg_replace('![*#/\"´`]+!','',$rua);
 		    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
@@ -38,7 +41,7 @@
 		    }
 			$conexao->close();
 			mandar_email($email,"Solicitação de cadastro enviada.","Caro $nome_usuario, <br>sua solicitação de cadastro foi enviada com sucesso. Assim que um dos nossos administradores analisarem seus dados, retornaremos a resposta. Obrigado por escolher o Clube de Ofertas!");
-			return $empresa_id;
+			return json_encode($dados);
 		}
 
 		function insert_endereco($empresa_id,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
@@ -151,11 +154,16 @@
 			$senha = md5(sha1($senha));
 			$conexao = conectar();
 			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email' AND senha = '$senha'");
-			if($query->num_rows == 0)
-				return 0;
-			$row = $query->fetch_assoc();
+			$dados = array();
+			if($query->num_rows == 1)
+			{
+				$row = $query->fetch_assoc();
+				$dados["id"] = $row["id"];
+				$dados["estado"] = $row["estado"];
+				$dados["access_token"] = sha1($row["senha"].$row["email"].$row["id"]);
+			}
 			$conexao->close();
-			return json_encode($row);
+			return json_encode($dados);
 		}
 
 		function select_perfil($id)

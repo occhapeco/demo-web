@@ -6,20 +6,29 @@
 
 	if (isset($_POST["concluir"]))
 	{
-		$json = $service->call('empresa.login', array($_POST["email"],$_POST["senha"]));
+		$data = array(
+	        'classe' => 'empresa',
+	        'metodo' => 'login',
+	        'email' => $_POST['email'],
+	        'senha' => $_POST['senha'],
+	    );
+
+		$json = call($data);
 		$empresa = json_decode($json);
-		if(!$json)
+		if(!isset($empresa->id))
 		{
-			$json = $service->call('admin.login', array($_POST["email"],$_POST["senha"]));
-			if(!$json)
+			$data['classe'] = 'admin';
+			$json = call($data);
+			$admin = json_decode($json);
+			if(!isset($admin->id))
 			{
 				$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email ou senha não correspondem!</b> Digite novamente.</span></div>';
 			}
 			else
 			{
 				session_start();
-				$admin = json_decode($json);
 				$_SESSION["admin_id"] = $admin->id;
+				$_SESSION["admin_token"] = $admin->access_token;
 				header("location: admin/");
 			}
 		}
@@ -27,17 +36,22 @@
 		{
 			session_start();
 			$_SESSION["empresa_id"] = $empresa->id;
+			$_SESSION["empresa_token"] = $empresa->access_token;
 			header("location: empresa/");
 		}
 		elseif($empresa->estado == -1)
-			header("location: aprovacao.php?id=".$empresa->id);
+			header("location: aprovacao.php?token=".$empresa->access_token);
 		elseif($empresa->estado == -2)
-			header("location: bloqueio.php?id=".$empresa->id);
+			header("location: bloqueio.php?token=".$empresa->access_token);
 	}
 
 	if(isset($_POST["esqueci_senha"]))
 	{
-		if($service->call('redefinir_senha', array($_POST["email2"])))
+		$data = array(
+			'metodo' => 'redefinir_senha',
+			'email' => $_POST["email2"]
+		);
+		if(call($data))
 			$alert = '<div class="alert alert-info" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Enviamos um email para a redefinição da sua senha!</b></span></div>';
 		else
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Não encontramos seu email em nosso sistema!</b></span></div>';

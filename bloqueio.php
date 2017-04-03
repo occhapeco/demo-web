@@ -1,11 +1,21 @@
 <?php
-	if(isset($_GET["id"]))
+	if(isset($_GET["token"]))
 	{
 		require_once("conectar_service.php");
-		$json = $service->call("empresa.select_perfil",array($_GET["id"]));
-		$empresa = json_decode($json);
-		if(!isset($empresa->nome_usuario))
-			header("location: index.php");
+		$data = array(
+	        'access_token' => $_GET["token"],
+			'classe' => 'empresa',
+	        'metodo' => 'verificar_token'
+		);
+		$id = call($data);
+		if($id > 0) {
+			$data['metodo'] = 'select_perfil';
+			$data['id'] = $id;
+			$json = call($data);
+			$empresa = json_decode($json);
+			if(!isset($empresa->nome_usuario))
+				header("location: index.php");
+		}
 	}
 	else
 		header("location: index.php");
