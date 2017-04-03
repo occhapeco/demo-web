@@ -36,10 +36,10 @@
 	   curl_setopt($ch, CURLOPT_POST, true);
 	   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 	   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	   curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);  
+	   curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
 	   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-	   $result = curl_exec($ch);           
+	   $result = curl_exec($ch);
 	   echo curl_error($ch);
 	   if ($result === FALSE) {
 	       die('Curl failed: ' . curl_error($ch));
@@ -105,12 +105,12 @@
   		{
     		for($i = 0; $i < 9; $i++)
       			$d1 += $cpf[$i] * (10 - $i);
-    
+
 	    	$r1 = $d1 % 11;
 	    	$d1 = ($r1 > 1) ? (11 - $r1) : 0;
 	    	for($i = 0; $i < 9; $i++)
 	      		$d2 += $cpf[$i] * (11 - $i);
-	    
+
 	    	$r2 = ($d2 + ($d1 * 2)) % 11;
 	    	$d2 = ($r2 > 1) ? (11 - $r2) : 0;
 	    	return (substr($cpf, -2) == $d1 . $d2) ? true : false;
@@ -218,6 +218,33 @@
 	}
 
 	$server->register('redefinir_senha', array('email' => 'xsd:string'), array('return' => 'xsd:boolean'),$namespace,false,'rpc','encoded','Gera token e envia email de redefinição de senha.');
+
+	function isset_email($email)
+	{
+		$result = false;
+		$conexao = conectar();
+
+		$query = $conexao->query("SELECT * FROM usuario WHERE email = '$email'");
+		if($query && $query->num_rows > 0)
+			$result = true;
+
+		if(!$result)
+		{
+			$query = $conexao->query("SELECT * FROM empresa WHERE email = '$email'");
+			if($query && $query->num_rows > 0)
+				$result = true;
+		}
+
+		if(!$result)
+		{
+			$query = $conexao->query("SELECT * FROM admin WHERE email = '$email'");
+			if($query && $query->num_rows > 0)
+				$result = true;
+		}
+
+		$conexao->close();
+		return $result;
+	}
 
 	class admin
 	{
@@ -445,7 +472,7 @@
 			while($date1->format("Y-m") <= $date2)
 			{
 				$nome = "";
-				switch($date1->format("m")) 
+				switch($date1->format("m"))
 				{
 			        case "01":    $nome = "Janeiro";     break;
 			        case "02":    $nome = "Fevereiro";   break;
@@ -458,7 +485,7 @@
 			        case "09":    $nome = "Setembro";    break;
 			        case "10":    $nome = "Outubro";     break;
 			        case "11":    $nome = "Novembro";    break;
-			        case "12":    $nome = "Dezembro";    break; 
+			        case "12":    $nome = "Dezembro";    break;
 				}
 				$nome .= "/".$date1->format("Y");
 				$dados[$i]["data"] = $nome;
@@ -551,9 +578,6 @@
 	{
 		function insert($nome_usuario,$email,$senha,$razao_social,$nome_fantasia,$cnpj,$celular,$descricao,$rua,$num,$complemento,$cep,$bairro,$cidade_id,$latitude,$longitude,$telefone)
 		{
-			if(!validar_cnpj($cnpj))
-				if(!validar_cpf($cnpj))
-					return 0;
 			$nome_usuario = preg_replace('![*#/\"´`]+!','',$nome_usuario);
 			$email = preg_replace('![*#/\"´`]+!','',$email);
 			$senha = md5(sha1($senha));
@@ -564,28 +588,30 @@
 			$descricao = preg_replace('![*#/\"´`]+!','',$descricao);
 			$data_cadastro = date("Y-m-d");
 
-			if(isset_email($email));
+			if(isset_email($email))
 				return -1;
 
 			$conexao = conectar();
 			$query = $conexao->query("INSERT INTO empresa VALUES(NULL,'$nome_usuario','$email','$senha','$razao_social','$nome_fantasia','$cnpj','$celular','$descricao','$data_cadastro',0,-1)");
 			if(!$query)
 		    	return -2;
-		    $empresa_id = $conexao->insert_id;
-		    $rua = preg_replace('![*#/\"´`]+!','',$rua);
-		    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
-		    $bairro = preg_replace('![*#/\"´`]+!','',$bairro);
+	    $empresa_id = $conexao->insert_id;
+	    $rua = preg_replace('![*#/\"´`]+!','',$rua);
+	    $complemento = preg_replace('![*#/\"´`]+!','',$complemento);
+	    $bairro = preg_replace('![*#/\"´`]+!','',$bairro);
 			$cep = preg_replace('![*#/\"´`]+!','',$cep);
 			$telefone = preg_replace('![*#/\"´`]+!','',$telefone);
 
-		    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,'$latitude','$longitude','$telefone')");
-		    if(!$query)
-		    {
-		    	$sub_query = $conexao->query("DELETE FROM empresa WHERE id = $empresa_id");
-		    	return -3;
-		    }
+	    $query = $conexao->query("INSERT INTO endereco VALUES(NULL,$empresa_id,'$rua',$num,'$complemento','$cep','$bairro',$cidade_id,'$latitude','$longitude','$telefone')");
+	    if(!$query)
+	    {
+	    	$sub_query = $conexao->query("DELETE FROM empresa WHERE id = $empresa_id");
+	    	return -3;
+	    }
+
 			$conexao->close();
 			mandar_email($email,"Solicitação de cadastro enviada.","Caro $nome_usuario, <br>sua solicitação de cadastro foi enviada com sucesso. Assim que um dos nossos administradores analisarem seus dados, retornaremos a resposta. Obrigado por escolher o Clube de Ofertas!");
+
 			return $empresa_id;
 		}
 
@@ -870,7 +896,7 @@
 			while($date1->format("Y-m") <= $date2)
 			{
 				$nome = "";
-				switch($date1->format("m")) 
+				switch($date1->format("m"))
 				{
 			        case "01":    $nome = "Janeiro";     break;
 			        case "02":    $nome = "Fevereiro";   break;
@@ -883,7 +909,7 @@
 			        case "09":    $nome = "Setembro";    break;
 			        case "10":    $nome = "Outubro";     break;
 			        case "11":    $nome = "Novembro";    break;
-			        case "12":    $nome = "Dezembro";    break; 
+			        case "12":    $nome = "Dezembro";    break;
 				}
 				$nome .= "/".$date1->format("Y");
 				$dados[$i]["data"] = $nome;
@@ -1176,7 +1202,7 @@
 	$server->register('usuario.avaliar', array('id' => 'xsd:integer','produto' => 'xsd:integer','atendimento' => 'xsd:integer','ambiente' => 'xsd:integer','comentarios' => 'xsd:string'), array('return' => 'xsd:string'),$namespace,false,'rpc','encoded','Seleciona histórico do usuario.');
 	$server->register('usuario.verificar_token', array('token' => 'xsd:string'), array('return' => 'xsd:integer'),$namespace,false,'rpc','encoded','Verifica token de acesso.');
 
-	
+
 	$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 	$server->service($HTTP_RAW_POST_DATA);
 ?>

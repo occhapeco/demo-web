@@ -11,7 +11,7 @@
 		$celular = $_POST["ddd_celular"].$_POST["celular"];
 		$insert = $service->call('empresa.insert', array($_POST["nome_usuario"],$_POST["email"],$_POST["senha"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["cnpj"],$celular,$_POST["descricao"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$telefone));
 		if($insert == 0)
-			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ inválido!</b> Digite novamente.</span></div>';
+			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>CNPJ ou CPF inválido!</b> Digite novamente.</span></div>';
 		elseif($insert == -1)
 			$alert = '<div class="alert alert-danger" style="margin-top: 10px;margin-bottom:-40px;"><span><b>Email já cadastrado!</b> Reveja seus dados.</span></div>';
 		elseif($insert == -2)
@@ -51,9 +51,9 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/themify-icons.css" rel="stylesheet">
-	
+
     <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
-	
+
 	<style type="text/css">
 		i{
 			margin-top:-5px;
@@ -235,7 +235,7 @@
 		                                            <input type="text" class="form-control" name="complemento" id="complemento" maxlength="20" placeholder="Próx. à escola">
 		                                        </div>
 		                                    </div>
-		                                    <div class="col-sm-6">												
+		                                    <div class="col-sm-6">
 												<div class="col-sm-3">
 													<div class="form-group">
 														<label>DDD</label>
@@ -270,7 +270,7 @@
 	    	</div><!-- end row -->
 		</div> <!--  big container -->
 
-	    
+
 	</div>
 
 </body>
@@ -294,7 +294,7 @@
     <script src="assets/js/jquery.maskedinput.js" type="text/javascript"></script>
     <script src="assets/js/jquery.validate.min.js" type="text/javascript"></script>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmWPAIE9_AASg6Ijgoh0lVOZZ_VWvw6fg&libraries=places&callback=geoco" async defer></script>  
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmWPAIE9_AASg6Ijgoh0lVOZZ_VWvw6fg&libraries=places&callback=geoco" async defer></script>
 
 	<script type="text/javascript">
 		var geocoder ;
