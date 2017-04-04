@@ -1,12 +1,13 @@
 <?php
+	require_once("conectar_service.php");
+
 	$input = "";
 	if(isset($_GET["token"]))
 	{
-		require_once("conectar_service.php");
 		$data = array(
-	        'access_token' => $_GET["token"],
+			'access_token' => $_GET["token"],
 			'classe' => 'empresa',
-	        'metodo' => 'verificar_token'
+			'metodo' => 'verificar_token'
 		);
 		$id = call($data);
 		if($id != 0)
@@ -27,11 +28,11 @@
 	if(isset($_POST["empresa"]))
 	{
 		$data = array(
-	        'access_token' => $_GET["token"],
+			'access_token' => $_GET["token"],
 			'classe' => 'empresa',
-	        'metodo' => 'redefinir_senha',
-	        'id' => $_POST["empresa"],
-	        'senha_nova' => $_POST["senha"]
+			'metodo' => 'redefinir_senha',
+			'id' => $_POST["empresa"],
+			'senha_nova' => $_POST["senha"]
 		);
 		$result = call($data);
 		header("location: login.php");
@@ -39,11 +40,11 @@
 	elseif(isset($_POST["usuario"]))
 	{
 		$data = array(
-	        'access_token' => $_GET["token"],
+			'access_token' => $_GET["token"],
 			'classe' => 'usuario',
-	        'metodo' => 'redefinir_senha',
-	        'id' => $_POST["usuario"],
-	        'senha_nova' => $_POST["senha"]
+			'metodo' => 'redefinir_senha',
+			'id' => $_POST["usuario"],
+			'senha_nova' => $_POST["senha"]
 		);
 		$result = call($data);
 		header("location: login.php");
@@ -91,7 +92,7 @@
 		            <div class="wizard-container" style="margin-top:50px">
 
 		                <div class="card wizard-card" data-color="orange" id="wizardProfile">
-		                    
+
 							<div class="logo center" style="margin:20px">
 				                    <img src="imgs/logo/escudo_corel.png" style="width: 80%;display: block;margin: 0 auto;">
 				            </div>
@@ -112,7 +113,7 @@
 											<input type="password" class="form-control" name="senha1" id="senha1" placeholder="Redigite sua senha" maxlength="12" required>
 										</div>
 									</div>
-									
+
 								</div>
 								<center>
 									<div class="wizard-footer">
@@ -129,7 +130,7 @@
 	    	</div><!-- end row -->
 		</div> <!--  big container -->
 
-	    
+
 	</div>
 
 </body>
