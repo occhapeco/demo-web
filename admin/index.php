@@ -14,13 +14,13 @@
         $bool = $service->call('admin.aprovar_cupom', array($_POST["cupom_id"]));
         header("location: index.php");
     }
-	
+
 	if(isset($_POST["aprovar_empresa"]))
 	{
 		$bool = $service->call('admin.aprovar_empresa', array($_POST["empresa_id"]));
 		header("location: index.php");
 	}
-	
+
 	if(isset($_POST["recusar_empresa"]))
 	{
 		$bool = $service->call('admin.recusar_empresa', array($_POST["empresa_id"]));
@@ -64,7 +64,7 @@
 <body>
 
 <div class="wrapper">
-	<?php 
+	<?php
         require_once("sidenav.php");
         require_once("topnav.php");
         $json_dados = $service->call('admin.select_cupons_avaliaveis',array());
@@ -150,8 +150,8 @@
     <?php
         }
     ?>
-	
-	<?php 
+
+	<?php
       	$json_dados = $service->call('admin.select_empresas',array(-1));
         $empresa = json_decode($json_dados);
         if(count($cupom) == 0 && count($empresa) == 0)
@@ -193,6 +193,9 @@
                             </div>
                             <div class="col-xs-12">
                                 <label>Endereços:</label><label style="color:#252422"><?php echo $enderecos; ?></label>
+                            </div>
+                            <div class="col-xs-12">
+                                <label>Descrição:</label><label style="color:#252422"><?php echo $empresa[$i]->descricao; ?></label>
                             </div>
                     </div>
                 </div>
