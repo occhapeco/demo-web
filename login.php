@@ -1,7 +1,7 @@
 <?php
 	require_once("permissao.php");
 	require_once("conectar_service.php");
-	
+
 	$alert = "";
 
 	if (isset($_POST["concluir"]))
@@ -83,19 +83,19 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/themify-icons.css" rel="stylesheet">
-	
+
 	<!-- Modal -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+
 	<style type="text/css">
 		i{
 			margin-top:-5px;
 		}
 
 	</style>
-	
+
 	<link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
 </head>
 
@@ -131,14 +131,14 @@
 									<div class="col-sm-10">
 										<div class="form-group">
 											<label>Email <small>(obrigatório)</small></label>
-											<input type="email" class="form-control" name="email" id="email" placeholder="informe um email" maxlength="40" required>
+											<input type="email" class="form-control" name="email" id="email" placeholder="Digite seu email" maxlength="40" required>
 										</div>
 										<div class="form-group">
 											<label>Senha <small>(obrigatório)</small></label>
 											<input type="password" class="form-control" name="senha" id="senha" placeholder="Digite sua senha" maxlength="12" required>
 										</div>
 									</div>
-									
+
 								</div>
 								<center>
 									<div class="wizard-footer">
@@ -152,19 +152,19 @@
 								<div class="col-sm-12 text-center"><a href="cad_empresa.php">Não possui cadastro? Clique aqui!</a></div><br><br>
 								<div class="col-sm-12 text-center"><a data-toggle="modal" href="#myModal">Esqueceu sua senha?</a></div>
 							</div><br><br><br><br>
-		                    
+
 		                </div>
 		            </div> <!-- wizard container -->
 		        </div>
 	    	</div><!-- end row -->
 		</div> <!--  big container -->
 
-	    
+
 	</div>
-	
+
 	<div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
 		<form action="#" method="post">
 	      <div class="modal-content">

@@ -49,7 +49,7 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="../assets/css/themify-icons.css" rel="stylesheet">
-	
+
     <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
 
     <style type="text/css">
@@ -64,74 +64,65 @@
 <body>
 
 <div class="wrapper">
-	<?php 
+	<?php
         require_once("sidenav.php");
         require_once("topnav.php");
     ?>
 
         <div class="content">
-            
+
             <?php
             $json_dados = $service->call('empresa.select_cupons', array($_SESSION["empresa_id"]));
             $cupom = json_decode($json_dados);
             $estado = "";
-			$desconto = "";
+			      $desconto = "";
             $em_aprovacao = "";
             $inativos = "";
             $ativos = "";
-            if(count($cupom) == 0)
-            {
-            ?>
-                <br><br><br><br><br><h2 class='text-center'>Você não possui ofertas cadastradas. Para inserir uma oferta <a href="cad_cupom.php">Clique aqui.</a></h^2>
-            <?php
-            }
-            else{
-               for($i = 0; $i<count($cupom); $i++)
-                {
-					$preco_cupom = $cupom[$i]->preco_cupom;
-					$preco_normal = $cupom[$i]->preco_normal;
-					$desconto = (($preco_normal - $preco_cupom)*100)/$preco_normal;
-                    if ($cupom[$i]->estado == -1)
-                    {
-                        $estado = "Enviado para aprovação";
-						$em_aprovacao .= '<div class="col-md-6 col-sm-6 bloco">
-						<div class="card">
-							<div class="content">
-								<div class="row">
-									<div class="col-sm-12">
-										<b><p style="color:red; font-size:18px">'. round($desconto) .'% Off</p></b>
-									</div>
-									<div class="col-sm-4">
-										<div class="icon-big icon-warning text-center">
-											<img src="../imgs/'. $cupom[$i]->imagem.'" width="130px" class="img-responsive">
-										</div>
-									</div>
-									<div class="col-sm-8">
-										<div class="numbers">
-											<p style="font-size:18px;">'. $cupom[$i]->titulo .'</p>
-											<p style="color: #aaa">'. $cupom[$i]->descricao .'</p>
-											<p style="color: #aaa">Válido de '. $cupom[$i]->data_cadastro .' até '. $cupom[$i]->prazo .'</p>
-											<p style="color: #aaa">'. $estado .'</p>
-										</div>
-									</div>
-								</div>
-								<div class="footer status">
-									<hr />
-										<div class="pull-right" >
-											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
-												<input type="hidden" name="id_cupom" id="id_cupom" value='.$cupom[$i]->id.'>
-												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
-											</form>
-											<form action="cad_cupom.php" method="post" style="margin-left:250px;margin-top:-52">
-												<input type="hidden" name="cupom_id" id="cupom_id" value='.$cupom[$i]->id.'>
-												<button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button>
-											</form>
-											</div>
-										<div style="font-size: 20px;color: #007aff;">R$'. $cupom[$i]->preco_cupom .'</div><br><s style="color:coral">R$'. $cupom[$i]->preco_normal .'</s>
-								</div>
-							</div>
-						</div>
-					</div>';
+            for($i = 0; $i<count($cupom); $i++) {
+    					$preco_cupom = $cupom[$i]->preco_cupom;
+    					$preco_normal = $cupom[$i]->preco_normal;
+    					$desconto = (($preco_normal - $preco_cupom)*100)/$preco_normal;
+              if ($cupom[$i]->estado == -1) {
+                $estado = "Enviado para aprovação";
+    						$em_aprovacao .= '<div class="col-md-6 col-sm-6 bloco">
+    						<div class="card">
+    							<div class="content">
+    								<div class="row">
+    									<div class="col-sm-12">
+    										<b><p style="color:red; font-size:18px">'. round($desconto) .'% Off</p></b>
+    									</div>
+    									<div class="col-sm-4">
+    										<div class="icon-big icon-warning text-center">
+    											<img src="../imgs/'. $cupom[$i]->imagem.'" width="130px" class="img-responsive">
+    										</div>
+    									</div>
+    									<div class="col-sm-8">
+    										<div class="numbers">
+    											<p style="font-size:18px;">'. $cupom[$i]->titulo .'</p>
+    											<p style="color: #aaa">'. $cupom[$i]->descricao .'</p>
+    											<p style="color: #aaa">Válido de '. $cupom[$i]->data_cadastro .' até '. $cupom[$i]->prazo .'</p>
+    											<p style="color: #aaa">'. $estado .'</p>
+    										</div>
+    									</div>
+    								</div>
+    								<div class="footer status">
+    									<hr />
+    										<div class="pull-right" >
+    											<form action="cupom.php" method="post" style="margin-left:150px;margin-top:15">
+    												<input type="hidden" name="id_cupom" id="id_cupom" value='.$cupom[$i]->id.'>
+    												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
+    											</form>
+    											<form action="cad_cupom.php" method="post" style="margin-left:250px;margin-top:-52">
+    												<input type="hidden" name="cupom_id" id="cupom_id" value='.$cupom[$i]->id.'>
+    												<button type="submit" class="btn btn-primary btn-info" name="editar" style="font-size: 14px"><i class="ti-pencil"></i> Editar</button>
+    											</form>
+    											</div>
+    										<div style="font-size: 20px;color: #007aff;">R$'. $cupom[$i]->preco_cupom .'</div><br><s style="color:coral">R$'. $cupom[$i]->preco_normal .'</s>
+    								</div>
+    							</div>
+    						</div>
+    					</div>';
                     }
                     if($cupom[$i]->estado == -2)
                     {
@@ -217,8 +208,7 @@
 						</div>
 					</div>';
 					}
-                  }
-                }
+        }
                 ?>
 				<div class="col-sm-12">
 					<label>Pesquisa</label>
@@ -275,26 +265,26 @@
 
     <!--  Notifications Plugin    -->
     <script src="../assets/js/bootstrap-notify.js"></script>
-	
+
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="../assets/js/paper-dashboard.js"></script>
 
     <script>
-        $(function(){ 
+        $(function(){
 
           $("#filtro").keyup(function(){
             var texto = $(this).val();
-            
+
             $(".bloco").each(function(){
               var resultado = $(this).text().toUpperCase().indexOf(' '+texto.toUpperCase());
-              
+
               if(resultado < 0) {
                 $(this).fadeOut();
               }else {
                 $(this).fadeIn();
               }
-            }); 
+            });
 
           });
 
