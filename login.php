@@ -112,7 +112,7 @@
 		            <div class="wizard-container" style="margin-top:50px;">
 
 		                <div class="card wizard-card" data-color="orange" id="wizardProfile">
-		                    <form action="#" id="frm" method="post">
+		                    <form action="#" id="frm" method="post" style="margin-left: 20px;margin-right: 20px;">
 		                    	<input type="hidden" name="latitude" id="latitude">
 		                    	<input type="hidden" name="longitude" id="longitude">
 		                    	<center>

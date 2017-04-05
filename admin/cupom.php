@@ -8,14 +8,15 @@
 
     $page = basename(__FILE__, '.php');
 
-    if(isset($_GET["aprovar"]))
-    {
-        $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Oferta enviada para aprovação!</b></span></div>';
-    }
-
     if(isset($_POST["cancelar"]))
     {
-        $json_dados = $service->call('empresa.desativar_cupom', array($_POST["cupom_id"]));
+    	$data = array(
+    		'access_token' => $_SESSION["admin_token"],
+            'classe' => 'empresa',
+            'metodo' => 'desativar_cupom',
+            'id' => $_POST["cupom_id"]
+    	);
+        $json_dados = call($data);
         $cancelar = json_decode($json_dados);
         if ($cancelar == 1)
         {
@@ -71,7 +72,12 @@
         <div class="content">
 			
             <?php
-                $json_dados = $service->call('admin.select_cupons', array());
+            	$data = array(
+		    		'access_token' => $_SESSION["admin_token"],
+		            'classe' => 'admin',
+		            'metodo' => 'select_cupons',
+		    	);
+		        $json_dados = call($data);
                 $cupom = json_decode($json_dados);
                 $estado = "";
 				$nome_emp = "";
@@ -81,7 +87,13 @@
 					$preco_cupom = $cupom[$i]->preco_cupom;
 					$preco_normal = $cupom[$i]->preco_normal;
 					$desconto = (($preco_normal - $preco_cupom)*100)/$preco_normal;
-					$json_dados = $service->call('empresa.select_perfil',array($cupom[$i]->empresa_id));
+					$data = array(
+			    		'access_token' => $_SESSION["admin_token"],
+			            'classe' => 'empresa',
+			            'metodo' => 'select_perfil',
+			            'id' => $cupom[$i]->empresa_id
+			    	);
+			        $json_dados = call($data);
 					$empresa = json_decode($json_dados);
 					$nome_emp = $empresa->razao_social;
                     if ($cupom[$i]->estado == -1)
@@ -198,7 +210,7 @@
 												<input type="hidden" name="id_cupom" id="id_cupom" value="'.$cupom[$i]->id.'">
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
-											<form action="#" method="post" style=" margin-left:100px; margin-top:-81; display: inline-block;">
+											<form action="#" method="post" style=" margin-left:100px; margin-top:-52; display: inline-block;">
 												<input type="hidden" name="cupom_id" id="cupom_id" value="'.$cupom[$i]->id.'";>
 												<button type="submit" class=" btn btn-primary btn-danger" name="cancelar" style="font-size:14px"><i class="ti-close"></i> Desativar</button>
 											</form>

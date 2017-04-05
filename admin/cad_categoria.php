@@ -8,25 +8,37 @@
 	
 	if(isset($_POST["cad_categoria"]))
 	{
-		if($service->call('admin.insert_tipo', array($_POST["categoria"])))
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'insert_tipo',
+            'nome' => $_POST["categoria"]
+        );
+		if(call($data))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Categoria cadastrada com sucesso!</b></span></div>';
 		}
 		else
 		{
-			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao cadastrar categoria! Verifique os dados e tente novamente</b></span></div>';
+			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao cadastrar categoria!</b> Verifique os dados e tente novamente</b></span></div>';
 		}
 	}
 	
 	if(isset($_POST["excluir"]))
 	{
-		if($service->call('admin.delete_tipo', array($_POST["categoria_id"])))
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'delete_tipo',
+            'id' => $_POST["categoria_id"]
+        );
+		if(call($data))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Categoria excluida com sucesso!</b></span></div>';
 		}
 		else
 		{
-			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao excluir categoria! Verifique os dados e tente novamente</b></span></div>';
+			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao excluir categoria!</b> Existem cupons vinculados a ela.</span></div>';
 		}
 	}
 
@@ -112,7 +124,10 @@
                                     </tr>
                                     <tbody>
                                         <?php
-                                            $select = $service->call('select_tipos', array());
+                                            $data = array(
+                                                'metodo' => 'select_tipos',
+                                            );
+                                            $select = call($data);
                                             $categoria = json_decode($select);
                                             for($i = 0; $i<count($categoria); $i++)
                                             {

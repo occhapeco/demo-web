@@ -46,7 +46,13 @@
     {
         $cupom_id = $_GET["cupom_id"];
         $empresa_id = $_GET["empresa_id"];
-        $json = $service->call('empresa.select_cupom', array($cupom_id));
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'empresa',
+            'metodo' => 'select_cupom',
+            'id' => $cupom_id
+        );
+        $json = call($data);
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
         $imagem = $cupom->imagem;
@@ -94,14 +100,41 @@
             $pagamento += 2;
 
         $types = array();
-        $json = $service->call("select_tipos",array());
+        $data = array(
+            'metodo' => 'select_tipos'
+        );
+        $json = call($data);
         $type = json_decode($json);
         for($i=0;$i<count($type);$i++)
             if(isset($_POST[$type[$i]->id]))
                 $types[] = $type[$i]->id;
-        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
 
-        $insert = $service->call('admin.aprovar_cupom',array($_POST["edit"]));
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'update_cupom',
+            'id' => $_POST["edit"],
+            'endereco_id' => $_POST["endereco_id"],
+            'imagem' => $imagem,
+            'titulo' => $_POST["titulo"],
+            'regras' => $_POST["regras"],
+            'descricao' => $_POST["descricao"],
+            'preco_normal' => $_POST["preco_normal"],
+            'preco_cupom' => $_POST["preco_cupom"],
+            'prazo' => $_POST["prazo"],
+            'quantidade' => $_POST["quantidade"],
+            'pagamento' => $pagamento,
+            'delivery' => $delivery,
+            'tipos' => json_encode($types)
+        );
+        $insert = call($data);
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'aprovar_cupom',
+            'id' => $_POST["edit"],
+        );
+        $insert = call($data);
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
@@ -254,7 +287,13 @@
                                         <div class="row">
                                         <div class="col-sm-12 text-center"><label>Selecione o endereço desta oferta</label></div>
                                         <?php
-                                            $json = $service->call("empresa.select_enderecos",array($empresa_id));
+                                            $data = array(
+                                                'access_token' => $_SESSION["admin_token"],
+                                                'classe' => 'empresa',
+                                                'metodo' => 'select_enderecos',
+                                                'empresa_id' => $empresa_id
+                                            );
+                                            $json = call($data);
                                             $endereco = json_decode($json);
                                             for($i=0;$i<count($endereco);$i++)
                                             {
@@ -319,7 +358,10 @@
                                         <div class="row">
                                             <div class="col-sm-12  text-center"><label>Selecione as categorias que se aplicam nesta oferta</label></div>
                                         <?php
-                                            $json = $service->call("select_tipos",array());
+                                            $data = array(
+                                                'metodo' => 'select_tipos',
+                                            );
+                                            $json = call($data);
                                             $types = json_decode($json);
                                             for($i=0;$i<count($types);$i++)
                                             {

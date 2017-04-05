@@ -4,7 +4,10 @@
 
     $page = basename(__FILE__, '.php');
 
-    $id_cupom = $_POST["id_cupom"];
+    if(isset($_POST["id_cupom"]))
+        $id_cupom = $_POST["id_cupom"];
+    else
+        header('location: cupom.php');
 
 ?>
 <html lang="pt">

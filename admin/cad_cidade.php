@@ -8,31 +8,50 @@
 	
 	if(isset($_POST["cad_cidade"]))
 	{
-		if($service->call('admin.insert_cidade', array($_POST["nome_cidade"],$_POST["uf"])))
+		$data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'insert_cidade',
+            'cidade' => $_POST["nome_cidade"],
+            'uf' => $_POST["uf"]
+        );
+		if(call($data))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Cidade cadastrada com sucesso!</b></span></div>';
 		}
 		else
 		{
-			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao cadastrar cidade! Verifique os dados e tente novamente</b></span></div>';
+			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao cadastrar cidade!</b> Verifique os dados e tente novamente. </span></div>';
 		}
 	}
 	
 	if(isset($_POST["bloq_cidade"]))
 	{
-		if($service->call('admin.desativar_cidade', array($_POST["cidade_id"])))
+		$data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'desativar_cidade',
+            'id' => $_POST["cidade_id"],
+        );
+		if(call($data))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Cidade desativada com sucesso!</b></span></div>';
 		}
 		else
 		{
-			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao desativar cidade! Verifique os dados e tente novamente</b></span></div>';
+			$alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Erro ao desativar cidade!</b> Verifique os dados e tente novamente. </span></div>';
 		}	
 	}
 	
 	if(isset($_POST["desbloquear"]))
 	{
-		if($service->call('admin.ativar_cidade', array($_POST["cidade_id"])))
+		$data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'ativar_cidade',
+            'id' => $_POST["cidade_id"],
+        );
+		if(call($data))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Cidade ativada com sucesso!</b></span></div>';
 		}
@@ -133,7 +152,12 @@
                                     </tr>
                                     <tbody>
                                         <?php
-                                            $select = $service->call('admin.select_cidades', array());
+                                        	$data = array(
+                                        		'access_token' => $_SESSION["admin_token"],
+            									'classe' => 'admin',
+                                                'metodo' => 'select_cidades',
+                                            );
+                                            $select = call($data);
                                             $cidade = json_decode($select);
                                             for($i = 0; $i<count($cidade); $i++)
                                             {

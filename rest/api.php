@@ -148,7 +148,7 @@
 			echo $empresa->update_endereco($_POST["id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]);
 
 		if($metodo == "update_cupom")
-			echo $empresa->update_cupom($_POST["cupom_id"],$_POST["endereco_id"],$_POST["imagem"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$_POST["pagamento"],$_POST["delivery"],$_POST["tipos"]);
+			echo $empresa->update_cupom($_POST["id"],$_POST["endereco_id"],$_POST["imagem"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$_POST["pagamento"],$_POST["delivery"],$_POST["tipos"]);
 
 		if($metodo == "select_perfil")
 			echo $empresa->select_perfil($_POST["id"]);
