@@ -7,7 +7,12 @@
 	
 	if(isset($_POST["baixa"]))
     {
-        $json = $service->call('admin.select_tarifa', array());
+    	$data = array(
+	        'access_token' => $_SESSION["admin_token"],
+	        'classe' => 'admin',
+	        'metodo' => 'select_tarifa',
+	    );
+	    $json = call($data);
         $tarifa = json_decode($json);
         $dados = array();
         for($i=0;$i<count($tarifa);$i++)
@@ -21,8 +26,13 @@
 				}
 				break;
 			}
-
-        $json = $service->call('admin.dar_baixa_tarifa', array(json_encode($dados)));
+		$data = array(
+	        'access_token' => $_SESSION["admin_token"],
+	        'classe' => 'admin',
+	        'metodo' => 'dar_baixa_tarifa',
+	        'dados' => json_encode($dados)
+	    );
+	    $json = call($data);
 
         if($json)
             $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
@@ -79,7 +89,12 @@
 					<div class="panel-group" id="faqAccordion">
 					
 						<?php
-							$json_dados = $service->call('admin.select_tarifa', array());
+							$data = array(
+						        'access_token' => $_SESSION["admin_token"],
+						        'classe' => 'admin',
+						        'metodo' => 'select_tarifa',
+						    );
+						    $json_dados = call($data);
 							$tarifa = json_decode($json_dados);
 							for($i = 0; $i<count($tarifa); $i++)
 							{
@@ -123,7 +138,13 @@
 																	<?php
 																		for($j=0; $j<count($tarifa[$i]->empresa); $j++)
 																		{
-																			$select = $service->call('empresa.select_perfil', array($tarifa[$i]->empresa[$j]->id));
+																			$data = array(
+																		        'access_token' => $_SESSION["admin_token"],
+																		        'classe' => 'admin',
+																		        'metodo' => 'select_perfil',
+																		        'id' => $tarifa[$i]->empresa[$j]->id
+																		    );
+																		    $select = call($data);
 																			$empresa = json_decode($select);
 																			
 																			$status = "";

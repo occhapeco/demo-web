@@ -4,18 +4,27 @@
 
     $page = basename(__FILE__, '.php');
 
-    if(isset($_POST["bloquear"]))
-    {
-        $bool = $service->call('admin.bloquear_empresa', array($_POST["empresa_id"]));
+    if(isset($_POST["bloquear"])) {
+    	$data = array(
+	        'access_token' => $_SESSION["admin_token"],
+	        'classe' => 'admin',
+	        'metodo' => 'bloquear_empresa',
+	        'id' => $_POST["empresa_id"]
+	    );
+	    $bool = call($data);
         header("location: empresa.php");
     }
-    if(isset($_POST["desbloquear"]))
-    {
-        $bool = $service->call('admin.desbloquear_empresa', array($_POST["empresa_id"]));
+    if(isset($_POST["desbloquear"])) {
+    	$data = array(
+	        'access_token' => $_SESSION["admin_token"],
+	        'classe' => 'admin',
+	        'metodo' => 'desbloquear_empresa',
+	        'id' => $_POST["empresa_id"]
+	    );
+	    $bool = call($data);
         header("location: empresa.php");
     }
-    if(isset($_POST["painel"]))
-    {
+    if(isset($_POST["painel"])) {
     	$_SESSION["empresa_id"] = $_POST["empresa_id"];
     	header("location: ../empresa");
     }
@@ -75,11 +84,23 @@
 							</tr>
 							<tbody>
 								<?php
-									$json_dados = $service->call('admin.select_empresas',array(0));
+									$data = array(
+								        'access_token' => $_SESSION["admin_token"],
+								        'classe' => 'admin',
+								        'metodo' => 'select_empresas',
+								        'estado' => 0
+								    );
+								    $json_dados = call($data);
 									$empresa = json_decode($json_dados);
 									for($i=0;$i<count($empresa);$i++)
 									{
-										$json = $service->call('empresa.select_enderecos', array($empresa[$i]->id));
+										$data = array(
+									        'access_token' => $_SESSION["admin_token"],
+									        'classe' => 'empresa',
+									        'metodo' => 'select_enderecos',
+									        'empresa_id' => $empresa[$i]->id
+									    );
+									    $json = call($data);
 										$endereco = json_decode($json);
 										$enderecos = "";
 										for($j=0;$j<count($endereco);$j++)

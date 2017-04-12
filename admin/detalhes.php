@@ -53,7 +53,13 @@
 
         <div class="content">
             <?php
-                $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
+                $data = array(
+                    'access_token' => $_SESSION["admin_token"],
+                    'classe' => 'empresa',
+                    'metodo' => 'select_cupom',
+                    'id' => $id_cupom
+                );
+                $json_dados = call($data);
                 $cupom = json_decode($json_dados);
                 $str_tipos = "";
                 $estado = "";
@@ -137,7 +143,13 @@
                                     </tr>
                                     <tbody>
                                         <?php
-                                            $select = $service->call('empresa.select_usuarios', array($id_cupom));
+                                            $data = array(
+                                                'access_token' => $_SESSION["admin_token"],
+                                                'classe' => 'empresa',
+                                                'metodo' => 'select_usuarios',
+                                                'cupum_id' => $id_cupom
+                                            );
+                                            $json_dados = call($data);
                                             $usuario = json_decode($select);
                                             $total_concluidos = 0;
                                             $total = 0;

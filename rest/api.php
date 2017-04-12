@@ -119,7 +119,7 @@
 			echo $admin->select_tarifa();
 
 		if($metodo == "dar_baixa_tarifa")
-			echo $admin->dar_baixa_tarifa($_POST["id"],$_POST["data"]);
+			echo $admin->dar_baixa_tarifa($_POST["dados"]);
 
 		if($metodo == "notificar_usuarios")
 			echo $admin->dar_baixa_tarifa($_POST["title"],$_POST["body"]);
