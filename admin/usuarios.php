@@ -64,6 +64,7 @@
 									{
 								?>
 								<tr>
+                                    <td><?php echo $i+1; ?></td>
 									<td><?php echo $usuarios[$i]->nome; ?></td>
 									<td><?php echo $usuarios[$i]->celular; ?></td>
 									<td><?php echo $usuarios[$i]->email; ?></td>
