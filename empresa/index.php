@@ -13,7 +13,13 @@
 
     if(isset($_POST["cancelar"]))
     {
-        $json_dados = $service->call('empresa.desativar_cupom', array($_POST["cupom_id"]));
+		$data = array(
+			'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+			'metodo' => 'desativar_cupom',
+			'id' => $_POST["cupom_id"]
+		);
+        $json_dados = call($data);
         $cancelar = json_decode($json_dados);
         if ($cancelar == 1)
         {
@@ -72,10 +78,16 @@
         <div class="content">
 
             <?php
-            $json_dados = $service->call('empresa.select_cupons', array($_SESSION["empresa_id"]));
+			$data = array(
+				'access_token' => $_SESSION["empresa_token"],
+				'classe' => 'empresa',
+				'metodo' => 'select_cupons',
+				'id' => $_SESSION["empresa_id"]
+			);
+            $json_dados = call($data);
             $cupom = json_decode($json_dados);
             $estado = "";
-			      $desconto = "";
+			$desconto = "";
             $em_aprovacao = "";
             $inativos = "";
             $ativos = "";

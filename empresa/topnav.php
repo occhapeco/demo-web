@@ -1,5 +1,11 @@
 <?php
-    $num = $service->call('empresa.select_nao_visualizadas', array($_SESSION["empresa_id"]));
+	$data = array(
+		'access_token' => $_SESSION["empresa_token"],
+		'classe' => 'empresa',
+		'metodo' => 'select_nao_visualizadas',
+		'empresa_id' => $_SESSION["empresa_id"]
+	);
+    $num = call($data);
 ?>
     <div class="main-panel">
         <nav class="navbar navbar-default">

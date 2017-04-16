@@ -5,7 +5,7 @@
 	$service = new nusoap_client('http://clubedeofertas.net/service/index.php?wsdl', true);
 
 	error_reporting(E_ALL);
-	ini_set("display_errors",0);
+	ini_set("display_errors",1);
 
 	function call($data)
 	{

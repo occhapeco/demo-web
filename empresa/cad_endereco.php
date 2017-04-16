@@ -17,18 +17,44 @@
 
     if(isset($_POST["cadastrar"]))
     {
-        $insert = $service->call('empresa.insert_endereco',array($_SESSION["empresa_id"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"]));
-        if ($insert > 0)
+		$data = array(
+            'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+	        'metodo' => 'insert_endereco',
+	        'empresa_id' => $_SESSION["empresa_id"],
+			'rua' => $_POST["rua"],
+			'num' => $_POST["num"],
+			'complemento' => $_POST["complemento"],
+			'cep' => $_POST["cep"],
+			'bairro' => $_POST["bairro"],
+			'cidade_id' => $_POST["cidade_id"],
+			'latitude' => $_POST["latitude"],
+			'longitude' => $_POST["longitude"],
+			'telefone' => $_POST["telefone"]
+			
+		);
+        
+		if (call($data)){
             header("location: meus_enderecos.php");
-        else
-            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';    
+		}
+        else{
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';   
+		}
     }
 
     //Post enviado de outra página para esta, onde serão carregados os dados e exibidos nos campos
     if(isset($_POST["editar"]))
     {
         $id_end = $_POST["id_end"];
-        $editar = $service->call('empresa.select_endereco', array($id_end));
+		
+		$data = array(
+            'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+	        'metodo' => 'select_endereco',
+	        'id' => $id_end
+		);
+		
+        $editar = call($data);
         $endereco = json_decode($editar);
         $rua = $endereco->rua;
         $num = $endereco->num;
@@ -44,10 +70,29 @@
     //Post enviado desta página para confirmar a edição
     if(isset($_POST["edit"]))
     {
-        if($service->call('empresa.update_endereco', array($_POST["edit"],$_POST["rua"],$_POST["num"],$_POST["complemento"],$_POST["cep"],$_POST["bairro"],$_POST["cidade_id"],$_POST["latitude"],$_POST["longitude"],$_POST["telefone"])))
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+	        'metodo' => 'update_endereco',
+	        'id' => $_POST["edit"],
+			'rua' => $_POST["rua"],
+			'num' => $_POST["num"],
+			'complemento' => $_POST["complemento"],
+			'cep' => $_POST["cep"],
+			'bairro' => $_POST["bairro"],
+			'cidade_id' => $_POST["cidade_id"],
+			'latitude' => $_POST["latitude"],
+			'longitude' => $_POST["longitude"],
+			'telefone' => $_POST["telefone"]
+			
+		);
+        
+		if (call($data)){
             header("location: meus_enderecos.php");
-        else
-            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';
+		}
+        else{
+            $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Endereço inválido!</b> Reveja seus dados.</span></div>';   
+		}
     }
 ?>
 <!doctype html>
@@ -134,8 +179,11 @@
 											<label style="margin-left:10px; margin-top:5px">Selecione a cidade</label>
                                         </div>
 										<?php
-                                            $json = $service->call("select_cidades",array());
-                                            $cidade = json_decode($json);
+											$data = array(
+												'metodo' => 'select_cidades'
+											);
+                                            $json = call($data);
+											$cidade = json_decode($json);
                                             for($i=0;$i<count($cidade);$i++)
                                             {
                                                 $first = "checked";

@@ -13,14 +13,26 @@
 
     if(isset($_POST["baixa"]))
     {
-        $json = $service->call('empresa.select_usuarios', array($id_cupom));
+		$data = array(
+			'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+			'metodo' => 'select_usuarios',
+			'cupum_id' => $id_cupom
+		);
+        $json = call($data);
         $usuario_has_cupom = json_decode($json);
         $usuarios = array();
         for($i=0;$i<count($usuario_has_cupom);$i++)
             if(isset($_POST[$usuario_has_cupom[$i]->id]))
                 $usuarios[] = $usuario_has_cupom[$i]->id;
-        $json = $service->call('empresa.dar_baixa', array(json_encode($usuarios)));
-        if($json)
+		
+		$data = array(
+			'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+			'metodo' => 'dar_baixa',
+			'usuarios' => json_encode($usuarios)
+		);
+        if(call($data))
             $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Baixa realizada com sucesso!</b></span></div>';
         else
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
@@ -71,7 +83,13 @@
 
         <div class="content">
             <?php
-                $json_dados = $service->call('empresa.select_cupom', array($id_cupom));
+				$data = array(
+					'access_token' => $_SESSION["empresa_token"],
+					'classe' => 'empresa',
+					'metodo' => 'select_cupom',
+					'id' => $id_cupom
+				);
+                $json_dados = call($data);
                 $cupom = json_decode($json_dados);
                 $str_tipos = "";
                 $estado = "";
@@ -170,7 +188,13 @@
                                         </tr>
                                         <tbody>
                                             <?php
-                                                $select = $service->call('empresa.select_usuarios', array($id_cupom));
+												$data = array(
+													'access_token' => $_SESSION["empresa_token"],
+													'classe' => 'empresa',
+													'metodo' => 'select_usuarios',
+													'cupum_id' => $id_cupom
+												);
+                                                $select = call($data);
                                                 $usuario = json_decode($select);
                                                 $total_concluidos = 0;
                                                 $total = 0;

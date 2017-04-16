@@ -52,7 +52,13 @@
 					<div class="panel-group" id="faqAccordion">
 					
 						<?php
-							$json_dados = $service->call('empresa.select_tarifa', array($_SESSION["empresa_id"]));
+							$data = array(
+								'access_token' => $_SESSION["empresa_token"],
+								'classe' => 'empresa',
+								'metodo' => 'select_tarifa',
+								'empresa_id' => $_SESSION["empresa_id"]
+							);
+							$json_dados = call($data);
 							$tarifa = json_decode($json_dados);
 							$total_venda = "";
 							$total_comissao = "";

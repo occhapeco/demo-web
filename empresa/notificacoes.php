@@ -4,7 +4,13 @@
 
     $page = basename(__FILE__, '.php');
 
-    $json_dados = $service->call('empresa.visualizar', array($_SESSION["empresa_id"]));
+	$data = array(
+		'access_token' => $_SESSION["empresa_token"],
+		'classe' => 'empresa',
+		'metodo' => 'visualizar',
+		'empresa_id' => $_SESSION["empresa_id"]
+	);
+    $json_dados = call($data);
 ?>
 <html lang="pt">
 <head>
@@ -52,7 +58,13 @@
 
         <div class="content">
          <?php
-            $json_dados = $service->call('empresa.select_notificacoes', array($_SESSION["empresa_id"]));
+			 $data = array(
+				'access_token' => $_SESSION["empresa_token"],
+				'classe' => 'empresa',
+				'metodo' => 'select_notificacoes',
+				'empresa_id' => $_SESSION["empresa_id"]
+			);
+            $json_dados = call($data);
             $notificacoes = json_decode($json_dados);
             if(count($notificacoes) == 0)
             {
@@ -63,7 +75,13 @@
             else{
                 for($i = 0; $i<count($notificacoes); $i++)
                 {
-                    $json_dados = $service->call('empresa.select_cupom', array($notificacoes[$i]->cupom_id));
+					$data = array(
+						'access_token' => $_SESSION["empresa_token"],
+						'classe' => 'empresa',
+						'metodo' => 'select_cupom',
+						'id' => $notificacoes[$i]->cupom_id
+					);
+                    $json_dados = call($data);
                     $cupom = json_decode($json_dados);
                  ?>
                  <div class="col-lg-12">

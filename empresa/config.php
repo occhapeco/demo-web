@@ -5,10 +5,17 @@
     $page = basename(__FILE__, '.php');
 
     $alert="";
-
-    $editar = $service->call('empresa.select_perfil', array($_SESSION["empresa_id"]));
-    $perfil = json_decode($editar);
-    $nome_usuario = $perfil->nome_usuario;
+	
+	$data = array(
+            'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+	        'metodo' => 'select_perfil',
+	        'id' => $_SESSION["empresa_id"]
+		);
+	$editar = call($data);
+	$perfil = json_decode($editar);
+	
+	$nome_usuario = $perfil->nome_usuario;
     $razao_social = $perfil->razao_social;	
     $nome_fantasia = $perfil->nome_fantasia;
     $celular = $perfil->celular;
@@ -17,7 +24,18 @@
     //Post enviado desta página para confirmar a edição
     if(isset($_POST["editar_perfil"]))
     {
-       if ($update = $service->call('empresa.update_perfil', array($_SESSION["empresa_id"],$_POST["nome_usuario"],$_POST["razao_social"],$_POST["nome_fantasia"],$_POST["celular"],$_POST["descricao"])))
+		$data = array(
+            'access_token' => $_SESSION["empresa_token"],
+			'classe' => 'empresa',
+	        'metodo' => 'update_perfil',
+	        'id' => $_SESSION["empresa_id"],
+			'nome_usuario' => $_POST["nome_usuario"],
+			'razao_social' => $_POST["razao_social"],
+			'nome_fantasia' => $_POST["nome_fantasia"],
+			'celular' => $_POST["celular"],
+			'descricao' => $_POST["descricao"]
+		);
+       if (call($data))
        {
    	        $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Perfil alterado com sucesso!</b></span></div>';
        }
@@ -31,7 +49,15 @@
     {
     	if($_POST["nova_senha"] == $_POST["nova_senha1"])
     	{	
-	        if ($update = $service->call('empresa.update_senha', array($_SESSION["empresa_id"],$_POST["senha_atual"],$_POST["nova_senha"])))
+			$data = array(
+				'access_token' => $_SESSION["empresa_token"],
+				'classe' => 'empresa',
+				'metodo' => 'update_senha',
+				'id' => $_SESSION["empresa_id"],
+				'senha_antiga' => $_POST["senha_atual"],
+				'senha_nova' => $_POST["nova_senha"]
+			);
+	        if (call($data))
 	        {
 	            $alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Senha alterada com sucesso!</b></span></div>';
 	        }
