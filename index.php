@@ -25,9 +25,6 @@
 	<script type="text/javascript" src="js/parallax.js"></script>
 	<script type="text/javascript" src="js/nicescroll.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
-	
-    <link rel="icon" type="image/png" sizes="96x76" href="../imgs/logo/escudo_clube.png">
-
 </head>
 <body>
 	
@@ -35,7 +32,7 @@
 	<header>
 		<div class="container">
 			<div class="logo pull-left animated wow fadeInLeft">
-				<a href="#hero" class="app_link"> <img src="img/logo_escrita.png" height="45px" title=""></a>
+				<a href="#hero" class="app_link"> <img src="img/logo.png" height="45px" title=""></a>
 			</div>
 
 			
@@ -44,7 +41,7 @@
 					<li class="animated wow fadeInLeft" data-wow-delay="0s"><a href="#about">Sobre</a></li>
 					<li class="animated wow fadeInLeft" data-wow-delay=".1s"><a href="#app_features">Como Funciona</a></li>
 					<li class="animated wow fadeInLeft" data-wow-delay=".2s"><a href="#testimonials">Contato</a></li>
-					<li class="animated wow fadeInRight" data-wow-delay=".2s" ><a class="oi" onclick="cad_empresa()" href="" >Cadastro</a></li>
+					<li class="animated wow fadeInRight" data-wow-delay=".2s" ><a class="oi" onclick="cad_empresa()" href="" >Cadastro Empresa</a></li>
 					<li class="animated wow fadeInRight" style="margin-left: 5px;"  data-wow-delay=".2s"><a onclick="login()" href="" style="padding: 10px 10px;background: white; color:#337ab7;" >Login</a></li>
 				</ul>
 			</nav>
@@ -73,7 +70,7 @@
 					<span>Iphone App</span>
 				</a>
 
-				<a href="http://play.google.com" class="app_store_btn text-uppercase animated wow fadeInLeft">
+				<a href="http://play.google.com/store/apps/details?id=br.com.clubedeofertas" class="app_store_btn text-uppercase animated wow fadeInLeft">
 					<i class="android_icon"></i>
 					<span>Android App</span>
 				</a>
@@ -138,39 +135,41 @@
 	<!--  App Features Section  -->
 	<section class="app_features" id="app_features">
 		<div class="container">
-
+			<center><p style="font-size: 40px;padding: 0px 0px 40px;font-weight: bold; font-family:'open_semibold', Helvetica, Arial, sans-serif" > Como Funciona? </p><center>
 			<div class="row text-center">
 				<div class="col-sm-4 col-md-4 details animated wow fadeInDown" data-wow-delay="0s">
-					<img src="img/f_icon1.png" alt="" title="">
-					<h1 class="text-uppercase">malesuada fames turpis.</h1>
-					<p class="text-lowercase">vel ultrices mauris libero id diam. Vivamus tellus sagittis facilisis nisi quis mollis risus quisque ultrices elit.</p>
+					<img src="img/icon_oferta.png" alt="" title="">
+					<h1 class="text-uppercase">Criamos o clube</h1>
+					<p class="text-lowercase"> de ofertas para facilitar suas compras e ficar de olhos nas ofertas de sua cidade. Reunimos diversas empresas que oferecem produtos e serviços com grande desconto para usuários do aplicativo.</p>
 				</div>
 				<div class="col-sm-4 col-md-4 details animated wow fadeInDown" data-wow-delay=".1s">
-					<img src="img/f_icon2.png" alt="" title="">
-					<h1 class="text-uppercase">malesuada fames turpis.</h1>
-					<p class="text-lowercase">vel ultrices mauris libero id diam. Vivamus tellus sagittis facilisis nisi quis mollis risus quisque ultrices elit.</p>
+					<img src="img/icon_download.png" alt="" title="">
+					<h1 class="text-uppercase">O usuário faz download </h1>
+					<p class="text-lowercase"> do aplicativo, de forma gratuita em seu smartphone, faz seu cadastro e passa a usufruir de uma lista de produtos e serviços com desconto de dezenas de empresas de sua cidade.</p>
 				</div>
 				<div class="col-sm-4 col-md-4 details animated wow fadeInDown" data-wow-delay=".2s">
-					<img src="img/f_icon3.png" alt="" title="">
-					<h1 class="text-uppercase">malesuada fames turpis.</h1>
-					<p class="text-lowercase">vel ultrices mauris libero id diam. Vivamus tellus sagittis facilisis nisi quis mollis risus quisque ultrices elit.</p>
+					<img src="img/icon_produto.png" alt="" title="">
+					<h1 class="text-uppercase">Dependendo da oferta do produto ou serviço</h1>
+					<p class="text-lowercase">você pode retirar no local, consumir o produto no local ou pedir para entrega (No caso de uma pizza, por exemplo). O pagamento é feito direto para a empresa que você escolheu.
+</p>
 				</div>
 			</div>
 			<div class="row text-center">
 				<div class="col-sm-4 col-md-4 details animated wow fadeInDown" data-wow-delay="0s">
-					<img src="img/f_icon4.png" alt="" title="">
-					<h1 class="text-uppercase">malesuada fames turpis.</h1>
-					<p class="text-lowercase">vel ultrices mauris libero id diam. Vivamus tellus sagittis facilisis nisi quis mollis risus quisque ultrices elit.</p>
+					<img src="img/icon_divulgacao.png" alt="" title="">
+					<h1 class="text-uppercase">O clube de ofertas</h1>
+					<p class="text-lowercase"> é apenas um meio de divulgar os produtos de uma empresa para você, cliente. Produtos e serviços com desconto, sem custo algum para o consumidor final. Você só tem vantagens.
+</p>
 				</div>
 				<div class="col-sm-4 col-md-4 details animated wow fadeInDown" data-wow-delay=".1s">
-					<img src="img/f_icon5.png" alt="" title="">
-					<h1 class="text-uppercase">malesuada fames turpis.</h1>
-					<p class="text-lowercase">vel ultrices mauris libero id diam. Vivamus tellus sagittis facilisis nisi quis mollis risus quisque ultrices elit.</p>
+					<img src="img/icon_app.png" alt="" title="">
+					<h1 class="text-uppercase">Com o aplicativo Clube de Ofertas</h1>
+					<p class="text-lowercase"> em seu smartphone e feito seu cadastro, você resgata o cupom da oferta que deseja, verifica o local e demais dados da empresa que oferta o produto e dirigi-se até o local para consumir ou retirar o produto. </p>
 				</div>
 				<div class="col-sm-4 col-md-4 details animated wow fadeInDown" data-wow-delay=".2s">
-					<img src="img/f_icon6.png" alt="" title="">
-					<h1 class="text-uppercase">malesuada fames turpis.</h1>
-					<p class="text-lowercase">vel ultrices mauris libero id diam. Vivamus tellus sagittis facilisis nisi quis mollis risus quisque ultrices elit.</p>
+					<img src="img/icon_contato.png" alt="" title="">
+					<h1 class="text-uppercase">Deseja anunciar seu produto</h1>
+					<p class="text-lowercase"> em nosso aplicativo de descontos? Entre em contato conosco para entender como funciona a relação com nossos parceiros e fechar uma parceria de sucesso. (Contato email telefone etc).</p>
 				</div>
 			</div>
 
