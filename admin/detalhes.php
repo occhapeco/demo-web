@@ -150,7 +150,7 @@
                                                 'cupum_id' => $id_cupom
                                             );
                                             $json_dados = call($data);
-                                            $usuario = json_decode($select);
+                                            $usuario = json_decode($json_dados);
                                             $total_concluidos = 0;
                                             $total = 0;
                                             for($i = 0; $i<count($usuario); $i++)
