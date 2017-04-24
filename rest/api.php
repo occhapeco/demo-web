@@ -14,7 +14,7 @@
 	$empresa = null;
 	$usuario = null;
 
-	if(isset($_POST["access_token"]))
+	if(isset($_POST["access_token"]) && $_POST["access_token"] != null)
 	{
 		$admin = new admin();
 		$empresa = new empresa();
@@ -49,6 +49,9 @@
 
 		if($_POST["metodo"] == "select_cupons")
 			echo $usuario->select_cupons($_POST["cidade_id"],$_POST["delivery"],$_POST["pagamento"],$_POST["tipo_id"]);
+
+		if($_POST["metodo"] == "select_detalhes_cupom")
+			echo $usuario->select_detalhes_cupom($_POST["cupom_id"]);
 
 		if($_POST["metodo"] == "insert")
 			echo $usuario->insert($_POST["nome"],$_POST["email"],$_POST["senha"],$_POST["celular"],$_POST["genero"],$_POST["nascimento"]);
