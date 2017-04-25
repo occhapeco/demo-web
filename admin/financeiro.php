@@ -140,7 +140,7 @@
 																		{
 																			$data = array(
 																		        'access_token' => $_SESSION["admin_token"],
-																		        'classe' => 'admin',
+																		        'classe' => 'empresa',
 																		        'metodo' => 'select_perfil',
 																		        'id' => $tarifa[$i]->empresa[$j]->id
 																		    );
