@@ -146,10 +146,10 @@
 			$resultado = 0;
 			if($query->num_rows == 0)
 			{
-				$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id AND quantidade > 0");
-				if($query)
-				{
-					$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id AND quantidade = 0 AND estado = 0");
+				$query = $conexao->query("SELECT quantidade FROM cupom WHERE id = $cupom_id");
+				$row = $query->fetch_assoc();
+				if($row["quantidade"] > 0) {
+					$query = $conexao->query("UPDATE cupom SET quantidade = quantidade - 1 WHERE id = $cupom_id");
 					$query = $conexao->query("SELECT * FROM cupom WHERE id = $cupom_id");
 					$row = $query->fetch_assoc();
 					$data = date("Y-m-d H:i:s");
