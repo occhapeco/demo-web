@@ -646,6 +646,11 @@
 		    {
 		    	$cupom_id = $conexao->insert_id;
 		    	$tipo = json_decode($tipos);
+		    	$tit = "Nova oferta para aprovar";
+				$msg = "\"$titulo\" requisita aprovação para entrar em vigor no Clube de Ofertas. Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";
+				mandar_email("andrewsaxx@gmail.com",$tit,$msg);
+				mandar_email("professortiton@gmail.com",$tit,$msg);
+				mandar_email("wagner.titon@edu.sc.senai.br",$tit,$msg);
 		    	for($i=0;$i<count($tipo);$i++)
 		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
 		    }
