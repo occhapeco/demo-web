@@ -10,7 +10,7 @@
 	        'classe' => 'empresa',
 	        'metodo' => 'login',
 	        'email' => $_POST['email'],
-	        'senha' => $_POST['senha'],
+	        'senha' => $_POST['senha']
 	    );
 
 		$json = call($data);

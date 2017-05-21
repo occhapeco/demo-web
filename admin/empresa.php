@@ -26,6 +26,7 @@
     }
     if(isset($_POST["painel"])) {
     	$_SESSION["empresa_id"] = $_POST["empresa_id"];
+    	$_SESSION["empresa_token"] = $_SESSION["admin_token"];
     	header("location: ../empresa");
     }
 ?>
