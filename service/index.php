@@ -57,7 +57,7 @@
 		$headers .= "From: Clube de Ofertas <$email_sender>\n";
 		$headers .= "Return-Path: $email_sender\n";
 		$headers .= "X-Priority: 1\n";
-		$envio = mail($email,"Clube de Ofertas - ".$assunto,"<h4>".$msg."</h4><br><br><h3>Atenciosamente, equipe Clube de Ofertas.</h3>",$headers,"-r".$email_sender);
+		$envio = mail($email,$assunto,"<div style='font-size: 18px;'>".$msg."<br><br><h3>Atenciosamente, equipe Clube de Ofertas.</h3></div>",$headers,"-r".$email_sender);
 		if(!envio)
 			return false;
 		else
@@ -640,14 +640,19 @@
 		    $prazo = converter_data($prazo,true);
 
 		    $conexao = conectar();
+
+		    $query = $conexao->query("SELECT nome_fantasia FROM empresa WHERE id = $empresa_id");
+		    $row = $query->fetch_assoc();
+		    $empresa = $row["nome_fantasia"];
+
 		    $query = $conexao->query("INSERT INTO cupom VALUES(NULL,$empresa_id,$endereco_id,'$imagem','$titulo','$regras','$descricao',$preco_normal,$preco_cupom,'$prazo',$quantidade,$pagamento,$delivery,-1,'".date("Y-m-d H:i")."')");
 		    $cupom_id = 0;
 		    if($query)
 		    {
 		    	$cupom_id = $conexao->insert_id;
 		    	$tipo = json_decode($tipos);
-		    	$tit = "Nova oferta para aprovar";
-				$msg = "\"$titulo\" requisita aprovação para entrar em vigor no Clube de Ofertas. Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";
+		    	$tit = "Nova oferta para aprovar - #$cupom_id";
+				$msg = "A empresa <u>$empresa</u> requisita a aprovação da seguinte oferta: <br><br><b>Título: </b>$titulo<br><b>Descrição: </b>$descricao<br><b>Regras: </b>$regras<br><b>Preço: </b>R\$$preco_normal por R\$$preco_cupom<br><b>Prazo: </b>".converter_data($prazo,false)."<br><br>Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";
 				mandar_email("andrewsaxx@gmail.com",$tit,$msg);
 				mandar_email("professortiton@gmail.com",$tit,$msg);
 				mandar_email("wagner.titon@edu.sc.senai.br",$tit,$msg);

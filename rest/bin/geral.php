@@ -50,7 +50,7 @@
 		$headers .= "From: Clube de Ofertas <$email_sender>\n";
 		$headers .= "Return-Path: $email_sender\n";
 		$headers .= "X-Priority: 1\n";
-		$envio = mail($email,"Clube de Ofertas - ".$assunto,"<h4>".$msg."</h4><br><br><h3>Atenciosamente, equipe Clube de Ofertas.</h3>",$headers,"-r".$email_sender);
+		$envio = mail($email,$assunto,"<div style='font-size: 18px;'>".$msg."<br><br><h3>Atenciosamente, equipe Clube de Ofertas.</h3></div>",$headers,"-r".$email_sender);
 		if(!$envio)
 			return false;
 		else
