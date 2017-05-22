@@ -82,9 +82,9 @@
 		    	$tipo = json_decode($tipos);
 		    	$tit = "Nova oferta para aprovar - #$cupom_id";
 				$msg = "A empresa <u>$empresa</u> requisita a aprovação da seguinte oferta: <br><br><b>Título: </b>$titulo<br><b>Descrição: </b>$descricao<br><b>Regras: </b>$regras<br><b>Preço: </b>R\$$preco_normal por R\$$preco_cupom<br><b>Prazo: </b>".converter_data($prazo,false)."<br><br>Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";
-				mandar_email("andrewsaxx@gmail.com",$tit,$msg);
-				mandar_email("professortiton@gmail.com",$tit,$msg);
-				mandar_email("wagner.titon@edu.sc.senai.br",$tit,$msg);
+				mandar_email("douglas101083@gmail.com",$tit,$msg);
+				mandar_email("paceragold@gmail.com",$tit,$msg);
+				mandar_email("fabiob@unochapeco.edu.br",$tit,$msg);
 		    	for($i=0;$i<count($tipo);$i++)
 		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
 		    }
