@@ -8,7 +8,14 @@
 	
 	if(isset($_POST["notificar"]))
 	{
-		if($service->call('admin.notificar_usuarios', array($_POST["title"],$_POST["body"])))
+        data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'notificar_usuarios',
+            "title" => $_POST["title"],
+            'body' => $_POST["body"]
+        );
+		if(call($data))
 		{
 			$alert = '<div class="alert alert-success" style="margin: 10px 10px -20px 10px;"><span><b>Notificação enviada com sucesso!</b></span></div>';
 		}

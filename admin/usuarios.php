@@ -58,8 +58,13 @@
 							</tr>
 							<tbody>
 								<?php
-									$json_dados = $service->call('admin.select_usuarios',array());
-									$usuarios = json_decode($json_dados);
+                                    data = array(
+                                        'access_token' => $_SESSION["admin_token"],
+                                        'classe' => 'admin',
+                                        'metodo' => 'select_usuarios'
+                                    );
+                                    $json = call($data);
+									$usuarios = json_decode($json);
 									for($i=0;$i<count($usuarios);$i++)
 									{
 								?>

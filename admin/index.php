@@ -6,24 +6,48 @@
 
     if(isset($_POST["recusar"]))
     {
-        $bool = $service->call('admin.recusar_cupom', array($_POST["cupom_id"]));
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'recusar_cupom',
+            'id' => $_POST["cupom_id"]
+        );
+        $json = call($data);
         header("location: index.php");
     }
     if(isset($_POST["aprovar"]))
     {
-        $bool = $service->call('admin.aprovar_cupom', array($_POST["cupom_id"]));
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'aprovar_cupom',
+            'id' => $_POST["cupom_id"]
+        );
+        $json = call($data);
         header("location: index.php");
     }
 
 	if(isset($_POST["aprovar_empresa"]))
 	{
-		$bool = $service->call('admin.aprovar_empresa', array($_POST["empresa_id"]));
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'aprovar_empresa',
+            'id' => $_POST["empresa_id"]
+        );
+        $json = call($data);
 		header("location: index.php");
 	}
 
 	if(isset($_POST["recusar_empresa"]))
 	{
-		$bool = $service->call('admin.recusar_empresa', array($_POST["empresa_id"]));
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'recusar_empresa',
+            'id' => $_POST["empresa_id"]
+        );
+        $json = call($data);
 		header("location: index.php");
 	}
 
@@ -67,8 +91,13 @@
 	<?php
         require_once("sidenav.php");
         require_once("topnav.php");
-        $json_dados = $service->call('admin.select_cupons_avaliaveis',array());
-        $cupom = json_decode($json_dados);
+        $data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'select_cupons_avaliaveis'
+        );
+        $json = call($data);
+        $cupom = json_decode($json);
         for($i=0;$i<count($cupom);$i++)
         {
             $str_tipos = "";
@@ -152,13 +181,25 @@
     ?>
 
 	<?php
-      	$json_dados = $service->call('admin.select_empresas',array(-1));
-        $empresa = json_decode($json_dados);
+        data = array(
+            'access_token' => $_SESSION["admin_token"],
+            'classe' => 'admin',
+            'metodo' => 'select_empresas',
+            'estado' => -1
+        );
+        $json = call($data);
+        $empresa = json_decode($json);
         if(count($cupom) == 0 && count($empresa) == 0)
             echo "<br><br><br><br><br><h2 class='text-center'>Sem novas requisições.</h2>";
         for($i=0;$i<count($empresa);$i++)
         {
-			$json = $service->call('empresa.select_enderecos', array($empresa[$i]->id));
+            data = array(
+                'access_token' => $_SESSION["admin_token"],
+                'classe' => 'empresa',
+                'metodo' => 'select_enderecos',
+                'empresa_id' => $empresa[$i]->id
+            );
+            $json = call($data);
             $endereco = json_decode($json);
             $enderecos = "";
             for($j=0;$j<count($endereco);$j++)

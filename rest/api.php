@@ -88,6 +88,9 @@
 		if($metodo == "select_empresas")
 			echo $admin->select_empresas($_POST["estado"]);
 
+		if($metodo == "select_usuarios")
+			echo $admin->select_usuarios();
+
 		if($metodo == "select_cidades")
 			echo $admin->select_cidades();
 
