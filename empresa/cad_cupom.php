@@ -55,13 +55,35 @@
             $pagamento += 2;
 
         $types = array();
-        $json = $service->call("select_tipos",array());
+        $data = array(
+            'metodo' => 'select_tipos'
+        );
+        $json = call($data);
         $type = json_decode($json);
         for($i=0;$i<count($type);$i++)
             if(isset($_POST[$type[$i]->id]))
                 $types[] = $type[$i]->id;
 
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["empresa_id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+            'classe' => 'empresa',
+            'metodo' => 'insert_cupom',
+            'empresa_id' => $_SESSION["empresa_id"],
+            'endereco_id' => $_POST["endereco_id"],
+            'imagem' => "",
+            'titulo' => $_POST["titulo"],
+            'regras' => $_POST["regras"],
+            'descricao' => $_POST["descricao"],
+            'preco_normal' => $_POST["preco_normal"],
+            'preco_cupom' => $_POST["preco_cupom"],
+            'prazo' => $_POST["prazo"],
+            'quantidade' => $_POST["quantidade"],
+            'pagamento' => $pagamento,
+            'delivery' => $delivery,
+            'tipos' => json_encode($types)
+           
+        );
+        $insert = call($data);
 
         $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
         $arquivo = $_FILES['wizard-picture'];
@@ -71,7 +93,16 @@
         img_resize($caminho.$arquivo["name"],$caminho.$arquivo["name"],$extension);
         chmod($caminho.$arquivo["name"],0777);
 
-        $insert = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$arquivo['name'],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+            'classe' => 'empresa',
+            'metodo' => 'update_imagem',
+            'id' => $insert,
+            'imagem' => $arquivo['name']
+           
+        );
+        $insert = call($data);
+
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
@@ -91,13 +122,35 @@
             $pagamento += 2;
 
         $types = array();
-        $json = $service->call("select_tipos",array());
+        $data = array(
+            'metodo' => 'select_tipos'
+        );
+        $json = call($data);
         $type = json_decode($json);
         for($i=0;$i<count($type);$i++)
             if(isset($_POST[$type[$i]->id]))
                 $types[] = $type[$i]->id;
 
-        $insert = $service->call('empresa.insert_cupom',array($_SESSION["empresa_id"],$_POST["endereco_id"],"",$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+            'classe' => 'empresa',
+            'metodo' => 'insert_cupom',
+            'empresa_id' => $_SESSION["empresa_id"],
+            'endereco_id' => $_POST["endereco_id"],
+            'imagem' => "",
+            'titulo' => $_POST["titulo"],
+            'regras' => $_POST["regras"],
+            'descricao' => $_POST["descricao"],
+            'preco_normal' => $_POST["preco_normal"],
+            'preco_cupom' => $_POST["preco_cupom"],
+            'prazo' => $_POST["prazo"],
+            'quantidade' => $_POST["quantidade"],
+            'pagamento' => $pagamento,
+            'delivery' => $delivery,
+            'tipos' => json_encode($types)
+        );
+        $insert = call($data);
+
         $imagem = $_POST["imagem"];
         $caminho = $_SERVER['DOCUMENT_ROOT'].'imgs/';
         if($imagem == "upload")
@@ -119,7 +172,16 @@
             $imagem = $new;
         }        
 
-        $insert = $service->call('empresa.update_cupom',array($insert,$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+            'classe' => 'empresa',
+            'metodo' => 'update_imagem',
+            'id' => $insert,
+            'imagem' => $imagem
+           
+        );
+        $insert = call($data);
+
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
         else
@@ -129,7 +191,14 @@
     if(isset($_POST["editar"]))
     {
         $cupom_id = $_POST["cupom_id"];
-        $json = $service->call('empresa.select_cupom', array($cupom_id));
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+            'classe' => 'empresa',
+            'metodo' => 'select_cupom',
+            'id' => $cupom_id
+           
+        );
+        $json = call($data);
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
         $imagem = $cupom->imagem;
@@ -149,7 +218,14 @@
     if(isset($_POST["reutilizar"]))
     {
         $cupom_id = $_POST["cupom_id"];
-        $json = $service->call('empresa.select_cupom', array($cupom_id));
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+            'classe' => 'empresa',
+            'metodo' => 'select_cupom',
+            'id' => $cupom_id
+           
+        );
+        $json = call($data);
         $cupom = json_decode($json);
         $endereco_id = $cupom->endereco_id;
         $imagem = $cupom->imagem;
@@ -194,12 +270,36 @@
             $pagamento += 2;
 
         $types = array();
-        $json = $service->call("select_tipos",array());
+         $data = array(
+            'metodo' => 'select_tipos'
+        );
+        $json = call($data);
         $type = json_decode($json);
-        for($i=0;$i<count($type);$i++)
-            if(isset($_POST[$type[$i]->id]))
+        for($i=0;$i<count($type);$i++) {
+            if(isset($_POST[$type[$i]->id])){
                 $types[] = $type[$i]->id;
-        $insert = $service->call('empresa.update_cupom',array($_POST["edit"],$_POST["endereco_id"],$imagem,$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$pagamento,$delivery,json_encode($types)));
+            }
+        }
+
+        $data = array(
+            'access_token' => $_SESSION["empresa_token"],
+            'classe' => 'empresa',
+            'metodo' => 'update_cupom',
+            'id' => $_POST["edit"],
+            'endereco_id' => $_POST["endereco_id"],
+            'imagem' => $imagem,
+            'titulo' => $_POST["titulo"],
+            'regras' => $_POST["regras"],
+            'descricao' => $_POST["descricao"],
+            'preco_normal' => $_POST["preco_normal"],
+            'preco_cupom' => $_POST["preco_cupom"],
+            'prazo' => $_POST["prazo"],
+            'quantidade' => $_POST["quantidade"],
+            'pagamento' => $pagamento,
+            'delivery' => $delivery,
+            'tipos' => json_encode($types)
+        );
+        $insert = call($data);
 
         if($insert == 0)
             $alert = '<div class="alert alert-danger" style="margin: 10px 10px -20px 10px;"><span><b>Algo deu errado!</b> Reveja seus dados.</span></div>';
@@ -353,7 +453,13 @@
                                         <div class="row">
                                         <div class="col-sm-12  text-center"><label>Selecione o endereço desta oferta</label></div>
                                         <?php
-                                            $json = $service->call("empresa.select_enderecos",array($_SESSION["empresa_id"]));
+                                            $data = array(
+                                                'access_token' => $_SESSION["admin_token"],
+                                                'classe' => 'empresa',
+                                                'metodo' => 'select_enderecos',
+                                                'empresa_id' => $_SESSION["empresa_id"]
+                                            );
+                                            $json = call($data);
                                             $endereco = json_decode($json);
                                             for($i=0;$i<count($endereco);$i++)
                                             {
@@ -418,7 +524,10 @@
                                         <div class="row">
                                             <div class="col-sm-12  text-center"><label>Selecione as categorias que se aplicam nesta oferta</label></div>
                                         <?php
-                                            $json = $service->call("select_tipos",array());
+                                            $data = array(
+                                                'metodo' => 'select_tipos',
+                                            );
+                                            $json = call($data);
                                             $types = json_decode($json);
                                             for($i=0;$i<count($types);$i++)
                                             {

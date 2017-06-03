@@ -156,6 +156,9 @@
 		if($metodo == "update_cupom")
 			echo $empresa->update_cupom($_POST["id"],$_POST["endereco_id"],$_POST["imagem"],$_POST["titulo"],$_POST["regras"],$_POST["descricao"],$_POST["preco_normal"],$_POST["preco_cupom"],$_POST["prazo"],$_POST["quantidade"],$_POST["pagamento"],$_POST["delivery"],$_POST["tipos"]);
 
+		if($metodo == "update_imagem")
+			echo $empresa->update_imagem($_POST["id"]);
+
 		if($metodo == "select_perfil")
 			echo $empresa->select_perfil($_POST["id"]);
 

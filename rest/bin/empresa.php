@@ -159,6 +159,13 @@
 			return $query;
 		}
 
+		function update_imagem($cupom_id,$imagem) {
+			$conexao = conectar();
+		    $query = $conexao->query("UPDATE cupom SET imagem='$imagem' WHERE id = $cupom_id");
+			$conexao->close();
+			return $query;
+		}
+
 		function login($email,$senha)
 		{
 			$senha = md5(sha1($senha));
