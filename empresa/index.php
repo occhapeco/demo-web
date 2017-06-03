@@ -97,7 +97,7 @@
     					$desconto = (($preco_normal - $preco_cupom)*100)/$preco_normal;
               if ($cupom[$i]->estado == -1) {
                 $estado = "Enviado para aprovação";
-    						$em_aprovacao .= '<div class="col-md-6 col-sm-6 bloco">
+    						$em_aprovacao .= '<div class="col-md-12 col-sm-12 bloco" style="display : inline-block">
     						<div class="card">
     							<div class="content">
     								<div class="row">
@@ -139,7 +139,7 @@
                     if($cupom[$i]->estado == -2)
                     {
                         $estado = "Inativo";
-						$inativos .= '<div class="col-md-6 col-sm-6 bloco">
+						$inativos .= '<div class="col-md-12 col-sm-12 bloco" style="display : inline-block">
 						<div class="card">
 							<div class="content">
 								<div class="row">
@@ -181,7 +181,7 @@
                     if($cupom[$i]->estado == 0)
                     {
                         $estado = "Ativo";
-						$ativos .= '<div class="col-md-6 col-sm-6 bloco">
+						$ativos .= '<div class="col-md-12 col-sm-12 bloco" style="display : inline-block">
 						<div class="card">
 							<div class="content">
 								<div class="row">
@@ -235,7 +235,7 @@
 				  <li><a data-toggle="pill" href="#menu2" style="color: #797979;">Em Aprovação</a></li>
 				</ul>
 				<div class="tab-content">
-					<div id="home" class="tab-pane fade in active">
+					<div id="home" class="tab-pane fade in active" style="columns: 2;-webkit-column-break-inside : avoid;">
 						<?php
                             if($ativos != "")
                                 echo $ativos;
@@ -243,7 +243,7 @@
                                 echo "<br><br><h3 class='text-center'>Sem cupons ativos.</h3>";
 						?>
 					</div>
-					<div id="menu1" class="tab-pane fade">
+					<div id="menu1" class="tab-pane fade" style="columns: 2;-webkit-column-break-inside : avoid;">
 						<?php
                             if($inativos != "")
                                 echo $inativos;
@@ -251,7 +251,7 @@
                                 echo "<br><br><h3 class='text-center'>Sem cupons inativos.</h3>";
 						?>
 					</div>
-					<div id="menu2" class="tab-pane fade">
+					<div id="menu2" class="tab-pane fade" style="columns: 2;-webkit-column-break-inside : avoid;">
 					<?php
                         if($em_aprovacao != "")
                             echo $em_aprovacao;
