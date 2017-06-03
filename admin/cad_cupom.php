@@ -111,7 +111,7 @@
 
         $data = array(
             'access_token' => $_SESSION["admin_token"],
-            'classe' => 'admin',
+            'classe' => 'empresa',
             'metodo' => 'update_cupom',
             'id' => $_POST["edit"],
             'endereco_id' => $_POST["endereco_id"],
