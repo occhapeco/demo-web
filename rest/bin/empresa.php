@@ -80,13 +80,18 @@
 		    {
 		    	$cupom_id = $conexao->insert_id;
 		    	$tipo = json_decode($tipos);
+		    	for($i=0;$i<count($tipo);$i++)
+		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
+
+		    	$query = $conexao->query("SELECT id FROM cupom WHERE endereco_id = $endereco_id AND titulo = '$titulo' AND regras = '$regras' AND descricao = '$descricao' AND preco_normal = $preco_normal AND preco_cupom = $preco_cupom AND pagamento = $pagamento AND delivery = $delivery AND imagem = '$imagem'");
+		    	if($query->num_rows > 1)
+		    		$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id");
+
 		    	$tit = "Nova oferta para aprovar - #$cupom_id";
 				$msg = "A empresa <u>$empresa</u> requisita a aprovação da seguinte oferta: <br><br><b>Título: </b>$titulo<br><b>Descrição: </b>$descricao<br><b>Regras: </b>$regras<br><b>Preço: </b>R\$$preco_normal por R\$$preco_cupom<br><b>Prazo: </b>".converter_data($prazo,false)."<br><br>Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";
 				mandar_email("douglas101083@gmail.com",$tit,$msg);
 				mandar_email("paceragold@gmail.com",$tit,$msg);
 				mandar_email("fabiob@unochapeco.edu.br",$tit,$msg);
-		    	for($i=0;$i<count($tipo);$i++)
-		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
 		    }
 			$conexao->close();
 			return $cupom_id;
