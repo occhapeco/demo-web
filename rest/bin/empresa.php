@@ -83,15 +83,16 @@
 		    	for($i=0;$i<count($tipo);$i++)
 		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
 
-		    	$query = $conexao->query("SELECT id FROM cupom WHERE endereco_id = $endereco_id AND titulo = '$titulo' AND regras = '$regras' AND descricao = '$descricao' AND preco_normal = $preco_normal AND preco_cupom = $preco_cupom AND pagamento = $pagamento AND delivery = $delivery AND imagem = '$imagem'");
+		    	$query = $conexao->query("SELECT id FROM cupom WHERE endereco_id = $endereco_id AND titulo = '$titulo' AND regras = '$regras' AND descricao = '$descricao' AND preco_normal = $preco_normal AND preco_cupom = $preco_cupom AND imagem = '$imagem'");
 		    	if($query->num_rows > 1)
 		    		$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id");
-
-		    	$tit = "Nova oferta para aprovar - #$cupom_id";
-				$msg = "A empresa <u>$empresa</u> requisita a aprovação da seguinte oferta: <br><br><b>Título: </b>$titulo<br><b>Descrição: </b>$descricao<br><b>Regras: </b>$regras<br><b>Preço: </b>R\$$preco_normal por R\$$preco_cupom<br><b>Prazo: </b>".converter_data($prazo,false)."<br><br>Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";
-				mandar_email("douglas101083@gmail.com",$tit,$msg);
-				mandar_email("paceragold@gmail.com",$tit,$msg);
-				mandar_email("fabiob@unochapeco.edu.br",$tit,$msg);
+		    	else {
+		    		$tit = "Nova oferta para aprovar - #$cupom_id";
+					$msg = "A empresa <u>$empresa</u> requisita a aprovação da seguinte oferta: <br><br><b>Título: </b>$titulo<br><b>Descrição: </b>$descricao<br><b>Regras: </b>$regras<br><b>Preço: </b>R\$$preco_normal por R\$$preco_cupom<br><b>Prazo: </b>".converter_data($prazo,false)."<br><br>Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";
+					mandar_email("douglas101083@gmail.com",$tit,$msg);
+					mandar_email("paceragold@gmail.com",$tit,$msg);
+					mandar_email("fabiob@unochapeco.edu.br",$tit,$msg);
+		    	}
 		    }
 			$conexao->close();
 			return $cupom_id;
@@ -237,9 +238,22 @@
 		function select_cupons($id)
 		{
 			$conexao = conectar();
-			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id ORDER BY estado DESC");
+			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado <> -2 AND estado ORDER BY estado DESC, prazo DESC");
 			$dados = array();
 			$i = 0;
+			while($row = $query->fetch_assoc())
+			{
+				$dados[$i] = $row;
+				$dados[$i]["prazo"] = converter_data($dados[$i]["prazo"],false);
+				$dados[$i]["data_cadastro"] = converter_data($dados[$i]["data_cadastro"],false);
+				$sub_query = $conexao->query("SELECT tipo.nome,tipo.id FROM cupom_has_tipo INNER JOIN tipo ON (tipo.id = cupom_has_tipo.tipo_id)  WHERE cupom_has_tipo.cupom_id = ".$row["id"]);
+				$dados[$i]["tipos"] = array();
+				while($row = $sub_query->fetch_assoc())
+					$dados[$i]["tipos"][] = $row;
+				$i++;
+			}
+
+			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado = -2 AND estado ORDER BY estado DESC, prazo DESC LIMIT 10");
 			while($row = $query->fetch_assoc())
 			{
 				$dados[$i] = $row;
