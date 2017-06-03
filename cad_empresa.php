@@ -194,7 +194,10 @@
 		                            <div class="tab-pane" id="account">
 		                                <div class="row">
 										<?php
-											$json = $service->call("select_cidades",array());
+											$data = array(
+										        'metodo' => 'select_cidades'
+											);
+									        $json = call($data);
 											$cidade = json_decode($json);
 											for($i=0;$i<count($cidade);$i++)
 											{
