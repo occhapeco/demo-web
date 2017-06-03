@@ -181,7 +181,7 @@
     ?>
 
 	<?php
-        data = array(
+        $data = array(
             'access_token' => $_SESSION["admin_token"],
             'classe' => 'admin',
             'metodo' => 'select_empresas',
@@ -193,7 +193,7 @@
             echo "<br><br><br><br><br><h2 class='text-center'>Sem novas requisições.</h2>";
         for($i=0;$i<count($empresa);$i++)
         {
-            data = array(
+            $data = array(
                 'access_token' => $_SESSION["admin_token"],
                 'classe' => 'empresa',
                 'metodo' => 'select_enderecos',

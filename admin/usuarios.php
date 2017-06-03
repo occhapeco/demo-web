@@ -58,7 +58,7 @@
 							</tr>
 							<tbody>
 								<?php
-                                    data = array(
+                                    $data = array(
                                         'access_token' => $_SESSION["admin_token"],
                                         'classe' => 'admin',
                                         'metodo' => 'select_usuarios'

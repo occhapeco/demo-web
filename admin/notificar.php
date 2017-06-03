@@ -8,7 +8,7 @@
 	
 	if(isset($_POST["notificar"]))
 	{
-        data = array(
+        $data = array(
             'access_token' => $_SESSION["admin_token"],
             'classe' => 'admin',
             'metodo' => 'notificar_usuarios',
