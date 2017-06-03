@@ -128,7 +128,7 @@
 			echo $admin->dar_baixa_tarifa($_POST["dados"]);
 
 		if($metodo == "notificar_usuarios")
-			echo $admin->dar_baixa_tarifa($_POST["title"],$_POST["body"]);
+			echo $admin->notificar_usuarios($_POST["title"],$_POST["body"]);
 
 		if($metodo == "verificar_token")
 			echo $admin->verificar_token($_POST["access_token"]);
