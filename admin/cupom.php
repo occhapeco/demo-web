@@ -211,7 +211,7 @@
 												<button type="submit" class="btn btn-primary btn-warning" name="finish">Detalhes</button>
 											</form>
 											<form action="#" method="post" style=" margin-left:100px; margin-top:-82; display: inline-block;">
-												<input type="hidden" name="cupom_id" id="cupom_id" value="'.$cupom[$i]->id.'";>
+												<input type="hidden" name="cupom_id" id="cupom_id" value="'.$cupom[$i]->id.'">
 												<button type="submit" class=" btn btn-primary btn-danger" name="cancelar" style="font-size:14px"><i class="ti-close"></i> Desativar</button>
 											</form>
 											</div>

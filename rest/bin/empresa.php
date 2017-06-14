@@ -83,9 +83,9 @@
 		    	for($i=0;$i<count($tipo);$i++)
 		    		$query = $conexao->query("INSERT INTO cupom_has_tipo VALUES(NULL,".$tipo[$i].",$cupom_id)");
 
-		    	$query = $conexao->query("SELECT id FROM cupom WHERE endereco_id = $endereco_id AND titulo = '$titulo' AND regras = '$regras' AND descricao = '$descricao' AND preco_normal = $preco_normal AND preco_cupom = $preco_cupom AND imagem = '$imagem'");
+		    	$query = $conexao->query("SELECT id FROM cupom WHERE titulo = '$titulo' AND regras = '$regras' AND descricao = '$descricao' AND preco_normal = $preco_normal AND preco_cupom = $preco_cupom");
 		    	if($query->num_rows > 1)
-		    		$query = $conexao->query("UPDATE cupom SET estado = 1 WHERE id = $cupom_id");
+		    		$query = $conexao->query("UPDATE cupom SET estado = 0 WHERE id = $cupom_id");
 		    	else {
 		    		$tit = "Nova oferta para aprovar - #$cupom_id";
 					$msg = "A empresa <u>$empresa</u> requisita a aprovação da seguinte oferta: <br><br><b>Título: </b>$titulo<br><b>Descrição: </b>$descricao<br><b>Regras: </b>$regras<br><b>Preço: </b>R\$$preco_normal por R\$$preco_cupom<br><b>Prazo: </b>".converter_data($prazo,false)."<br><br>Acesse o <a href='http://clubedeofertas.net/admin/'>Painel admin</a>.";

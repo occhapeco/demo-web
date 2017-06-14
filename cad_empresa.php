@@ -142,11 +142,11 @@
 											<div class="col-sm-6">
 												<div class="form-group">
 													<label>Razão Social/Nome <small>(obrigatório)</small></label>
-													<input type="text" class="form-control" name="razao_social" id="razao_social" placeholder="Digite a razão social" maxlength="50" required>
+													<input type="text" class="form-control" name="razao_social" id="razao_social" placeholder="Digite a razão social" maxlength="120" required>
 												</div>
 												<div class="form-group">
 													<label>Nome Fantasia <small></small></label>
-													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" maxlength="50">
+													<input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" placeholder="Digite o nome fantasia" maxlength="120">
 												</div>
 												<div class="form-group">
 													<label>CNPJ/CPF <small>(obrigatório)</small></label>
