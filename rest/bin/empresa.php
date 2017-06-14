@@ -253,7 +253,7 @@
 				$i++;
 			}
 
-			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado = -2 AND estado ORDER BY estado DESC, prazo DESC LIMIT 20");
+			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado = -2 AND estado ORDER BY estado DESC, prazo DESC LIMIT 30");
 			while($row = $query->fetch_assoc())
 			{
 				$dados[$i] = $row;
