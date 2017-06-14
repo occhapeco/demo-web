@@ -238,7 +238,7 @@
 		function select_cupons($id)
 		{
 			$conexao = conectar();
-			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado <> -2 AND estado ORDER BY estado DESC, prazo DESC");
+			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado <> -2 ORDER BY estado DESC, prazo DESC");
 			$dados = array();
 			$i = 0;
 			while($row = $query->fetch_assoc())
@@ -253,7 +253,7 @@
 				$i++;
 			}
 
-			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado = -2 AND estado ORDER BY estado DESC, prazo DESC LIMIT 30");
+			$query = $conexao->query("SELECT * FROM cupom WHERE empresa_id = $id AND estado = -2 ORDER BY estado DESC, prazo DESC LIMIT 30");
 			while($row = $query->fetch_assoc())
 			{
 				$dados[$i] = $row;
